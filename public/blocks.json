@@ -1,0 +1,65 @@
+[
+    {"w":1, "h":1, "type": "collection", "name":"量子存储", "value":277293, "color":"a14a4c"},
+    {"w":1, "h":1, "type": "collection", "name":"高速固态硬盘", "value":75568, "color":"a16e50"},
+    {"w":1, "h":1, "type": "collection", "name":"内存条", "value":26581, "color":"695687"},
+    {"w":1, "h":1, "type": "collection", "name":"U盘", "value":8910, "color":"4b6b87"},
+    {"w":1, "h":1, "type": "collection", "name":"机械硬盘", "value":2812, "color":"367e68"},
+
+    {"w":1, "h":2, "type": "collection", "name":"喷漆", "value":3904, "color":"367e68"},
+    {"w":1, "h":2, "type": "collection", "name":"火药", "value":21135, "color":"4b6b87"},
+    {"w":1, "h":2, "type": "collection", "name":"粉碎钳", "value":31558, "color":"695687"},
+    {"w":1, "h":2, "type": "collection", "name":"紫外线灯", "value":92749, "color":"a16e50"},
+
+    {"w":2, "h":1, "type": "collection", "name":"个人信笺", "value":3265, "color":"367e68"},
+    {"w":2, "h":1, "type": "collection", "name":"枪械零件", "value":17654, "color":"4b6b87"},
+    {"w":2, "h":1, "type": "collection", "name":"便携生存套组", "value":24350, "color":"695687"},
+    {"w":2, "h":1, "type": "collection", "name":"手弩", "value":101614, "color":"a16e50"},
+
+    {"w":2, "h":2, "type": "collection", "name":"娱乐月刊", "value":5205, "color":"367e68"},
+    {"w":2, "h":2, "type": "collection", "name":"电子温度计", "value":17550, "color":"4b6b87"},
+    {"w":2, "h":2, "type": "collection", "name":"离心机", "value":61164, "color":"695687"},
+    {"w":2, "h":2, "type": "collection", "name":"军用卫星通信仪", "value":217872, "color":"a16e50"},
+
+    {"w":3, "h":1, "type": "collection", "name":"石工锤", "value":17826, "color":"367e68"},
+    {"w":3, "h":1, "type": "collection", "name":"骨锯", "value":24000, "color":"20851"},
+    {"w":3, "h":1, "type": "collection", "name":"户外医疗箱", "value":44755, "color":"695687"},
+    {"w":3, "h":1, "type": "collection", "name":"精密头盔维修包", "value":92145, "color":"a16e50"},
+
+    {"w":1, "h":3, "type": "collection", "name":"电子显微镜", "value":14584, "color":"4b6b87"},
+
+    {"w":3, "h":2, "type": "collection", "name":"电动车电池", "value":72062, "color":"695687"},
+    {"w":3, "h":2, "type": "collection", "name":"本地特色首饰", "value":398869, "color":"a16e50"},
+
+    {"w":2, "h":3, "type": "collection", "name":"军用热像仪", "value":64111, "color":"4b6b87"},
+    {"w":2, "h":3, "type": "collection", "name":"燃料电池", "value":370066, "color":"695687"},
+
+    {"w":2, "h":2, "type": "helmet", "name":"2级头", "value":5000, "color":"367e68"},
+    {"w":2, "h":2, "type": "helmet", "name":"3级头", "value":15000, "color":"4b6b87"},
+    {"w":2, "h":2, "type": "helmet", "name":"4级头", "value":30000, "color":"695687"},
+    {"w":2, "h":2, "type": "helmet", "name":"5级头", "value":50000, "color":"a16e50"},
+
+    {"w":3, "h":3, "type": "armor", "name":"2级甲", "value":10000, "color":"367e68"},
+    {"w":3, "h":3, "type": "armor", "name":"3级甲", "value":30000, "color":"4b6b87"},
+    {"w":3, "h":4, "type": "armor", "name":"4级甲", "value":60000, "color":"695687"},
+    {"w":4, "h":4, "type": "armor", "name":"5级甲", "value":100000, "color":"a16e50"},
+
+    {"w":5, "h":2, "type": "primaryWeapon", "name":"AKM", "value":20000, "color":"808080"},
+    {"w":5, "h":2, "type": "primaryWeapon", "name":"M4A1", "value":30000, "color":"808080"},
+    {"w":5, "h":2, "type": "primaryWeapon", "name":"M249", "value":40000, "color":"808080"},
+    {"w":5, "h":2, "type": "primaryWeapon", "name":"M14", "value":35000, "color":"808080"},
+    {"w":6, "h":1, "type": "primaryWeapon", "name":"AWM", "value":50000, "color":"808080"},
+
+    {"w":2, "h":1, "type": "secondaryWeapon", "name":"G17", "value":5000, "color":"808080"},
+    {"w":2, "h":1, "type": "secondaryWeapon", "name":"G18", "value":6000, "color":"808080"},
+    {"w":2, "h":1, "type": "secondaryWeapon", "name":"93R", "value":7000, "color":"808080"},
+
+    {"w":2, "h":2, "type": "backpack", "name":"2级包", "value":8000, "color":"367e68"},
+    {"w":2, "h":2, "type": "backpack", "name":"3级包", "value":20000, "color":"4b6b87"},
+    {"w":2, "h":2, "type": "backpack", "name":"4级包", "value":40000, "color":"695687"},
+    {"w":3, "h":3, "type": "backpack", "name":"5级包", "value":80000, "color":"a16e50"},
+
+    {"w":1, "h":2, "type": "chestRigs", "name":"2级胸挂", "value":5000, "color":"367e68"},
+    {"w":1, "h":2, "type": "chestRigs", "name":"3级胸挂", "value":15000, "color":"4b6b87"},
+    {"w":2, "h":2, "type": "chestRigs", "name":"4级胸挂", "value":30000, "color":"695687"},
+    {"w":2, "h":2, "type": "chestRigs", "name":"5级胸挂", "value":50000, "color":"a16e50"}
+]
