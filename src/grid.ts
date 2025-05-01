@@ -1,9 +1,9 @@
-import * as PIXI from 'pixi.js';
-import { Block } from './block';
-import { Game } from './game';
-import { GAME_WIDTH, GAME_HEIGHT } from './config';
-import { RIGHT_REGION_COUNT } from './config';
-import { DEFAULT_CELL_SIZE } from './config';
+import * as PIXI from "pixi.js";
+import { Block } from "./block";
+import { Game } from "./game";
+import { GAME_WIDTH, GAME_HEIGHT } from "./config";
+import { RIGHT_REGION_COUNT } from "./config";
+import { DEFAULT_CELL_SIZE } from "./config";
 
 export class Grid {
     game: Game;
@@ -23,7 +23,19 @@ export class Grid {
     container: PIXI.Container;
     blocks: Block[];
 
-    constructor(game: Game, stage: PIXI.Container, x, y, width, height, cellSize, aspect, type, info, visible = true) {
+    constructor(
+        game: Game,
+        stage: PIXI.Container,
+        x,
+        y,
+        width,
+        height,
+        cellSize,
+        aspect,
+        type,
+        info,
+        visible = true,
+    ) {
         this.game = game;
         this.stage = stage;
         this.x = x;
@@ -37,13 +49,13 @@ export class Grid {
         this.fullfill = info.fullfill || false;
         this.countable = info.countable || false;
         this.acceptedTypes = info.accept || []; // 默认接受所有类型
-        
+
         this.margin = [4, 4, 4, 4]; // 上下左右边距
 
         this.container = new PIXI.Container();
         this.container.position.set(this.x, this.y);
 
-        this.blocks = []
+        this.blocks = [];
 
         this.initGrid();
     }
@@ -54,7 +66,12 @@ export class Grid {
 
         // 半透明背景
         graphics.beginFill(0x1f2121, 0.3);
-        graphics.drawRect(0, 0, this.width * this.cellSize * this.aspect, this.height * this.cellSize);
+        graphics.drawRect(
+            0,
+            0,
+            this.width * this.cellSize * this.aspect,
+            this.height * this.cellSize,
+        );
         graphics.endFill();
 
         // 网格线
@@ -63,20 +80,31 @@ export class Grid {
         // 水平线
         for (let row = 0; row <= this.height; row++) {
             graphics.moveTo(0, row * this.cellSize); // 使用 this.cellSize
-            graphics.lineTo(this.width * this.cellSize * this.aspect, row * this.cellSize);
+            graphics.lineTo(
+                this.width * this.cellSize * this.aspect,
+                row * this.cellSize,
+            );
             graphics.stroke({ width: 2, color: 0x333333 });
         }
 
         // 垂直线
         for (let col = 0; col <= this.width; col++) {
             graphics.moveTo(col * this.cellSize * this.aspect, 0); // 使用 this.cellSize
-            graphics.lineTo(col * this.cellSize * this.aspect, this.height * this.cellSize);
+            graphics.lineTo(
+                col * this.cellSize * this.aspect,
+                this.height * this.cellSize,
+            );
             graphics.stroke({ width: 2, color: 0x333333 });
         }
 
         // 外围边框
         graphics.lineStyle(3, 0x666666);
-        graphics.drawRect(0, 0, this.width * this.cellSize * this.aspect, this.height * this.cellSize); // 使用 this.cellSize
+        graphics.drawRect(
+            0,
+            0,
+            this.width * this.cellSize * this.aspect,
+            this.height * this.cellSize,
+        ); // 使用 this.cellSize
         graphics.stroke({ width: 3, color: 0x666666 });
 
         this.container.addChild(graphics);
@@ -93,45 +121,62 @@ export class Grid {
     }
 
     /*
-    * 获取网格位置
-    * @param {number} globalX - 全局X坐标
-    * @param {number} globalY - 全局Y坐标
-    * @param {Block} item - 方块对象
-    * @returns {object} - 返回一个对象，包含 clampedCol, clampedRow, snapX 和 snapY
-    */
-    getGridPositionFromGlobal(globalX: number, globalY: number, item: Block | null): 
-    { clampedCol: number; clampedRow: number; snapX: number; snapY: number } {
+     * 给定全局坐标，获取该坐标对应的网格内位置
+     * @param {number} globalX - 全局X坐标
+     * @param {number} globalY - 全局Y坐标
+     * @param {Block} item - 方块对象
+     * @returns {object} - 返回一个对象，包含 clampedCol, clampedRow, snapX 和 snapY
+     */
+    getGridPositionFromGlobal(
+        globalX: number,
+        globalY: number,
+        item: Block | null,
+    ): {
+        clampedCol: number;
+        clampedRow: number;
+        snapX: number;
+        snapY: number;
+    } {
         // 获取容器的全局位置
         const globalPosition = this.getGlobalPosition();
-    
+
         const cellWidth = item ? item.cellWidth : 1;
         const cellHeight = item ? item.cellHeight : 1;
-    
+
         // 计算网格位置
-        const col = Math.round((globalX - globalPosition.x - cellWidth * this.cellSize * this.aspect / 2) / this.cellSize);
-        const row = Math.round((globalY - globalPosition.y - cellHeight * this.cellSize / 2) / this.cellSize);
+        const col = Math.round(
+            (globalX -
+                globalPosition.x -
+                (cellWidth * this.cellSize * this.aspect) / 2) /
+                this.cellSize,
+        );
+        const row = Math.round(
+            (globalY - globalPosition.y - (cellHeight * this.cellSize) / 2) /
+                this.cellSize,
+        );
 
         // 限制在网格范围内
         const clampedCol = Math.max(0, Math.min(col, this.width - cellWidth));
         const clampedRow = Math.max(0, Math.min(row, this.height - cellHeight));
 
         // 计算对齐后的位置
-        const snapX = (clampedCol + cellWidth / 2) * this.cellSize * this.aspect;
+        const snapX =
+            (clampedCol + cellWidth / 2) * this.cellSize * this.aspect;
         const snapY = (clampedRow + cellHeight / 2) * this.cellSize;
-    
-        return { clampedCol, clampedRow , snapX, snapY };
+
+        return { clampedCol, clampedRow, snapX, snapY };
     }
 
     checkForOverlap(item, col, row) {
         // 获取当前容器中的所有方块，排除当前检测的方块
-        const items = this.blocks.filter(child => child !== item);
+        const items = this.blocks.filter((child) => child !== item);
 
         // 计算当前方块的边界
         const itemBounds = {
             col: col,
             row: row,
             right: col + item.cellWidth,
-            bottom: row + item.cellHeight
+            bottom: row + item.cellHeight,
         };
 
         // 遍历其他方块，检查是否有重叠
@@ -140,7 +185,7 @@ export class Grid {
                 col: otherItem.col,
                 row: otherItem.row,
                 right: otherItem.col + otherItem.cellWidth,
-                bottom: otherItem.row + otherItem.cellHeight
+                bottom: otherItem.row + otherItem.cellHeight,
             };
 
             // 检查是否重叠
@@ -158,7 +203,6 @@ export class Grid {
     }
 
     checkBoundary(item, col, row) {
-
         if (this.fullfill) {
             return col === 0 && row === 0;
         }
@@ -202,15 +246,20 @@ export class Grid {
         this.container.addChild(obj.container);
         obj.parentGrid = this; // 设置父级网格
 
-
         if (this.fullfill) {
             obj.resize(this.cellSize * this.aspect, this.cellSize);
         } else {
-            obj.resize(this.cellSize * this.aspect * obj.cellWidth, this.cellSize * obj.cellHeight);
+            obj.resize(
+                this.cellSize * this.aspect * obj.cellWidth,
+                this.cellSize * obj.cellHeight,
+            );
         }
 
         if (this.fullfill) {
-            obj.setGridPosition(-(obj.cellWidth - 1) / 2, -(obj.cellHeight - 1) / 2); // 设置网格位置
+            obj.setGridPosition(
+                -(obj.cellWidth - 1) / 2,
+                -(obj.cellHeight - 1) / 2,
+            ); // 设置网格位置
         } else {
             obj.setGridPosition(col, row); // 设置网格位置
         }
@@ -241,24 +290,32 @@ export class Grid {
         const blocksNum = Math.floor(Math.random() * 10); // 随机生成0到9个方块
         let blocks = [];
         for (let i = 0; i < blocksNum; i++) {
-            const blockType = blockTypes[Math.floor(Math.random() * blockTypes.length)];
+            const blockType =
+                blockTypes[Math.floor(Math.random() * blockTypes.length)];
             blocks.push(blockType);
         }
 
         for (let row = 0; row < row_count; row++) {
             for (let col = 0; col < col_count; col++) {
                 const blockType = blocks[0];
-                if(!blockType) {
+                if (!blockType) {
                     return; // 如果没有更多方块类型，退出循环
                 }
                 // console.log(blocks, blockType)
-                const item = { cellWidth: blockType.w, cellHeight: blockType.h, blockType: blockType };
-                const canPlace = !this.checkForOverlap(item, col, row) &&
+                const item = {
+                    cellWidth: blockType.w,
+                    cellHeight: blockType.h,
+                    blockType: blockType,
+                };
+                const canPlace =
+                    !this.checkForOverlap(item, col, row) &&
                     this.checkBoundary(item, col, row);
-                    // console.log(canPlace, item.blockType.name, col, row)
+                // console.log(canPlace, item.blockType.name, col, row)
                 if (canPlace) {
-                    const x = col * this.cellSize + blockType.w * this.cellSize / 2;
-                    const y = row * this.cellSize + blockType.h * this.cellSize / 2;
+                    const x =
+                        col * this.cellSize + (blockType.w * this.cellSize) / 2;
+                    const y =
+                        row * this.cellSize + (blockType.h * this.cellSize) / 2;
 
                     // 使用 Block 类创建方块
                     const block = new Block(this.game, this, item.blockType);

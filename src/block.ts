@@ -1,10 +1,10 @@
-import * as PIXI from 'pixi.js';
+import * as PIXI from "pixi.js";
 // import * as text from '@pixi/text';
 
-import { Game } from './game';
-import { Grid } from './grid';
-import { GAME_WIDTH, GAME_HEIGHT } from './config';
-import { DEFAULT_CELL_SIZE } from './config';
+import { Game } from "./game";
+import { Grid } from "./grid";
+import { GAME_WIDTH, GAME_HEIGHT } from "./config";
+import { DEFAULT_CELL_SIZE } from "./config";
 
 export class Block {
     game: Game;
@@ -31,7 +31,7 @@ export class Block {
     container: PIXI.Container;
     graphicsBg: PIXI.Graphics | null;
     graphicsText: PIXI.Container | null;
-    
+
     dragStartContainerPosition: PIXI.Point;
     dragStartMousePoint: PIXI.Point;
     dragStartContainer: PIXI.Container;
@@ -51,14 +51,15 @@ export class Block {
         this.cellHeight = this.blockType.h;
         this.originCellWidth = this.cellWidth;
         this.originCellHeight = this.cellHeight;
-        this.pixelWidth = this.cellWidth * this.parentGrid.cellSize * this.parentGrid.aspect;
+        this.pixelWidth =
+            this.cellWidth * this.parentGrid.cellSize * this.parentGrid.aspect;
         this.pixelHeight = this.cellHeight * this.parentGrid.cellSize;
         this.color = this.blockType.color;
         this.baseValue = this.blockType.value;
         this.name = this.blockType.name;
-        this.type = blockType.type || 'collection';
+        this.type = blockType.type || "collection";
         this.search = blockType.search || 1.2;
-        
+
         // 只用作检查
         this.cellSize = this.parentGrid.cellSize;
         this.aspect = this.parentGrid.aspect;
@@ -100,7 +101,7 @@ export class Block {
             -this.pixelWidth / 2 + 2,
             -this.pixelHeight / 2 + 2,
             this.pixelWidth - 4, // 减去边框宽度
-            this.pixelHeight - 4
+            this.pixelHeight - 4,
         );
         this.graphicsBg.endFill();
 
@@ -110,7 +111,7 @@ export class Block {
             -this.pixelWidth / 2 + 2,
             -this.pixelHeight / 2 + 2,
             this.pixelWidth,
-            this.pixelHeight
+            this.pixelHeight,
         );
 
         // 添加背景到容器
@@ -121,11 +122,11 @@ export class Block {
 
         // 添加方块名称
         const nameText = new PIXI.Text(this.name || "未知", {
-            fontFamily: 'Arial',
+            fontFamily: "Arial",
             fontSize: 16,
             fill: 0xffffff,
-            fontWeight: 'bold',
-            stroke: { color: 'black', width: 3 }
+            fontWeight: "bold",
+            stroke: { color: "black", width: 3 },
         });
         nameText.anchor.set(0.5);
         nameText.position.set(0, -10); // 名称显示在方块中心上方
@@ -134,15 +135,17 @@ export class Block {
         // 添加方块价值
         const valueText = new PIXI.Text(
             this.baseValue
-                ? this.baseValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                ? this.baseValue
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 : "0",
             {
-                fontFamily: 'Arial',
+                fontFamily: "Arial",
                 fontSize: 21,
                 fill: 0xffffff,
-                fontWeight: 'bold',
-                stroke: { color: 'black', width: 3 }
-            }
+                fontWeight: "bold",
+                stroke: { color: "black", width: 3 },
+            },
         );
         valueText.anchor.set(0.5);
         valueText.position.set(0, 10); // 价值显示在方块中心下方
@@ -158,20 +161,21 @@ export class Block {
     addEventListeners() {
         // this.container.interactive = true;
         // this.container.buttonMode = true;
-        this.container.eventMode = 'static';
+        this.container.eventMode = "static";
 
         this.container
-            .on('pointerdown', (event) => {
-                if (this.game.isGameStarted) { // 只有游戏开始后才能拖动
+            .on("pointerdown", (event) => {
+                if (this.game.isGameStarted) {
+                    // 只有游戏开始后才能拖动
                     this.onDragStart(event);
                 }
             })
-            .on('pointerup', this.onDragEnd.bind(this))
-            .on('pointerupoutside', this.onDragEnd.bind(this))
-            .on('click', this.onBlockClick.bind(this));
+            .on("pointerup", this.onDragEnd.bind(this))
+            .on("pointerupoutside", this.onDragEnd.bind(this))
+            .on("click", this.onBlockClick.bind(this));
 
         // 添加全局键盘事件监听
-        window.addEventListener('keydown', this.onKeyDown.bind(this));
+        window.addEventListener("keydown", this.onKeyDown.bind(this));
     }
 
     onDragStart(event: PIXI.FederatedMouseEvent) {
@@ -191,7 +195,12 @@ export class Block {
         if (!this.dragOverlay) {
             this.dragOverlay = new PIXI.Graphics();
             this.dragOverlay.beginFill(0x000000, 0.1); // 完全透明
-            this.dragOverlay.drawRect(-GAME_WIDTH, -GAME_HEIGHT, GAME_WIDTH * 3, GAME_HEIGHT * 3); // 大范围矩形
+            this.dragOverlay.drawRect(
+                -GAME_WIDTH,
+                -GAME_HEIGHT,
+                GAME_WIDTH * 3,
+                GAME_HEIGHT * 3,
+            ); // 大范围矩形
             this.dragOverlay.endFill();
             this.container.addChild(this.dragOverlay);
         }
@@ -202,9 +211,9 @@ export class Block {
         // console.log(this.app)
         this.game.app.stage.addChild(this.container);
         this.container.position.set(globalPosition.x, globalPosition.y);
-        
+
         // bind
-        this.container.on('pointermove', this.onDragMove.bind(this));
+        this.container.on("pointermove", this.onDragMove.bind(this));
     }
 
     /**
@@ -219,9 +228,13 @@ export class Block {
             const bounds = grid.container.getBounds();
 
             // 检查坐标是否在当前网格的范围内
-            if (x >= bounds.x && x <= bounds.x + bounds.width &&
-                y >= bounds.y && y <= bounds.y + bounds.height) {
-                    // console.log(bounds.x, bounds.y, bounds.width, bounds.height)
+            if (
+                x >= bounds.x &&
+                x <= bounds.x + bounds.width &&
+                y >= bounds.y &&
+                y <= bounds.y + bounds.height
+            ) {
+                // console.log(bounds.x, bounds.y, bounds.width, bounds.height)
                 return grid; // 返回找到的 Grid 实例
             }
         }
@@ -230,7 +243,6 @@ export class Block {
 
     /**
      * 结束拖动事件
-     * @param {PIXI.FederatedMouseEvent} event - The event object
      */
     onDragEnd() {
         this.container.alpha = 1;
@@ -239,17 +251,22 @@ export class Block {
         const newPosition = this.container.getGlobalPosition();
 
         const grid = this.findGrid(newPosition.x, newPosition.y);
-        if(!grid) {
-            console.log('没有找到对应的网格');
+        if (!grid) {
+            console.log("没有找到对应的网格");
             return;
         }
 
         // 获取网格的全局位置
-        const { clampedCol, clampedRow, snapX, snapY } = grid.getGridPositionFromGlobal(newPosition.x, newPosition.y, this);
+        const { clampedCol, clampedRow } = grid.getGridPositionFromGlobal(
+            newPosition.x,
+            newPosition.y,
+            this,
+        );
 
-        const canPlace = !grid.checkForOverlap(this, clampedCol, clampedRow) &&
-                         grid.checkBoundary(this, clampedCol, clampedRow) &&
-                         grid.checkAccept(this);
+        const canPlace =
+            !grid.checkForOverlap(this, clampedCol, clampedRow) &&
+            grid.checkBoundary(this, clampedCol, clampedRow) &&
+            grid.checkAccept(this);
 
         // 检查重叠和边界
         if (canPlace) {
@@ -273,11 +290,13 @@ export class Block {
             this.container.removeChild(this.dragOverlay);
             this.dragOverlay = null;
         }
-        console.log('a')
-        this.game.totalValueDisplay.updateTotalValue();
+        const tvd = this.game.totalValueDisplay;
+        if (tvd) {
+            tvd.updateTotalValue();
+        }
 
         // 移除事件监听
-        this.container.off('pointermove', this.onDragMove.bind(this));
+        this.container.off("pointermove", this.onDragMove.bind(this));
     }
 
     onDragMove(event: PIXI.FederatedMouseEvent) {
@@ -286,7 +305,10 @@ export class Block {
         const dy = newPosition.y - this.dragStartMousePoint.y;
 
         // 更新方块位置
-        this.container.position.set(this.dragStartContainerPosition.x + dx, this.dragStartContainerPosition.y + dy);
+        this.container.position.set(
+            this.dragStartContainerPosition.x + dx,
+            this.dragStartContainerPosition.y + dy,
+        );
         this.isDragging = true;
 
         // 获取方块的全局坐标
@@ -305,9 +327,9 @@ export class Block {
     }
 
     onKeyDown(event) {
-        if (event.key.toLowerCase() === 'r') {
+        if (event.key.toLowerCase() === "r") {
             // console.log(this.isDragging)
-            if(this.isDragging) {
+            if (this.isDragging) {
                 // 交换宽度和高度以实现旋转
                 const t1 = this.cellWidth;
                 this.cellWidth = this.cellHeight;
@@ -345,43 +367,59 @@ export class Block {
         baseY = globalPos.y;
 
         // 计算网格位置
-        const col = Math.round((x - baseX - this.cellWidth * this.game.CELL_SIZE / 2) / this.game.CELL_SIZE);
-        const row = Math.round((y - baseY - this.cellHeight * this.game.CELL_SIZE / 2) / this.game.CELL_SIZE);
+        const col = Math.round(
+            (x - baseX - (this.cellWidth * this.game.CELL_SIZE) / 2) /
+                this.game.CELL_SIZE,
+        );
+        const row = Math.round(
+            (y - baseY - (this.cellHeight * this.game.CELL_SIZE) / 2) /
+                this.game.CELL_SIZE,
+        );
 
         // 限制在网格范围内
-        const clampedCol = Math.max(0, Math.min(col, grid.width - this.cellWidth));
-        const clampedRow = Math.max(0, Math.min(row, grid.height - this.cellHeight));
+        const clampedCol = Math.max(
+            0,
+            Math.min(col, grid.width - this.cellWidth),
+        );
+        const clampedRow = Math.max(
+            0,
+            Math.min(row, grid.height - this.cellHeight),
+        );
 
         // 计算对齐后的位置
-        const snapX = clampedCol * this.game.CELL_SIZE + this.cellWidth * this.game.CELL_SIZE / 2;
-        const snapY = clampedRow * this.game.CELL_SIZE + this.cellHeight * this.game.CELL_SIZE / 2;
+        const snapX =
+            clampedCol * this.game.CELL_SIZE +
+            (this.cellWidth * this.game.CELL_SIZE) / 2;
+        const snapY =
+            clampedRow * this.game.CELL_SIZE +
+            (this.cellHeight * this.game.CELL_SIZE) / 2;
 
         // 检查是否可以放置
-        const canPlace = !grid.checkForOverlap(this, clampedCol, clampedRow) &&
-                         grid.checkBoundary(this, clampedCol, clampedRow) &&
-                         grid.checkAccept(this);
+        const canPlace =
+            !grid.checkForOverlap(this, clampedCol, clampedRow) &&
+            grid.checkBoundary(this, clampedCol, clampedRow) &&
+            grid.checkAccept(this);
 
         // 设置预览颜色
         const previewColor = canPlace ? 0x88ff88 : 0xff8888; // 浅绿色或浅红色
 
         // 绘制预览
-        if(grid.fullfill) {
+        if (grid.fullfill) {
             this.previewIndicator.beginFill(previewColor);
             this.previewIndicator.drawRect(
                 baseX,
                 baseY,
                 grid.width * grid.cellSize * grid.aspect,
-                grid.height * grid.cellSize
+                grid.height * grid.cellSize,
             );
             this.previewIndicator.endFill();
-
         } else {
             this.previewIndicator.beginFill(previewColor);
             this.previewIndicator.drawRect(
-                baseX + snapX - this.cellWidth * this.game.CELL_SIZE / 2,
-                baseY + snapY - this.cellHeight * this.game.CELL_SIZE / 2,
+                baseX + snapX - (this.cellWidth * this.game.CELL_SIZE) / 2,
+                baseY + snapY - (this.cellHeight * this.game.CELL_SIZE) / 2,
                 this.cellWidth * this.game.CELL_SIZE,
-                this.cellHeight * this.game.CELL_SIZE
+                this.cellHeight * this.game.CELL_SIZE,
             );
             this.previewIndicator.endFill();
         }
@@ -395,7 +433,10 @@ export class Block {
     setGridPosition(col, row) {
         this.col = col;
         this.row = row;
-        this.x = (col + 0.5 * this.cellWidth) * this.parentGrid.cellSize * this.parentGrid.aspect;
+        this.x =
+            (col + 0.5 * this.cellWidth) *
+            this.parentGrid.cellSize *
+            this.parentGrid.aspect;
         this.y = (row + 0.5 * this.cellHeight) * this.parentGrid.cellSize;
         this.container.position.set(this.x, this.y);
         // console.log(col, row, this.parentGrid.cellSize, this.parentGrid.aspect, this.x, this.y, this.graphicsBg.scale)

@@ -1,19 +1,20 @@
-import * as PIXI from 'pixi.js';
-import { GAME_WIDTH, GAME_HEIGHT } from './config';
-import { Grid } from './grid';
+import * as PIXI from "pixi.js";
+import { GAME_WIDTH, GAME_HEIGHT } from "./config";
+import { Grid } from "./grid";
+import { TotalValueDisplay } from "./totalValueDisplay";
 
 export class Game {
     app: PIXI.Application;
     BLOCK_TYPES: never[];
     grids: Grid[];
     currentRightRegion: number;
-    totalValueDisplay: null;
+    totalValueDisplay: TotalValueDisplay | null;
     regionSwitchUI: null;
     isGameStarted: boolean;
     timer: null;
     scrollableContainer: null;
     instances: Array<any> = [];
-    
+
     constructor() {
         this.app = new PIXI.Application();
         this.BLOCK_TYPES = [];
@@ -29,36 +30,34 @@ export class Game {
 
     async loadBlockTypes() {
         try {
-            const response = await fetch('public/blocks.json');
+            const response = await fetch("public/blocks.json");
             this.BLOCK_TYPES = await response.json();
-            const loadingElement = document.querySelector('.loading');
+            const loadingElement = document.querySelector(".loading");
             if (loadingElement) {
-                (loadingElement as HTMLElement).style.display = 'none';
+                (loadingElement as HTMLElement).style.display = "none";
             }
         } catch (error) {
-            console.error('加载方块数据失败:', error);
-            const loadingElement = document.querySelector('.loading');
+            console.error("加载方块数据失败:", error);
+            const loadingElement = document.querySelector(".loading");
             if (loadingElement) {
-                loadingElement.textContent = '加载方块数据失败，请刷新重试';
+                loadingElement.textContent = "加载方块数据失败，请刷新重试";
             }
             throw error;
         }
     }
-  
+
     async createPixiApp() {
-        await this.app.init(
-            {
-                width: GAME_WIDTH,
-                height: GAME_HEIGHT,
-                antialias: true,
-                backgroundColor: 0x000000,
-                resolution: window.devicePixelRatio || 1,
-            }
-        );
+        await this.app.init({
+            width: GAME_WIDTH,
+            height: GAME_HEIGHT,
+            antialias: true,
+            backgroundColor: 0x000000,
+            resolution: window.devicePixelRatio || 1,
+        });
         document.body.appendChild(this.app.canvas);
     }
-  
-    createBG(){
+
+    createBG() {
         const bg = new PIXI.Graphics();
         bg.beginFill(0x242f39);
         bg.drawRoundedRect(0, 0, GAME_WIDTH, GAME_HEIGHT, 10); // 背景稍微大于按钮和文字
@@ -67,62 +66,70 @@ export class Game {
             this.app.stage.addChild(bg);
         }
     }
-  
+
     createUI() {
         const infoBG = new PIXI.Graphics();
         infoBG.beginFill(0xffffff, 0.1);
-        infoBG.drawRect(30, 124, 246, 580)
+        infoBG.drawRect(30, 124, 246, 580);
         infoBG.endFill();
         this.app.stage.addChild(infoBG);
-  
+
         const infoTitleBG = new PIXI.Graphics();
         infoBG.beginFill(0xffffff, 0.3);
-        infoBG.drawRect(30, 72, 760, 50)
+        infoBG.drawRect(30, 72, 760, 50);
         infoBG.endFill();
         this.app.stage.addChild(infoTitleBG);
-  
+
         const infoTitleText = new PIXI.Text("个人物资", {
-            fontFamily: 'Arial',
+            fontFamily: "Arial",
             fontSize: 24,
             fill: 0xffffff,
-            fontWeight: 'bold',
+            fontWeight: "bold",
             stroke: 0x000000,
-            strokeThickness: 3
+            strokeThickness: 3,
         });
         infoTitleText.anchor.set(0.5);
         infoTitleText.position.set(100, 100);
         this.app.stage.addChild(infoTitleText);
-      
+
         const spoilsTitleBG = new PIXI.Graphics();
         spoilsTitleBG.beginFill(0xff0000, 0.3);
-        spoilsTitleBG.drawRect(804, 72, 508, 50)
+        spoilsTitleBG.drawRect(804, 72, 508, 50);
         spoilsTitleBG.endFill();
         this.app.stage.addChild(spoilsTitleBG);
-      
+
         const infoTitleText2 = new PIXI.Text("战利品", {
-            fontFamily: 'Arial',
+            fontFamily: "Arial",
             fontSize: 24,
             fill: 0xffffff,
-            fontWeight: 'bold',
+            fontWeight: "bold",
             stroke: 0x000000,
-            strokeThickness: 3
+            strokeThickness: 3,
         });
         infoTitleText2.anchor.set(0.5);
         infoTitleText2.position.set(860, 100);
         this.app.stage.addChild(infoTitleText2);
-        
-        // 创建总价值显示UI
-        this.totalValueDisplay = new TotalValueDisplay(this, this.gridContainers, 42, 186);
-      
-        // 创建区域切换UI
-        this.regionSwitchUI = new RegionSwitchUI(this, 920, 86, () => {
 
-      
-        });
+        // 创建总价值显示UI
+        this.totalValueDisplay = new TotalValueDisplay(
+            this,
+            this.gridContainers,
+            42,
+            186,
+        );
+
+        // 创建区域切换UI
+        this.regionSwitchUI = new RegionSwitchUI(this, 920, 86, () => {});
         this.regionSwitchUI.addToStage();
 
         // 创建创建左侧滚动容器
-        this.scrollableContainer = new ScrollableContainer(this.app, 276, 124, 514, 580);
+        this.scrollableContainer = new ScrollableContainer(
+            this.app,
+            276,
+            124,
+            514,
+            580,
+        );
         this.scrollableContainer.addToStage();
     }
 
@@ -136,8 +143,8 @@ export class Game {
         // this.totalValueDisplay.updateTotalValue();
         // console.log(`初始总价值: ${this.totalValueDisplay.valueText.text}`);
     }
-  
-/*
+
+    /*
     createGrid(info) {
         const grid = new Grid(
             this,
