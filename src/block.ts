@@ -37,10 +37,11 @@ export class Block {
     dragStartBlockGlobalPosition: PIXI.Point;
     dragStartMouseGlobalPoint: PIXI.Point;
     isDragging: boolean;
+    hasMoved: boolean;
     dragOverlay: PIXI.Graphics | null;
     previewIndicator: PIXI.Graphics | null;
 
-    constructor(game: Game, parentGrid: Grid, blockType: any) {
+    constructor(game: Game, parentGrid: Grid, type: string, blockType: any) {
         this.game = game;
         this.parentGrid = parentGrid;
         this.col = 0;
@@ -58,7 +59,7 @@ export class Block {
         this.color = this.blockType.color;
         this.baseValue = this.blockType.value;
         this.name = this.blockType.name;
-        this.type = blockType.type || "collection";
+        this.type = type || "collection";
         this.search = blockType.search || 1.2;
 
         // 只用作检查
@@ -77,6 +78,7 @@ export class Block {
         this.dragStartBlockGlobalPosition = new PIXI.Point(this.x, this.y);
         this.dragStartMouseGlobalPoint = new PIXI.Point(this.x, this.y);
         this.isDragging = false;
+        this.hasMoved = false;
         this.dragOverlay = null;
         this.previewIndicator = null;
 
@@ -182,13 +184,14 @@ export class Block {
     }
 
     onDragStart(event: PIXI.FederatedMouseEvent) {
+        this.isDragging = true;
+        this.hasMoved = false;
         // Keep track of the starting position and container
         this.dragStartParentContainer = this.container.parent;
         this.dragStartBlockLocalPosition = this.container.position.clone();
         this.dragStartBlockGlobalPosition = this.container.getGlobalPosition();
         // Get the global mouse position at the start of the drag
         this.dragStartMouseGlobalPoint = event.global.clone();
-        this.isDragging = false;
         this.container.alpha = 0.7;
 
         // 创建预览指示器
@@ -268,14 +271,12 @@ export class Block {
             newPosition.y,
             this,
         );
-        console.log(clampedCol, clampedRow);
+        // console.log(clampedCol, clampedRow);
 
         const canPlace =
             !grid.checkForOverlap(this, clampedCol, clampedRow) &&
             grid.checkBoundary(this, clampedCol, clampedRow) &&
             grid.checkAccept(this);
-
-        
 
         // 检查重叠和边界
         if (canPlace) {
@@ -288,7 +289,8 @@ export class Block {
             this.container.position.copyFrom(this.dragStartBlockLocalPosition);
             // console.log(checkForOverlap(container, this.container, snapX, snapY), checkBoundary(container, this.container, clampedCol, clampedRow));
         }
-        console.log(canPlace);
+        // console.log("2", this.previewIndicator.position.x);
+        // console.log("2", this.graphicsBg.position.x);
 
         // Remove the preview indicator
         if (this.previewIndicator) {
@@ -309,10 +311,18 @@ export class Block {
 
         // Remove the event listener for pointermove
         this.container.off("pointermove", this.onDragMove.bind(this));
+
+        if (!this.hasMoved) {
+            this.showBlockDetails(newPosition.x, newPosition.y);
+        }
+        this.hasMoved = false;
     }
 
     onDragMove(event: PIXI.FederatedMouseEvent) {
-        this.isDragging = true;
+        if (this.isDragging === false) {
+            return;
+        }
+        this.hasMoved = true;
         const dx = event.global.x - this.dragStartMouseGlobalPoint.x;
         const dy = event.global.y - this.dragStartMouseGlobalPoint.y;
 
@@ -337,14 +347,12 @@ export class Block {
             currentBlockGlobalPosition.x,
             currentBlockGlobalPosition.y,
         );
+        // console.log("1", this.dragOverlay.position.x);
+        // console.log("1", this.graphicsBg.position.x);
     }
 
     onBlockClick(event: any) {
         event.stopPropagation();
-        if (!this.isDragging) {
-            const globalPos = event.global;
-            this.showBlockDetails(globalPos.x, globalPos.y);
-        }
     }
 
     onKeyDown(event: any) {

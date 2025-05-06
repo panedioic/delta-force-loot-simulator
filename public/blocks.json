@@ -218,7 +218,7 @@
     {
         "cellWidth": 2,
         "cellHeight": 2,
-        "type": "cellHeightelmet",
+        "type": "helmet",
         "name": "2级头",
         "value": 5000,
         "color": "367e68"
@@ -226,7 +226,7 @@
     {
         "cellWidth": 2,
         "cellHeight": 2,
-        "type": "cellHeightelmet",
+        "type": "helmet",
         "name": "3级头",
         "value": 15000,
         "color": "4b6b87"
@@ -234,7 +234,7 @@
     {
         "cellWidth": 2,
         "cellHeight": 2,
-        "type": "cellHeightelmet",
+        "type": "helmet",
         "name": "4级头",
         "value": 30000,
         "color": "695687"
@@ -242,7 +242,7 @@
     {
         "cellWidth": 2,
         "cellHeight": 2,
-        "type": "cellHeightelmet",
+        "type": "helmet",
         "name": "5级头",
         "value": 50000,
         "color": "a16e50"
@@ -284,7 +284,7 @@
     {
         "cellWidth": 5,
         "cellHeight": 2,
-        "type": "primarycellWidtheapon",
+        "type": "primaryWeapon",
         "name": "AKM",
         "value": 20000,
         "color": "808080"
@@ -292,7 +292,7 @@
     {
         "cellWidth": 5,
         "cellHeight": 2,
-        "type": "primarycellWidtheapon",
+        "type": "primaryWeapon",
         "name": "M4A1",
         "value": 30000,
         "color": "808080"
@@ -300,7 +300,7 @@
     {
         "cellWidth": 5,
         "cellHeight": 2,
-        "type": "primarycellWidtheapon",
+        "type": "primaryWeapon",
         "name": "M249",
         "value": 40000,
         "color": "808080"
@@ -308,7 +308,7 @@
     {
         "cellWidth": 5,
         "cellHeight": 2,
-        "type": "primarycellWidtheapon",
+        "type": "primaryWeapon",
         "name": "M14",
         "value": 35000,
         "color": "808080"
@@ -316,7 +316,7 @@
     {
         "cellWidth": 6,
         "cellHeight": 1,
-        "type": "primarycellWidtheapon",
+        "type": "primaryWeapon",
         "name": "AcellWidthM",
         "value": 50000,
         "color": "808080"
@@ -325,7 +325,7 @@
     {
         "cellWidth": 2,
         "cellHeight": 1,
-        "type": "secondarycellWidtheapon",
+        "type": "secondaryWeapon",
         "name": "G17",
         "value": 5000,
         "color": "808080"
@@ -333,7 +333,7 @@
     {
         "cellWidth": 2,
         "cellHeight": 1,
-        "type": "secondarycellWidtheapon",
+        "type": "secondaryWeapon",
         "name": "G18",
         "value": 6000,
         "color": "808080"
@@ -341,7 +341,7 @@
     {
         "cellWidth": 2,
         "cellHeight": 1,
-        "type": "secondarycellWidtheapon",
+        "type": "secondaryWeapon",
         "name": "93R",
         "value": 7000,
         "color": "808080"
@@ -383,7 +383,7 @@
     {
         "cellWidth": 1,
         "cellHeight": 2,
-        "type": "ccellHeightestRigs",
+        "type": "chestRigs",
         "name": "2级胸挂",
         "value": 5000,
         "color": "367e68"
@@ -391,7 +391,7 @@
     {
         "cellWidth": 1,
         "cellHeight": 2,
-        "type": "ccellHeightestRigs",
+        "type": "chestRigs",
         "name": "3级胸挂",
         "value": 15000,
         "color": "4b6b87"
@@ -399,7 +399,7 @@
     {
         "cellWidth": 2,
         "cellHeight": 2,
-        "type": "ccellHeightestRigs",
+        "type": "chestRigs",
         "name": "4级胸挂",
         "value": 30000,
         "color": "695687"
@@ -407,7 +407,7 @@
     {
         "cellWidth": 2,
         "cellHeight": 2,
-        "type": "ccellHeightestRigs",
+        "type": "chestRigs",
         "name": "5级胸挂",
         "value": 50000,
         "color": "a16e50"

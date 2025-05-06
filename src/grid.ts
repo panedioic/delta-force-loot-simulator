@@ -274,6 +274,7 @@ export class Grid {
                 ret = true;
             }
         });
+        // console.log(this.acceptedTypes, item.type, ret);
         return ret;
     }
 
@@ -370,6 +371,7 @@ export class Grid {
                     cellWidth: blockType.cellWidth,
                     cellHeight: blockType.cellHeight,
                     blockType: blockType,
+                    type: blockType.type,
                 };
                 const canPlace =
                     !this.checkForOverlap(item, col, row) &&
@@ -377,7 +379,12 @@ export class Grid {
                 if (canPlace) {
                     // console.log("aaa", blockType, item);
                     // 使用 Block 类创建方块
-                    const block = new Block(this.game, this, item.blockType);
+                    const block = new Block(
+                        this.game,
+                        this,
+                        item.type,
+                        blockType,
+                    );
                     this.addBlock(block, col, row);
 
                     blocks.shift(); // 移除已放置的方块类型
