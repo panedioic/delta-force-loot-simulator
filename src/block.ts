@@ -46,8 +46,8 @@ export class Block {
         this.x = 0;
         this.y = 0;
         this.blockType = blockType;
-        this.cellWidth = this.blockType.w;
-        this.cellHeight = this.blockType.h;
+        this.cellWidth = this.blockType.cellWidth;
+        this.cellHeight = this.blockType.cellHeight;
         this.originCellWidth = this.cellWidth;
         this.originCellHeight = this.cellHeight;
         this.pixelWidth =
@@ -414,7 +414,16 @@ export class Block {
             this.parentGrid.aspect;
         this.y = (row + 0.5 * this.cellHeight) * this.parentGrid.cellSize;
         this.container.position.set(this.x, this.y);
-        // console.log(col, row, this.parentGrid.cellSize, this.parentGrid.aspect, this.x, this.y, this.graphicsBg.scale)
+        // console.log(
+        //     col,
+        //     row,
+        //     this.parentGrid.cellSize,
+        //     this.parentGrid.aspect,
+        //     this.cellWidth,
+        //     this.x,
+        //     this.y,
+        //     this.graphicsBg.scale,
+        // );
     }
 
     getValue() {

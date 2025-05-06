@@ -1,12 +1,20 @@
-import * as PIXI from 'pixi.js';
-import { Game } from './game';
+import * as PIXI from "pixi.js";
+import { Game } from "./game";
 
+/**
+ * 显示玩家目前获得的所有物资的总价值的组件。
+ * @param {Game} game - The game instance
+ * @param {number} x - The x coordinate of the display
+ * @param {number} y - The y coordinate of the display
+ * */
 export class TotalValueDisplay {
     private game: Game;
     private x: number;
     private y: number;
-    private totalValue: number;
+    totalValue: number;
     private container: PIXI.Container;
+
+    private valueText: PIXI.Text;
 
     constructor(game: Game, x: number, y: number) {
         this.game = game;
@@ -15,6 +23,7 @@ export class TotalValueDisplay {
         this.totalValue = 0;
 
         this.container = new PIXI.Container();
+        this.valueText = new PIXI.Text();
 
         this.initUI();
     }
@@ -29,33 +38,24 @@ export class TotalValueDisplay {
         this.container.addChild(bg);
 
         // 标题
-        const title = new PIXI.Text('当前总价值:', {
-            fontFamily: 'Arial',
+        const title = new PIXI.Text("当前总价值:", {
+            fontFamily: "Arial",
             fontSize: 16,
             fill: 0x333333,
-            fontWeight: 'bold'
+            fontWeight: "bold",
         });
         title.position.set(10, 20);
         this.container.addChild(title);
 
         // 价值显示
-        const valueText = new PIXI.Text('0', {
-            fontFamily: 'Arial',
+        this.valueText = new PIXI.Text("0", {
+            fontFamily: "Arial",
             fontSize: 24,
             fill: 0x00aa00,
-            fontWeight: 'bold'
+            fontWeight: "bold",
         });
-        valueText.position.set(100, 13);
-        this.container.addChild(valueText);
-
-        // // 单位
-        // const unitText = new PIXI.Text('元', {
-        //     fontFamily: 'Arial',
-        //     fontSize: 16,
-        //     fill: 0x333333
-        // });
-        // unitText.position.set(210, 20);
-        // this.container.addChild(unitText);
+        this.valueText.position.set(100, 13);
+        this.container.addChild(this.valueText);
 
         // 定位在左侧网格上方
         this.container.position.set(this.x, this.y);
@@ -67,22 +67,26 @@ export class TotalValueDisplay {
         this.totalValue = 0;
 
         // 遍历所有 countable 为 true 的 Grid
-        this.game.grids.forEach(grid => {
+        this.game.grids.forEach((grid) => {
             if (grid.countable) {
-                grid.blocks.forEach(block => {
+                grid.blocks.forEach((block) => {
                     this.totalValue += block.getValue();
                 });
             }
         });
 
         // 格式化数字显示，添加千位分隔符
-        const formattedValue = this.totalValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        const formattedValue = this.totalValue
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         this.valueText.text = formattedValue;
 
         // 根据价值改变颜色
         let color = 0x00aa00; // 默认绿色
-        if (this.totalValue > 500000) color = 0xff0000; // 红色
-        else if (this.totalValue > 200000) color = 0xffcc00; // 金色
+        if (this.totalValue > 500000)
+            color = 0xff0000; // 红色
+        else if (this.totalValue > 200000)
+            color = 0xffcc00; // 金色
         else if (this.totalValue > 100000) color = 0xaa00aa; // 紫色
         this.valueText.style.fill = color;
     }

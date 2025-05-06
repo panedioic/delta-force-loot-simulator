@@ -1,0 +1,158 @@
+[
+    {
+        "type": "Grid",
+        "accept": ["primaryWeapon"],
+        "cellsize": 128,
+        "aspect": 2.6,
+        "scrollable": true,
+        "fullfill": true,
+        "countable": true
+    },
+    {
+        "type": "Grid",
+        "accept": ["secondaryWeapon"],
+        "cellsize": 128,
+        "aspect": 1.2,
+        "scrollable": true,
+        "fullfill": true,
+        "countable": true
+    },
+    {
+        "type": "Grid",
+        "accept": ["primaryWeapon"],
+        "cellsize": 128,
+        "aspect": 2.6,
+        "scrollable": true,
+        "fullfill": true,
+        "countable": true
+    },
+    {
+        "type": "Grid",
+        "accept": ["knife"],
+        "cellsize": 128,
+        "aspect": 1.2,
+        "scrollable": true,
+        "fullfill": true,
+        "countable": true
+    },
+    {
+        "type": "Grid",
+        "accept": ["helmet"],
+        "cellsize": 128,
+        "aspect": 1.9,
+        "scrollable": true,
+        "fullfill": true,
+        "countable": true
+    },
+    {
+        "type": "Grid",
+        "accept": ["armor"],
+        "cellsize": 128,
+        "aspect": 1.9,
+        "scrollable": true,
+        "fullfill": true,
+        "countable": true
+    },
+    {
+        "type": "GridTitle",
+        "cellSize": 36,
+        "aspect": 13.8
+    },
+    {
+        "type": "Grid",
+        "accept": ["chestRigs"],
+        "width": 1,
+        "height": 1,
+        "cellsize": 100,
+        "aspect": 1.0,
+        "scrollable": true,
+        "fullfill": true,
+        "countable": true
+    },
+    {
+        "type": "Grid",
+        "width": 5,
+        "height": 4,
+        "scrollable": true,
+        "countable": true
+    },
+    {
+        "type": "GridTitle",
+        "x": 0,
+        "y": 0,
+        "cellSize": 36,
+        "aspect": 13.8
+    },
+    {
+        "type": "Grid",
+        "width": 1,
+        "height": 1,
+        "scrollable": true,
+        "countable": true
+    },
+    {
+        "type": "Grid",
+        "width": 1,
+        "height": 1,
+        "scrollable": true,
+        "countable": true
+    },
+    {
+        "type": "Grid",
+        "width": 1,
+        "height": 1,
+        "scrollable": true,
+        "countable": true
+    },
+    {
+        "type": "Grid",
+        "width": 1,
+        "height": 1,
+        "scrollable": true,
+        "countable": true
+    },
+    {
+        "type": "Grid",
+        "width": 1,
+        "height": 1,
+        "scrollable": true,
+        "countable": true
+    },
+    {
+        "type": "GridTitle",
+        "x": 0,
+        "y": 0,
+        "cellSize": 36,
+        "aspect": 13.8
+    },
+    {
+        "type": "Grid",
+        "accept": ["backpack"],
+        "cellsize": 100,
+        "aspect": 1.0,
+        "scrollable": true,
+        "fullfill": true,
+        "countable": true
+    },
+    {
+        "type": "Grid",
+        "width": 5,
+        "height": 8,
+        "scrollable": true,
+        "countable": true
+    },
+    {
+        "type": "GridTitle",
+        "x": 0,
+        "y": 0,
+        "cellSize": 36,
+        "aspect": 13.8
+    },
+    {
+        "type": "Grid",
+        "width": 3,
+        "height": 3,
+        "scrollable": true,
+        "countable": true
+    }
+]

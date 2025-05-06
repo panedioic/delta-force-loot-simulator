@@ -1,6 +1,5 @@
-
 export interface BlockType {
-    w: number;
-    h: number;
+    cellWidth: number;
+    cellHeight: number;
     blockType: any; // Assuming blockType is an object with properties
 }

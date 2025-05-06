@@ -11,7 +11,6 @@ import { BlockType } from "./types";
  */
 export class Grid {
     game: Game;
-    stage: PIXI.Container;
     x: number;
     y: number;
     width: number;
@@ -28,7 +27,6 @@ export class Grid {
 
     constructor(
         game: Game,
-        stage: PIXI.Container,
         x: number,
         y: number,
         width: number,
@@ -40,7 +38,6 @@ export class Grid {
         accept: string[],
     ) {
         this.game = game;
-        this.stage = stage;
         this.x = x;
         this.y = y;
         this.width = width;
@@ -194,7 +191,11 @@ export class Grid {
      * @param {number} row - The row position of the item
      * @returns {boolean} - Returns true if there is an overlap, false otherwise
      */
-    checkForOverlap(item: Block, col: number, row: number): boolean {
+    checkForOverlap(
+        item: Block | BlockType,
+        col: number,
+        row: number,
+    ): boolean {
         // 获取当前容器中的所有方块，排除当前检测的方块
         const items = this.blocks.filter((child) => child !== item);
 
@@ -236,7 +237,7 @@ export class Grid {
      * @param {number} row - The row position of the item
      * @returns {boolean} - Returns true if the item is within the boundary, false otherwise
      * */
-    checkBoundary(item: Block, col: number, row: number): boolean {
+    checkBoundary(item: Block | BlockType, col: number, row: number): boolean {
         if (this.fullfill) {
             return col === 0 && row === 0;
         }
@@ -278,9 +279,10 @@ export class Grid {
 
     /**
      * Add the grid to the stage.
+     * @param {PIXI.Container} stage - The stage to add the grid to
      * */
-    addToStage() {
-        this.stage.addChild(this.container);
+    addToStage(stage: PIXI.Container) {
+        stage.addChild(this.container);
     }
 
     /**
@@ -310,6 +312,7 @@ export class Grid {
             ); // 设置网格位置
         } else {
             obj.setGridPosition(col, row); // 设置网格位置
+            // console.log(obj.col, obj.row);
         }
     }
 
@@ -338,7 +341,7 @@ export class Grid {
      * Get the bounds of the grid.
      * @returns {PIXI.Rectangle} - The bounds of the grid
      * */
-    getBounds() {
+    getBounds(): PIXI.Bounds {
         return this.container.getBounds();
     }
 
@@ -355,6 +358,8 @@ export class Grid {
             blocks.push(blockType);
         }
 
+        // console.log(blocks);
+
         for (let row = 0; row < this.width; row++) {
             for (let col = 0; col < this.height; col++) {
                 const blockType = blocks[0];
@@ -362,25 +367,22 @@ export class Grid {
                     return; // 如果没有更多方块类型，退出循环
                 }
                 const item = {
-                    cellWidth: blockType.w,
-                    cellHeight: blockType.h,
+                    cellWidth: blockType.cellWidth,
+                    cellHeight: blockType.cellHeight,
                     blockType: blockType,
                 };
                 const canPlace =
                     !this.checkForOverlap(item, col, row) &&
                     this.checkBoundary(item, col, row);
                 if (canPlace) {
-                    const x =
-                        col * this.cellSize + (blockType.w * this.cellSize) / 2;
-                    const y =
-                        row * this.cellSize + (blockType.h * this.cellSize) / 2;
-
+                    // console.log("aaa", blockType, item);
                     // 使用 Block 类创建方块
                     const block = new Block(this.game, this, item.blockType);
                     this.addBlock(block, col, row);
 
                     blocks.shift(); // 移除已放置的方块类型
                     if (blocks.length === 0) {
+                        // console.log(this.blocks);
                         return;
                     }
                 }
