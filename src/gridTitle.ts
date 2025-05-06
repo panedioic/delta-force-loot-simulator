@@ -5,10 +5,10 @@ export class GridTitle {
     game: Game;
     private x: number;
     private y: number;
-    private width: number;
-    private height: number;
-    private cellSize: number;
-    private aspect: number;
+    width: number;
+    height: number;
+    cellSize: number;
+    aspect: number;
     margin: number[];
     container: PIXI.Container;
 
