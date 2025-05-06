@@ -74,7 +74,7 @@ export class Game {
      * */
     async loadBlockTypes(): Promise<void> {
         try {
-            const response = await fetch("public/blocks.json");
+            const response = await fetch("/blocks.json");
             this.BLOCK_TYPES = await response.json();
             const loadingElement = document.querySelector(".loading");
             if (loadingElement) {
@@ -96,7 +96,7 @@ export class Game {
      * */
     async loadGridInfo(): Promise<void> {
         try {
-            const response = await fetch("public/gridinfo.json");
+            const response = await fetch("/gridinfo.json");
             this.GRID_INFO = await response.json();
             const loadingElement = document.querySelector(".loading");
             if (loadingElement) {
