@@ -85,8 +85,7 @@ export class Game {
             fontSize: 24,
             fill: 0xffffff,
             fontWeight: "bold",
-            stroke: 0x000000,
-            strokeThickness: 3,
+            stroke: { color: "black", width: 3 },
         });
         infoTitleText.anchor.set(0.5);
         infoTitleText.position.set(100, 100);
@@ -103,8 +102,7 @@ export class Game {
             fontSize: 24,
             fill: 0xffffff,
             fontWeight: "bold",
-            stroke: 0x000000,
-            strokeThickness: 3,
+            stroke: { color: "black", width: 3 },
         });
         infoTitleText2.anchor.set(0.5);
         infoTitleText2.position.set(860, 100);
@@ -155,7 +153,6 @@ export class Game {
             info.height || 1,
             info.cellsize || this.CELL_SIZE,
             info.aspect || 1.0,
-            info.type,
             info,
             info.visible
         );

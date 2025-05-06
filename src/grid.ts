@@ -1,10 +1,13 @@
 import * as PIXI from "pixi.js";
 import { Block } from "./block";
 import { Game } from "./game";
-import { GAME_WIDTH, GAME_HEIGHT } from "./config";
-import { RIGHT_REGION_COUNT } from "./config";
 import { DEFAULT_CELL_SIZE } from "./config";
 
+/**
+ * This class represents a grid in the game.
+ * @param {Game} game - The game instance
+ * @param {PIXI.Container} stage - The stage to add the grid to
+ */
 export class Grid {
     game: Game;
     stage: PIXI.Container;
@@ -14,7 +17,6 @@ export class Grid {
     height: number;
     cellSize: number;
     aspect: number;
-    type: string;
     info: any;
     fullfill: boolean;
     countable: boolean;
@@ -26,15 +28,15 @@ export class Grid {
     constructor(
         game: Game,
         stage: PIXI.Container,
-        x,
-        y,
-        width,
-        height,
-        cellSize,
-        aspect,
-        type,
-        info,
-        visible = true,
+        x: number,
+        y: number,
+        width: number,
+        height: number,
+        cellSize: number,
+        aspect: number,
+        fullfill: boolean,
+        countable: boolean,
+        accept: string[],
     ) {
         this.game = game;
         this.stage = stage;
@@ -42,13 +44,11 @@ export class Grid {
         this.y = y;
         this.width = width;
         this.height = height;
-        this.cellSize = cellSize;
-        this.aspect = aspect;
-        this.type = type;
-        this.info = info;
-        this.fullfill = info.fullfill || false;
-        this.countable = info.countable || false;
-        this.acceptedTypes = info.accept || []; // 默认接受所有类型
+        this.cellSize = cellSize || DEFAULT_CELL_SIZE;
+        this.aspect = aspect || 1.0;
+        this.fullfill = fullfill || false;
+        this.countable = countable || false;
+        this.acceptedTypes = accept || []; // 默认接受所有类型
 
         this.margin = [4, 4, 4, 4]; // 上下左右边距
 
@@ -60,19 +60,29 @@ export class Grid {
         this.initGrid();
     }
 
+    /**
+     * Initialize the grid by creating the grid background and lines.
+     */
     initGrid() {
         // 创建网格背景
         const graphics = new PIXI.Graphics();
 
-        // 半透明背景
-        graphics.beginFill(0x1f2121, 0.3);
-        graphics.drawRect(
+        // 半透明背景 (deprecated)
+        // graphics.beginFill(0x1f2121, 0.3);
+        // graphics.drawRect(
+        //     0,
+        //     0,
+        //     this.width * this.cellSize * this.aspect,
+        //     this.height * this.cellSize,
+        // );
+        // graphics.endFill();
+        graphics.rect(
             0,
             0,
             this.width * this.cellSize * this.aspect,
             this.height * this.cellSize,
         );
-        graphics.endFill();
+        graphics.fill({ color: 0x1f2121, alpha: 0.3 });
 
         // 网格线
         graphics.lineStyle(2, 0x666666);
@@ -110,22 +120,31 @@ export class Grid {
         this.container.addChild(graphics);
     }
 
-    setPosition(x, y) {
+    /**
+     * Set the position of the grid.
+     * @param {number} x - The x coordinate
+     * @param {number} y - The y coordinate
+     * */
+    setPosition(x: number, y: number) {
         this.x = x;
         this.y = y;
         this.container.position.set(this.x, this.y);
     }
 
-    getGlobalPosition() {
+    /**
+     * Get the global position of the grid.
+     * @returns {PIXI.Point} - The global position of the grid
+     **/
+    getGlobalPosition(): PIXI.Point {
         return this.container.getGlobalPosition();
     }
 
-    /*
-     * 给定全局坐标，获取该坐标对应的网格内位置
-     * @param {number} globalX - 全局X坐标
-     * @param {number} globalY - 全局Y坐标
-     * @param {Block} item - 方块对象
-     * @returns {object} - 返回一个对象，包含 clampedCol, clampedRow, snapX 和 snapY
+    /**
+     * Get the grid position from the global coordinates
+     * @param {number} globalX - The global X coordinate
+     * @param {number} globalY - The global Y coordinate
+     * @param {Block} item - The block item to check
+     * @returns {object} - Returns an object containing the clamped column, clamped row, snap X, and snap Y
      */
     getGridPositionFromGlobal(
         globalX: number,
@@ -167,7 +186,14 @@ export class Grid {
         return { clampedCol, clampedRow, snapX, snapY };
     }
 
-    checkForOverlap(item, col, row) {
+    /**
+     * Check for overlap between the item and other items in the grid.
+     * @param {Block} item - The block item to check
+     * @param {number} col - The column position of the item
+     * @param {number} row - The row position of the item
+     * @returns {boolean} - Returns true if there is an overlap, false otherwise
+     */
+    checkForOverlap(item: Block, col: number, row: number): boolean {
         // 获取当前容器中的所有方块，排除当前检测的方块
         const items = this.blocks.filter((child) => child !== item);
 
@@ -202,7 +228,14 @@ export class Grid {
         return false; // 无重叠
     }
 
-    checkBoundary(item, col, row) {
+    /**
+     * Check if the item is within the boundary of the grid.
+     * @param {Block} item - The block item to check
+     * @param {number} col - The column position of the item
+     * @param {number} row - The row position of the item
+     * @returns {boolean} - Returns true if the item is within the boundary, false otherwise
+     * */
+    checkBoundary(item: Block, col: number, row: number): boolean {
         if (this.fullfill) {
             return col === 0 && row === 0;
         }
@@ -223,7 +256,12 @@ export class Grid {
         );
     }
 
-    checkAccept(item) {
+    /**
+     * Check if the item is acceptable by the grid.
+     * @param {Block} item - The block item to check
+     * @returns {boolean} - Returns true if the item is accepted, false otherwise
+     * */
+    checkAccept(item: Block): boolean {
         if (this.acceptedTypes.length === 0) {
             return true; // 如果没有指定接受的类型，则默认接受所有类型
         }
@@ -237,11 +275,20 @@ export class Grid {
         return ret;
     }
 
+    /**
+     * Add the grid to the stage.
+     * */
     addToStage() {
         this.stage.addChild(this.container);
     }
 
-    addBlock(obj, col, row) {
+    /**
+     * Add a block to the grid.
+     * @param {Block} obj - The block to add
+     * @param {number} col - The column position of the block
+     * @param {number} row - The row position of the block
+     * */
+    addBlock(obj: Block, col: number, row: number) {
         this.blocks.push(obj);
         this.container.addChild(obj.container);
         obj.parentGrid = this; // 设置父级网格
@@ -265,28 +312,40 @@ export class Grid {
         }
     }
 
-    removeBlock(obj) {
+    /**
+     * Remove a block from the grid.
+     * @param {Block} obj - The block to remove
+     * */
+    removeBlock(obj: Block) {
         const index = this.blocks.indexOf(obj);
         if (index !== -1) {
             this.blocks.splice(index, 1);
-            this.container.removeChild(obj.graphics);
-            obj.parentGrid = null; // 清除父级网格引用
+            this.container.removeChild(obj.container);
+            // obj.parentGrid = null; // 清除父级网格引用
         }
     }
 
-    setVisible(visible) {
+    /**
+     * Set the visibility of the grid.
+     * @param {boolean} visible - The visibility of the grid
+     * */
+    setVisible(visible: boolean) {
         this.container.visible = visible;
     }
 
+    /**
+     * Get the bounds of the grid.
+     * @returns {PIXI.Rectangle} - The bounds of the grid
+     * */
     getBounds() {
         return this.container.getBounds();
     }
 
-    setVisible(visible) {
-        this.container.visible = visible;
-    }
-
-    initialBlocks(row_count, col_count, blockTypes) {
+    /**
+     * Initialize the blocks in the grid.
+     * @param {Array} blockTypes - The types of blocks to initialize
+     * */
+    initialBlocks(blockTypes: []) {
         const blocksNum = Math.floor(Math.random() * 10); // 随机生成0到9个方块
         let blocks = [];
         for (let i = 0; i < blocksNum; i++) {
@@ -295,8 +354,8 @@ export class Grid {
             blocks.push(blockType);
         }
 
-        for (let row = 0; row < row_count; row++) {
-            for (let col = 0; col < col_count; col++) {
+        for (let row = 0; row < this.width; row++) {
+            for (let col = 0; col < this.height; col++) {
                 const blockType = blocks[0];
                 if (!blockType) {
                     return; // 如果没有更多方块类型，退出循环

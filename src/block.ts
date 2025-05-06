@@ -4,7 +4,7 @@ import * as PIXI from "pixi.js";
 import { Game } from "./game";
 import { Grid } from "./grid";
 import { GAME_WIDTH, GAME_HEIGHT } from "./config";
-import { DEFAULT_CELL_SIZE } from "./config";
+import { BlockType } from "./types";
 
 export class Block {
     game: Game;
@@ -29,7 +29,7 @@ export class Block {
     aspect: number;
     fullfill: boolean;
     container: PIXI.Container;
-    graphicsBg: PIXI.Graphics | null;
+    graphicsBg: PIXI.Graphics;
     graphicsText: PIXI.Container | null;
 
     dragStartContainerPosition: PIXI.Point;
@@ -67,7 +67,7 @@ export class Block {
 
         this.container = new PIXI.Container();
         // this.container.position.set(this.x, this.y);
-        this.graphicsBg = null;
+        this.graphicsBg = new PIXI.Graphics();
         this.graphicsText = null;
         this.createBlockGraphics();
         this.dragStartContainerPosition = new PIXI.Point(this.x, this.y);
@@ -318,7 +318,7 @@ export class Block {
         this.updatePreviewIndicator(globalPosition.x, globalPosition.y);
     }
 
-    onBlockClick(event: PIXI.InteractionEvent) {
+    onBlockClick(event: any) {
         event.stopPropagation();
         if (!this.isDragging) {
             const globalPos = event.global;
@@ -326,7 +326,7 @@ export class Block {
         }
     }
 
-    onKeyDown(event) {
+    onKeyDown(event: any) {
         if (event.key.toLowerCase() === "r") {
             // console.log(this.isDragging)
             if (this.isDragging) {
@@ -344,12 +344,12 @@ export class Block {
         }
     }
 
-    showBlockDetails(x, y) {
+    showBlockDetails(x: number, y: number) {
         // Implement block details display logic here
         console.log(`Showing details for block at (${x}, ${y})`);
     }
 
-    updatePreviewIndicator(x, y) {
+    updatePreviewIndicator(x: number, y: number) {
         if (!this.previewIndicator) return;
 
         this.previewIndicator.clear();
@@ -362,37 +362,13 @@ export class Block {
             return;
         }
 
+        // 获取网格的全局位置
+        const { clampedCol, clampedRow, snapX, snapY } =
+            grid.getGridPositionFromGlobal(x, y, this);
+
         globalPos = grid.getGlobalPosition();
         baseX = globalPos.x;
         baseY = globalPos.y;
-
-        // 计算网格位置
-        const col = Math.round(
-            (x - baseX - (this.cellWidth * this.game.CELL_SIZE) / 2) /
-                this.game.CELL_SIZE,
-        );
-        const row = Math.round(
-            (y - baseY - (this.cellHeight * this.game.CELL_SIZE) / 2) /
-                this.game.CELL_SIZE,
-        );
-
-        // 限制在网格范围内
-        const clampedCol = Math.max(
-            0,
-            Math.min(col, grid.width - this.cellWidth),
-        );
-        const clampedRow = Math.max(
-            0,
-            Math.min(row, grid.height - this.cellHeight),
-        );
-
-        // 计算对齐后的位置
-        const snapX =
-            clampedCol * this.game.CELL_SIZE +
-            (this.cellWidth * this.game.CELL_SIZE) / 2;
-        const snapY =
-            clampedRow * this.game.CELL_SIZE +
-            (this.cellHeight * this.game.CELL_SIZE) / 2;
 
         // 检查是否可以放置
         const canPlace =
@@ -416,21 +392,21 @@ export class Block {
         } else {
             this.previewIndicator.beginFill(previewColor);
             this.previewIndicator.drawRect(
-                baseX + snapX - (this.cellWidth * this.game.CELL_SIZE) / 2,
-                baseY + snapY - (this.cellHeight * this.game.CELL_SIZE) / 2,
-                this.cellWidth * this.game.CELL_SIZE,
-                this.cellHeight * this.game.CELL_SIZE,
+                baseX + snapX - (this.cellWidth * this.cellSize) / 2,
+                baseY + snapY - (this.cellHeight * this.cellSize) / 2,
+                this.cellWidth * this.cellSize,
+                this.cellHeight * this.cellSize,
             );
             this.previewIndicator.endFill();
         }
     }
 
-    resize(sizeX, sizeY) {
+    resize(sizeX: number, sizeY: number) {
         this.graphicsBg.width = sizeX - 4;
         this.graphicsBg.height = sizeY - 4;
     }
 
-    setGridPosition(col, row) {
+    setGridPosition(col: number, row: number) {
         this.col = col;
         this.row = row;
         this.x =
