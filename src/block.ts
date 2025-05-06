@@ -31,9 +31,11 @@ export class Block {
     graphicsBg: PIXI.Graphics;
     graphicsText: PIXI.Container | null;
 
-    dragStartContainerPosition: PIXI.Point;
-    dragStartMousePoint: PIXI.Point;
-    dragStartContainer: PIXI.Container;
+    /** 拖动相关 */
+    dragStartParentContainer: PIXI.Container;
+    dragStartBlockLocalPosition: PIXI.Point;
+    dragStartBlockGlobalPosition: PIXI.Point;
+    dragStartMouseGlobalPoint: PIXI.Point;
     isDragging: boolean;
     dragOverlay: PIXI.Graphics | null;
     previewIndicator: PIXI.Graphics | null;
@@ -69,9 +71,11 @@ export class Block {
         this.graphicsBg = new PIXI.Graphics();
         this.graphicsText = null;
         this.createBlockGraphics();
-        this.dragStartContainerPosition = new PIXI.Point(this.x, this.y);
-        this.dragStartMousePoint = new PIXI.Point(this.x, this.y);
-        this.dragStartContainer = this.container.parent;
+
+        this.dragStartParentContainer = this.container.parent;
+        this.dragStartBlockLocalPosition = new PIXI.Point(this.x, this.y);
+        this.dragStartBlockGlobalPosition = new PIXI.Point(this.x, this.y);
+        this.dragStartMouseGlobalPoint = new PIXI.Point(this.x, this.y);
         this.isDragging = false;
         this.dragOverlay = null;
         this.previewIndicator = null;
@@ -178,9 +182,12 @@ export class Block {
     }
 
     onDragStart(event: PIXI.FederatedMouseEvent) {
-        this.dragStartContainerPosition = this.container.position.clone();
-        this.dragStartMousePoint = event.global.clone();
-        this.dragStartContainer = this.container.parent; // 获取当前容器
+        // Keep track of the starting position and container
+        this.dragStartParentContainer = this.container.parent;
+        this.dragStartBlockLocalPosition = this.container.position.clone();
+        this.dragStartBlockGlobalPosition = this.container.getGlobalPosition();
+        // Get the global mouse position at the start of the drag
+        this.dragStartMouseGlobalPoint = event.global.clone();
         this.isDragging = false;
         this.container.alpha = 0.7;
 
@@ -261,11 +268,14 @@ export class Block {
             newPosition.y,
             this,
         );
+        console.log(clampedCol, clampedRow);
 
         const canPlace =
             !grid.checkForOverlap(this, clampedCol, clampedRow) &&
             grid.checkBoundary(this, clampedCol, clampedRow) &&
             grid.checkAccept(this);
+
+        
 
         // 检查重叠和边界
         if (canPlace) {
@@ -274,47 +284,59 @@ export class Block {
             grid.addBlock(this, clampedCol, clampedRow);
         } else {
             // 如果重叠或超出边界，返回拖动前的位置
-            this.dragStartContainer.addChild(this.container);
-            this.container.position.copyFrom(this.dragStartContainerPosition);
+            this.dragStartParentContainer.addChild(this.container);
+            this.container.position.copyFrom(this.dragStartBlockLocalPosition);
             // console.log(checkForOverlap(container, this.container, snapX, snapY), checkBoundary(container, this.container, clampedCol, clampedRow));
         }
+        console.log(canPlace);
 
-        // 移除预览指示器
+        // Remove the preview indicator
         if (this.previewIndicator) {
             this.game.app.stage.removeChild(this.previewIndicator);
             this.previewIndicator = null;
         }
-        // console.log('end')
+
+        // Remove the drag overlay
         if (this.dragOverlay) {
             this.container.removeChild(this.dragOverlay);
             this.dragOverlay = null;
         }
-        const tvd = this.game.totalValueDisplay;
-        if (tvd) {
-            tvd.updateTotalValue();
+
+        // Update the total value display
+        if (this.game.totalValueDisplay) {
+            this.game.totalValueDisplay.updateTotalValue();
         }
 
-        // 移除事件监听
+        // Remove the event listener for pointermove
         this.container.off("pointermove", this.onDragMove.bind(this));
     }
 
     onDragMove(event: PIXI.FederatedMouseEvent) {
-        const newPosition = event.global.clone();
-        const dx = newPosition.x - this.dragStartMousePoint.x;
-        const dy = newPosition.y - this.dragStartMousePoint.y;
+        this.isDragging = true;
+        const dx = event.global.x - this.dragStartMouseGlobalPoint.x;
+        const dy = event.global.y - this.dragStartMouseGlobalPoint.y;
+
+        const currentBlockGlobalPosition = {
+            x: this.dragStartBlockGlobalPosition.x + dx,
+            y: this.dragStartBlockGlobalPosition.y + dy,
+        };
+
+        // console.log(
+        //     this.dragStartBlockGlobalPosition,
+        //     currentBlockGlobalPosition,
+        // );
 
         // 更新方块位置
         this.container.position.set(
-            this.dragStartContainerPosition.x + dx,
-            this.dragStartContainerPosition.y + dy,
+            currentBlockGlobalPosition.x,
+            currentBlockGlobalPosition.y,
         );
-        this.isDragging = true;
-
-        // 获取方块的全局坐标
-        const globalPosition = this.container.getGlobalPosition();
 
         // 更新预览指示器
-        this.updatePreviewIndicator(globalPosition.x, globalPosition.y);
+        this.updatePreviewIndicator(
+            currentBlockGlobalPosition.x,
+            currentBlockGlobalPosition.y,
+        );
     }
 
     onBlockClick(event: any) {
