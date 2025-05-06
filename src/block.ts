@@ -4,7 +4,6 @@ import * as PIXI from "pixi.js";
 import { Game } from "./game";
 import { Grid } from "./grid";
 import { GAME_WIDTH, GAME_HEIGHT } from "./config";
-import { BlockType } from "./types";
 
 export class Block {
     game: Game;

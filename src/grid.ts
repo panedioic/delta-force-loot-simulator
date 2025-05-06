@@ -2,6 +2,7 @@ import * as PIXI from "pixi.js";
 import { Block } from "./block";
 import { Game } from "./game";
 import { DEFAULT_CELL_SIZE } from "./config";
+import { BlockType } from "./types";
 
 /**
  * This class represents a grid in the game.
@@ -345,7 +346,7 @@ export class Grid {
      * Initialize the blocks in the grid.
      * @param {Array} blockTypes - The types of blocks to initialize
      * */
-    initialBlocks(blockTypes: []) {
+    initialBlocks(blockTypes: BlockType[]) {
         const blocksNum = Math.floor(Math.random() * 10); // 随机生成0到9个方块
         let blocks = [];
         for (let i = 0; i < blocksNum; i++) {
@@ -360,7 +361,6 @@ export class Grid {
                 if (!blockType) {
                     return; // 如果没有更多方块类型，退出循环
                 }
-                // console.log(blocks, blockType)
                 const item = {
                     cellWidth: blockType.w,
                     cellHeight: blockType.h,
@@ -369,7 +369,6 @@ export class Grid {
                 const canPlace =
                     !this.checkForOverlap(item, col, row) &&
                     this.checkBoundary(item, col, row);
-                // console.log(canPlace, item.blockType.name, col, row)
                 if (canPlace) {
                     const x =
                         col * this.cellSize + (blockType.w * this.cellSize) / 2;
