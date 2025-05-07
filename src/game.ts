@@ -153,30 +153,6 @@ export class Game {
         bg.fill({ color: 0x242f39 });
         this.app.stage.addChild(bg);
 
-        // Add info button
-        const infoBtn = new PIXI.Graphics();
-        infoBtn.rect(0, 0, 80, 30);
-        infoBtn.fill({ color: 0x4caf50 });
-        infoBtn.position.set(GAME_WIDTH - 100, 20);
-        infoBtn.eventMode = "static";
-        infoBtn.cursor = "pointer";
-        infoBtn.on("pointerdown", () => this.infoDialog.show());
-        this.app.stage.addChild(infoBtn);
-
-        const infoText = new PIXI.Text({
-            text: "游戏说明",
-            style: {
-                fontSize: 14,
-                fill: 0xffffff,
-            },
-        });
-        infoText.anchor.set(0.5);
-        infoText.position.set(40, 15);
-        infoBtn.addChild(infoText);
-
-        // Initialize info dialog
-        this.infoDialog = new InfoDialog(this.app);
-
         // Info background
         const infoBG = new PIXI.Graphics();
         infoBG.rect(30, 124, 246, 580);
@@ -238,7 +214,7 @@ export class Game {
         this.timer = new Timer(
             this,
             42,
-            286,
+            266,
             () => {
                 this.isGameStarted = true; // 开始计时时，允许拖动方块
             },
@@ -246,6 +222,9 @@ export class Game {
                 this.isGameStarted = false; // 暂停计时时，禁止拖动方块
             },
         );
+        // Initialize info dialog
+        this.infoDialog = new InfoDialog(this, 42, 386);
+        this.infoDialog.initUI();
     }
 
     initGrids() {

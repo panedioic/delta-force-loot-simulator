@@ -1,18 +1,70 @@
-
 import * as PIXI from "pixi.js";
+import { Game } from "./game";
 
 export class InfoDialog {
+    private game: Game;
+    private x: number;
+    private y: number;
     private container: PIXI.Container;
     private background: PIXI.Graphics;
     private isDragging: boolean = false;
     private dragStartPos: PIXI.Point = new PIXI.Point();
     private dialogStartPos: PIXI.Point = new PIXI.Point();
 
-    constructor(private app: PIXI.Application) {
+    constructor(game: Game, x: number, y: number) {
+        this.game = game;
+        this.x = x;
+        this.y = y;
         this.container = new PIXI.Container();
         this.container.visible = false;
+        this.background = new PIXI.Graphics();
         this.initDialog();
-        this.app.stage.addChild(this.container);
+        this.game.app.stage.addChild(this.container);
+    }
+
+    initUI() {
+        const UIContainer = new PIXI.Container();
+        UIContainer.position.set(this.x, this.y);
+
+        const bg = new PIXI.Graphics();
+        bg.roundRect(0, 0, 220, 50, 10);
+        bg.fill({ color: 0xffffff, alpha: 1.0 });
+        UIContainer.addChild(bg);
+
+        const infoText = new PIXI.Text({
+            text: "游戏说明:",
+            style: {
+                fontFamily: "Arial",
+                fontSize: 24,
+                fill: 0x333333,
+                fontWeight: "bold",
+            },
+        });
+        infoText.anchor.set(0.5);
+        infoText.position.set(65, 25);
+        UIContainer.addChild(infoText);
+
+        const infoBtn = new PIXI.Graphics();
+        infoBtn.roundRect(0, 0, 80, 30, 5);
+        infoBtn.fill({ color: 0x4caf50 });
+        infoBtn.position.set(130, 10);
+        infoBtn.eventMode = "static";
+        infoBtn.cursor = "pointer";
+        infoBtn.on("pointerdown", () => this.show());
+        UIContainer.addChild(infoBtn);
+
+        const clickMeText = new PIXI.Text({
+            text: "Click me!",
+            style: {
+                fontSize: 14,
+                fill: 0xffffff,
+            },
+        });
+        clickMeText.anchor.set(0.5);
+        clickMeText.position.set(40, 15);
+        infoBtn.addChild(clickMeText);
+
+        this.game.app.stage.addChild(UIContainer);
     }
 
     private initDialog() {
@@ -25,12 +77,12 @@ export class InfoDialog {
 
         // Close button
         const closeBtn = new PIXI.Graphics();
-        closeBtn.rect(-15, -15, 30, 30);
+        closeBtn.roundRect(-15, -15, 30, 30, 5);
         closeBtn.fill({ color: 0xff3333 });
         closeBtn.position.set(570, 30);
-        closeBtn.eventMode = 'static';
-        closeBtn.cursor = 'pointer';
-        closeBtn.on('pointerdown', () => this.hide());
+        closeBtn.eventMode = "static";
+        closeBtn.cursor = "pointer";
+        closeBtn.on("pointerdown", () => this.hide());
         this.container.addChild(closeBtn);
 
         const closeMark = new PIXI.Graphics();
@@ -40,6 +92,17 @@ export class InfoDialog {
         closeMark.moveTo(-8, 8);
         closeMark.lineTo(8, -8);
         closeBtn.addChild(closeMark);
+        // 不知道为什么，上面的x显示不出来
+        const closeMark2 = new PIXI.Text({
+            text: "×",
+            style: {
+                fontSize: 28,
+                fill: 0xffffff,
+            },
+        });
+        closeMark2.anchor.set(0.5);
+        closeMark2.position.set(0, 0);
+        closeBtn.addChild(closeMark2);
 
         // Title
         const title = new PIXI.Text({
@@ -47,8 +110,8 @@ export class InfoDialog {
             style: {
                 fontSize: 24,
                 fill: 0xffffff,
-                fontWeight: "bold"
-            }
+                fontWeight: "bold",
+            },
         });
         title.position.set(30, 30);
         this.container.addChild(title);
@@ -56,16 +119,16 @@ export class InfoDialog {
         // Content
         const content = [
             "游戏介绍：",
-            "这是一个模拟三角洲部队战利品管理的游戏。通过拖拽方式管理你的装备和战利品。",
+            "三角洲行动的舔包模拟器。通过拖拽方式管理你的装备和收集品。",
             "",
             "玩法说明：",
             "1. 拖动物品到合适的格子中存放",
             "2. 按R键可以旋转物品",
             "3. 合理安排空间以获得最大收益",
             "",
-            "项目地址：https://github.com/panedioic",
-            "作者主页：https://github.com/panedioic",
-            "讨论群：123456789"
+            "游戏版本：0.2.0",
+            "项目地址：https://github.com/panedioic/delta-force-loot-simulator",
+            "讨论群：还没有建好（",
         ].join("\n");
 
         const contentText = new PIXI.Text({
@@ -73,20 +136,20 @@ export class InfoDialog {
             style: {
                 fontSize: 16,
                 fill: 0xffffff,
-                lineHeight: 24
-            }
+                lineHeight: 24,
+            },
         });
         contentText.position.set(30, 80);
         this.container.addChild(contentText);
 
         // Make dialog draggable
-        this.background.eventMode = 'static';
-        this.background.cursor = 'move';
+        this.background.eventMode = "static";
+        this.background.cursor = "move";
         this.background
-            .on('pointerdown', this.onDragStart.bind(this))
-            .on('pointermove', this.onDragMove.bind(this))
-            .on('pointerup', this.onDragEnd.bind(this))
-            .on('pointerupoutside', this.onDragEnd.bind(this));
+            .on("pointerdown", this.onDragStart.bind(this))
+            .on("pointermove", this.onDragMove.bind(this))
+            .on("pointerup", this.onDragEnd.bind(this))
+            .on("pointerupoutside", this.onDragEnd.bind(this));
     }
 
     private onDragStart(event: PIXI.FederatedPointerEvent) {
@@ -102,7 +165,7 @@ export class InfoDialog {
             const dy = newPosition.y - this.dragStartPos.y;
             this.container.position.set(
                 this.dialogStartPos.x + dx,
-                this.dialogStartPos.y + dy
+                this.dialogStartPos.y + dy,
             );
         }
     }
@@ -114,10 +177,10 @@ export class InfoDialog {
     show() {
         this.container.visible = true;
         this.container.position.set(
-            (this.app.screen.width - 600) / 2,
-            (this.app.screen.height - 400) / 2
+            (this.game.app.screen.width - 600) / 2,
+            (this.game.app.screen.height - 400) / 2,
         );
-        this.app.stage.addChild(this.container); // Bring to top layer
+        this.game.app.stage.addChild(this.container); // Bring to top layer
     }
 
     hide() {
