@@ -317,7 +317,7 @@
         "cellWidth": 6,
         "cellHeight": 1,
         "type": "primaryWeapon",
-        "name": "AcellWidthM",
+        "name": "AWM",
         "value": 50000,
         "color": "808080"
     },

@@ -5,22 +5,23 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)](package.json)
 [![Vite](https://img.shields.io/badge/Vite-6.2-green)](package.json)
 
-使用 TypeScript、Vite 和 PixiJS 构建的三角洲部队战利品管理模拟器。
+三角洲行动的舔包模拟器。
 
-## ✨ 特性
+担心自己打完架后不会舔包痛失百万哈夫币？看见主播清图后的炒菜看的手痒？快来试试这款三角洲舔包模拟器吧！让你不用打开三角洲也可以享受舔包的感觉\~
 
-- 交互式库存管理系统
+## ✨ Features
+
 - 拖放式界面
-- 多种武器和装备类型
+- 模拟了手机端三角洲行动的 UI
+- 多种物品类型（头、甲、背包、胸挂、枪械、收集品...）
 - 计时器系统
-- 收集物品价值计算
-- 可滚动的扩展库存
+- 自动计算所有物品的总价值
 
-## 🌐 在线演示
+## 🌐 Online Demo
 
 [点击体验在线演示](https://df.y1yan.com)
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
 1. 克隆仓库
 2. 安装依赖：
@@ -42,7 +43,7 @@ npm run dev
   - 以及更多...
 - `public/` - 静态资产和配置文件
 
-## 📝 待办事项
+## 📝 TODO
 
 - [ ] 道具搜索功能
 - [ ] 子弹组合功能
@@ -54,7 +55,7 @@ npm run dev
 - [ ] 双击快速拾取
 - [ ] 其他功能改进
 
-## 🤝 贡献
+## 🤝 Contrubution
 
 欢迎参与项目开发！您可以通过以下方式贡献：
 1. Fork 仓库
@@ -63,10 +64,10 @@ npm run dev
 
 如有任何问题或建议，欢迎提出 Issue！
 
-## 👨‍💻 开发者
+## 👨‍💻 Development
 
-由 [依言](https://github.com/panedioic) 开发
+Created by [Y1yan（依言）](https://github.com/panedioic)
 
-## 📄 许可证
+## 📄 License
 
 本项目采用 Apache-2.0 许可证开源，详见 LICENSE 文件。
