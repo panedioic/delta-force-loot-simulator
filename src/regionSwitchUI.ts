@@ -42,56 +42,67 @@ export class RegionSwitchUI {
 
         // 背景
         const bg = new PIXI.Graphics();
-        bg.beginFill(0xffffff, 0.3);
-        bg.drawRoundedRect(0, 0, 240, 32, 10); // 背景稍微大于按钮和文字
-        bg.endFill();
+        bg.roundRect(0, 0, 240, 32, 10); // 背景稍微大于按钮和文字
+        bg.fill({ color: 0xffffff, alpha: 0.3 });
         this.container.addChild(bg);
 
         // 上一个区域按钮
         const prevButton = new PIXI.Graphics();
-        prevButton.beginFill(0xcccccc);
-        prevButton.drawRoundedRect(6, 4, 40, 24, 5);
-        prevButton.endFill();
-        prevButton.interactive = true;
+        prevButton.roundRect(6, 4, 40, 24, 5);
+        prevButton.fill({ color: 0xcccccc });
+        // prevButton.interactive = true;
+        prevButton.eventMode = "static";
+        prevButton.cursor = "pointer";
+        this.container.addChild(prevButton);
         // prevButton.buttonMode = true;
 
-        const prevText = new PIXI.Text("←", {
-            fontSize: 20,
-            fill: 0x333333,
-            fontWeight: "bold",
+        const prevText = new PIXI.Text({
+            text: "←",
+            style: {
+                fontSize: 20,
+                fill: 0x333333,
+                fontWeight: "bold",
+            },
         });
         prevText.anchor.set(0.5);
         prevText.position.set(24, 13);
-        prevButton.addChild(prevText);
+        // prevButton.addChild(prevText);
+        this.container.addChild(prevText);
 
         // 下一个区域按钮
         const nextButton = new PIXI.Graphics();
-        nextButton.beginFill(0xcccccc);
-        nextButton.drawRoundedRect(58, 4, 40, 24, 5);
-        nextButton.endFill();
-        nextButton.interactive = true;
+        nextButton.roundRect(58, 4, 40, 24, 5);
+        nextButton.fill({ color: 0xcccccc });
+        // nextButton.interactive = true;
+        nextButton.eventMode = "static";
+        nextButton.cursor = "pointer";
+        this.container.addChild(nextButton);
         // nextButton.buttonMode = true;
 
-        const nextText = new PIXI.Text("→", {
-            fontSize: 20,
-            fill: 0x333333,
-            fontWeight: "bold",
+        const nextText = new PIXI.Text({
+            text: "→",
+            style: {
+                fontSize: 20,
+                fill: 0x333333,
+                fontWeight: "bold",
+            },
         });
         nextText.anchor.set(0.5);
         nextText.position.set(76, 13);
-        nextButton.addChild(nextText);
+        // nextButton.addChild(nextText);
+        this.container.addChild(nextText);
 
         // 区域指示文本
-        this.regionText = new PIXI.Text(
-            `区域 ${this.game.currentRightRegion + 1}/${this.game.totalRightRegion}`,
-            {
+        this.regionText = new PIXI.Text({
+            text: `区域 ${this.game.currentRightRegion + 1}/${this.game.totalRightRegion}`,
+            style: {
                 fontFamily: "Arial",
                 fontSize: 22,
                 fill: 0xffffff,
                 fontWeight: "bold",
                 stroke: { color: "#000000", width: 3 },
             },
-        );
+        });
         this.regionText.anchor.set(0.5);
         this.regionText.position.set(160, 15);
 
@@ -108,8 +119,6 @@ export class RegionSwitchUI {
             }
         });
 
-        this.container.addChild(prevButton);
-        this.container.addChild(nextButton);
         this.container.addChild(this.regionText);
     }
 

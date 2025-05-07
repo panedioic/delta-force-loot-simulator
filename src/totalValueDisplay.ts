@@ -31,28 +31,33 @@ export class TotalValueDisplay {
     initUI() {
         // 背景
         const bg = new PIXI.Graphics();
-        bg.beginFill(0xffffff);
-        bg.lineStyle(2, 0x333333);
-        bg.drawRoundedRect(0, 0, 220, 60, 8);
-        bg.endFill();
+        bg.roundRect(0, 0, 220, 60, 8);
+        bg.fill({ color: 0xffffff });
+        bg.stroke({ width: 2, color: 0x333333 });
         this.container.addChild(bg);
 
         // 标题
-        const title = new PIXI.Text("当前总价值:", {
-            fontFamily: "Arial",
-            fontSize: 16,
-            fill: 0x333333,
-            fontWeight: "bold",
+        const title = new PIXI.Text({
+            text: "当前总价值:",
+            style: {
+                fontFamily: "Arial",
+                fontSize: 16,
+                fill: 0x333333,
+                fontWeight: "bold",
+            },
         });
         title.position.set(10, 20);
         this.container.addChild(title);
 
         // 价值显示
-        this.valueText = new PIXI.Text("0", {
-            fontFamily: "Arial",
-            fontSize: 24,
-            fill: 0x00aa00,
-            fontWeight: "bold",
+        this.valueText = new PIXI.Text({
+            text: "0",
+            style: {
+                fontFamily: "Arial",
+                fontSize: 24,
+                fill: 0x00aa00,
+                fontWeight: "bold",
+            },
         });
         this.valueText.position.set(100, 13);
         this.container.addChild(this.valueText);

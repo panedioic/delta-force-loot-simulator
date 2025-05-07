@@ -61,8 +61,9 @@ export class InfoDialog {
             },
         });
         clickMeText.anchor.set(0.5);
-        clickMeText.position.set(40, 15);
-        infoBtn.addChild(clickMeText);
+        clickMeText.position.set(130 + 40, 10 + 15);
+        // infoBtn.addChild(clickMeText);
+        UIContainer.addChild(clickMeText);
 
         this.game.app.stage.addChild(UIContainer);
     }
@@ -91,7 +92,7 @@ export class InfoDialog {
         closeMark.lineTo(8, 8);
         closeMark.moveTo(-8, 8);
         closeMark.lineTo(8, -8);
-        closeBtn.addChild(closeMark);
+        // closeBtn.addChild(closeMark);
         // 不知道为什么，上面的x显示不出来
         const closeMark2 = new PIXI.Text({
             text: "×",
@@ -101,8 +102,9 @@ export class InfoDialog {
             },
         });
         closeMark2.anchor.set(0.5);
-        closeMark2.position.set(0, 0);
-        closeBtn.addChild(closeMark2);
+        closeMark2.position.set(570, 30);
+        // closeBtn.addChild(closeMark2);
+        this.container.addChild(closeMark2);
 
         // Title
         const title = new PIXI.Text({
@@ -126,7 +128,7 @@ export class InfoDialog {
             "2. 按R键可以旋转物品",
             "3. 合理安排空间以获得最大收益",
             "",
-            "游戏版本：0.2.0",
+            "游戏版本：0.2.1",
             "项目地址：https://github.com/panedioic/delta-force-loot-simulator",
             "讨论群：还没有建好（",
         ].join("\n");

@@ -42,17 +42,19 @@ export class Timer {
 
         // 创建计时器背景
         const bg = new PIXI.Graphics();
-        bg.beginFill(0xffffff);
-        bg.drawRoundedRect(0, 0, 220, 100, 10); // 背景大小
-        bg.endFill();
+        bg.roundRect(0, 0, 220, 100, 10); // 背景大小
+        bg.fill({ color: 0xffffff });
         container.addChild(bg);
 
         // 创建计时器文本
-        this.timerText = new PIXI.Text("00:00:00", {
-            fontFamily: "Arial",
-            fontSize: 20,
-            fill: 0x333333,
-            fontWeight: "bold",
+        this.timerText = new PIXI.Text({
+            text: "00:00:00",
+            style: {
+                fontFamily: "Arial",
+                fontSize: 20,
+                fill: 0x333333,
+                fontWeight: "bold",
+            },
         });
         this.timerText.position.set(20, 15); // 文本位置
         container.addChild(this.timerText);
@@ -90,9 +92,8 @@ export class Timer {
 
         // 按钮背景
         const bg = new PIXI.Graphics();
-        bg.beginFill(0xcccccc);
-        bg.drawRoundedRect(0, 0, 60, 30, 5);
-        bg.endFill();
+        bg.roundRect(0, 0, 60, 30, 5);
+        bg.fill({ color: 0xcccccc });
         bg.interactive = true;
         // bg.buttonMode = true;
         // Inside the createButton function
@@ -101,11 +102,14 @@ export class Timer {
         });
 
         // 按钮文本
-        const text = new PIXI.Text(label, {
-            fontFamily: "Arial",
-            fontSize: 14,
-            fill: 0x333333,
-            fontWeight: "bold",
+        const text = new PIXI.Text({
+            text: label,
+            style: {
+                fontFamily: "Arial",
+                fontSize: 14,
+                fill: 0x333333,
+                fontWeight: "bold",
+            },
         });
         text.anchor.set(0.5);
         text.position.set(30, 15);

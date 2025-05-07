@@ -184,12 +184,15 @@ export class Game {
         spoilsTitleBG.fill({ color: 0xff0000, alpha: 0.3 });
         this.app.stage.addChild(spoilsTitleBG);
 
-        const infoTitleText2 = new PIXI.Text("战利品", {
-            fontFamily: "Arial",
-            fontSize: 24,
-            fill: 0xffffff,
-            fontWeight: "bold",
-            stroke: { color: "black", width: 3 },
+        const infoTitleText2 = new PIXI.Text({
+            text: "战利品",
+            style: {
+                fontFamily: "Arial",
+                fontSize: 24,
+                fill: 0xffffff,
+                fontWeight: "bold",
+                stroke: { color: "black", width: 3 },
+            },
         });
         infoTitleText2.anchor.set(0.5);
         infoTitleText2.position.set(860, 100);

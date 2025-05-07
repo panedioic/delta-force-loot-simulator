@@ -101,23 +101,22 @@ export class Block {
         const color = parseInt(this.color, 16) || 0x000000;
 
         // 绘制方块主体
-        this.graphicsBg.beginFill(color);
-        this.graphicsBg.drawRect(
+        this.graphicsBg.rect(
             -this.pixelWidth / 2 + 2,
             -this.pixelHeight / 2 + 2,
             this.pixelWidth - 4, // 减去边框宽度
             this.pixelHeight - 4,
         );
-        this.graphicsBg.endFill();
+        this.graphicsBg.fill({ color: color });
 
         // 绘制边框
-        this.graphicsBg.lineStyle(3, 0x000000, 0.8);
-        this.graphicsBg.drawRect(
+        this.graphicsBg.rect(
             -this.pixelWidth / 2 + 2,
             -this.pixelHeight / 2 + 2,
             this.pixelWidth,
             this.pixelHeight,
         );
+        this.graphicsBg.stroke({ width: 3, color: 0x666666, alpha: 0.8 });
 
         // 添加背景到容器
         this.container.addChild(this.graphicsBg);
@@ -126,32 +125,35 @@ export class Block {
         this.graphicsText = new PIXI.Container();
 
         // 添加方块名称
-        const nameText = new PIXI.Text(this.name || "未知", {
-            fontFamily: "Arial",
-            fontSize: 16,
-            fill: 0xffffff,
-            fontWeight: "bold",
-            stroke: { color: "black", width: 3 },
+        const nameText = new PIXI.Text({
+            text: this.name || "未知",
+            style: {
+                fontFamily: "Arial",
+                fontSize: 16,
+                fill: 0xffffff,
+                fontWeight: "bold",
+                stroke: { color: "black", width: 3 },
+            },
         });
         nameText.anchor.set(0.5);
         nameText.position.set(0, -10); // 名称显示在方块中心上方
         this.graphicsText.addChild(nameText);
 
         // 添加方块价值
-        const valueText = new PIXI.Text(
-            this.baseValue
+        const valueText = new PIXI.Text({
+            text: this.baseValue
                 ? this.baseValue
                       .toString()
                       .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 : "0",
-            {
+            style: {
                 fontFamily: "Arial",
                 fontSize: 21,
                 fill: 0xffffff,
                 fontWeight: "bold",
                 stroke: { color: "black", width: 3 },
             },
-        );
+        });
         valueText.anchor.set(0.5);
         valueText.position.set(0, 10); // 价值显示在方块中心下方
         this.graphicsText.addChild(valueText);

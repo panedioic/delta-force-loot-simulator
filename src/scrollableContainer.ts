@@ -45,16 +45,14 @@ export class ScrollableContainer {
 
         // 创建遮罩
         const mask = new PIXI.Graphics();
-        mask.beginFill(0xffffff);
-        mask.drawRect(0, 0, this.width, this.height);
-        mask.endFill();
+        mask.rect(0, 0, this.width, this.height);
+        mask.fill({ color: 0xffffff });
         this.container.addChild(mask);
         this.container.mask = mask;
 
         const bg = new PIXI.Graphics();
-        bg.beginFill(0xffffff, 0.1);
-        bg.drawRect(0, 0, this.width, this.height);
-        bg.endFill();
+        bg.rect(0, 0, this.width, this.height);
+        bg.fill({ color: 0xffffff, alpha: 0.1 });
         this.container.addChild(bg);
 
         // 创建内容容器

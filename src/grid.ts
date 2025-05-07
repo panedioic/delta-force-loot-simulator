@@ -83,7 +83,7 @@ export class Grid {
         graphics.fill({ color: 0x1f2121, alpha: 0.3 });
 
         // 网格线
-        graphics.lineStyle(2, 0x666666);
+        // graphics.lineStyle(2, 0x666666);
 
         // 水平线
         for (let row = 0; row <= this.height; row++) {
@@ -106,8 +106,7 @@ export class Grid {
         }
 
         // 外围边框
-        graphics.lineStyle(3, 0x666666);
-        graphics.drawRect(
+        graphics.rect(
             0,
             0,
             this.width * this.cellSize * this.aspect,
