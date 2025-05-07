@@ -119,29 +119,57 @@ export class InfoDialog {
         this.container.addChild(title);
 
         // Content
-        const content = [
-            "游戏介绍：",
-            "三角洲行动的舔包模拟器。通过拖拽方式管理你的装备和收集品。",
-            "",
-            "玩法说明：",
-            "1. 拖动物品到合适的格子中存放",
-            "2. 按R键可以旋转物品",
-            "3. 合理安排空间以获得最大收益",
-            "",
-            "游戏版本：0.2.2",
-            "项目作者： 依言（Y1yan）",
-            "项目地址：https://github.com/panedioic/delta-force-loot-simulator",
-            "讨论群：还没有建好（",
-        ].join("\n");
-
-        const contentText = new PIXI.Text({
-            text: content,
+        const introText = new PIXI.Text({
+            text: [
+                "游戏介绍：",
+                "三角洲行动的舔包模拟器。通过拖拽方式管理你的装备和收集品。",
+                "",
+                "玩法说明：",
+                "1. 拖动物品到合适的格子中存放",
+                "2. 按R键可以旋转物品",
+                "3. 合理安排空间以获得最大收益",
+                "",
+                "游戏版本：0.2.2",
+                "项目作者： 依言（Y1yan）",
+            ].join("\n"),
             style: {
                 fontSize: 16,
                 fill: 0xffffff,
                 lineHeight: 24,
             },
         });
+        introText.position.set(30, 80);
+        this.container.addChild(introText);
+
+        // Link text
+        const linkText = new PIXI.Text({
+            text: "项目地址：https://github.com/panedioic/delta-force-loot-simulator",
+            style: {
+                fontSize: 16,
+                fill: 0x66ccff,
+                lineHeight: 24,
+                underline: true,
+            },
+        });
+        linkText.position.set(30, 300);
+        linkText.eventMode = 'static';
+        linkText.cursor = 'pointer';
+        linkText.on('pointerdown', () => {
+            window.open('https://github.com/panedioic/delta-force-loot-simulator', '_blank');
+        });
+        this.container.addChild(linkText);
+
+        // Discussion group text
+        const discussText = new PIXI.Text({
+            text: "讨论群：还没有建好（",
+            style: {
+                fontSize: 16,
+                fill: 0xffffff,
+                lineHeight: 24,
+            },
+        });
+        discussText.position.set(30, 330);
+        this.container.addChild(discussText);
         contentText.position.set(30, 80);
         this.container.addChild(contentText);
 
