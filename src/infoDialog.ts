@@ -117,6 +117,7 @@ export class InfoDialog {
             (this.app.screen.width - 600) / 2,
             (this.app.screen.height - 400) / 2
         );
+        this.app.stage.addChild(this.container); // Bring to top layer
     }
 
     hide() {
