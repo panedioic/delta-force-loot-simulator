@@ -7,6 +7,7 @@ import { GridTitle } from "./gridTitle";
 import { TotalValueDisplay } from "./totalValueDisplay";
 import { RegionSwitchUI } from "./regionSwitchUI";
 import { ScrollableContainer } from "./scrollableContainer";
+import { InfoDialog } from "./infoDialog";
 import { Timer } from "./timer";
 
 /**
@@ -143,12 +144,38 @@ export class Game {
     /**
      * Initialize the game UI.
      * */
+    infoDialog: InfoDialog;
+
     initGameUI() {
         // Create background
         const bg = new PIXI.Graphics();
         bg.roundRect(0, 0, GAME_WIDTH, GAME_HEIGHT, 10);
         bg.fill({ color: 0x242f39 });
         this.app.stage.addChild(bg);
+
+        // Add info button
+        const infoBtn = new PIXI.Graphics();
+        infoBtn.rect(0, 0, 80, 30);
+        infoBtn.fill({ color: 0x4CAF50 });
+        infoBtn.position.set(GAME_WIDTH - 100, 20);
+        infoBtn.eventMode = 'static';
+        infoBtn.cursor = 'pointer';
+        infoBtn.on('pointerdown', () => this.infoDialog.show());
+        this.app.stage.addChild(infoBtn);
+
+        const infoText = new PIXI.Text({
+            text: "游戏说明",
+            style: {
+                fontSize: 14,
+                fill: 0xffffff
+            }
+        });
+        infoText.anchor.set(0.5);
+        infoText.position.set(40, 15);
+        infoBtn.addChild(infoText);
+
+        // Initialize info dialog
+        this.infoDialog = new InfoDialog(this.app);
 
         // Info background
         const infoBG = new PIXI.Graphics();
