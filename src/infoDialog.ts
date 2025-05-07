@@ -130,7 +130,9 @@ export class InfoDialog {
                 "3. 合理安排空间以获得最大收益",
                 "",
                 "游戏版本：0.2.2",
-                "项目作者： 依言（Y1yan）",
+                "项目作者：依言（Y1yan）",
+                "项目地址：",
+                "讨论群：还没有建好（",
             ].join("\n"),
             style: {
                 fontSize: 16,
@@ -143,35 +145,37 @@ export class InfoDialog {
 
         // Link text
         const linkText = new PIXI.Text({
-            text: "项目地址：https://github.com/panedioic/delta-force-loot-simulator",
+            text: "https://github.com/panedioic/delta-force-loot-simulator",
             style: {
                 fontSize: 16,
                 fill: 0x66ccff,
                 lineHeight: 24,
-                underline: true,
             },
         });
-        linkText.position.set(30, 300);
-        linkText.eventMode = 'static';
-        linkText.cursor = 'pointer';
-        linkText.on('pointerdown', () => {
-            window.open('https://github.com/panedioic/delta-force-loot-simulator', '_blank');
+        linkText.position.set(110, 320);
+        linkText.eventMode = "static";
+        linkText.cursor = "pointer";
+        linkText.on("pointerdown", () => {
+            window.open(
+                "https://github.com/panedioic/delta-force-loot-simulator",
+                "_blank",
+            );
         });
         this.container.addChild(linkText);
 
         // Discussion group text
-        const discussText = new PIXI.Text({
-            text: "讨论群：还没有建好（",
-            style: {
-                fontSize: 16,
-                fill: 0xffffff,
-                lineHeight: 24,
-            },
-        });
-        discussText.position.set(30, 330);
-        this.container.addChild(discussText);
-        contentText.position.set(30, 80);
-        this.container.addChild(contentText);
+        // const discussText = new PIXI.Text({
+        //     text: "讨论群：还没有建好（",
+        //     style: {
+        //         fontSize: 16,
+        //         fill: 0xffffff,
+        //         lineHeight: 24,
+        //     },
+        // });
+        // discussText.position.set(30, 330);
+        // this.container.addChild(discussText);
+        // contentText.position.set(30, 80);
+        // this.container.addChild(contentText);
 
         // Make dialog draggable
         this.background.eventMode = "static";
