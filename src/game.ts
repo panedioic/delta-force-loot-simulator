@@ -16,7 +16,7 @@ import { Timer } from "./timer";
 export class Game {
     app: PIXI.Application;
     BLOCK_TYPES: any[];
-    GRID_INFO: never[];
+    GRID_INFO: any[];
     grids: Grid[];
     currentRightRegion: number;
     totalRightRegion: number;
@@ -73,15 +73,14 @@ export class Game {
      * @returns {Promise<void>} A promise that resolves when the block types are loaded.
      * */
     async loadBlockTypes(): Promise<void> {
-        if (import.meta.env.MODE === "development") {
-            const { getMockBlocks } = await import('./mockData');
-            this.BLOCK_TYPES = await getMockBlocks();
-            const loadingElement = document.querySelector(".loading");
-            if (loadingElement) {
-                (loadingElement as HTMLElement).style.display = "none";
-            }
-            return;
-        }
+        // if (import.meta.env.MODE === "development") {
+        //     this.BLOCK_TYPES = await getMockBlocks();
+        //     const loadingElement = document.querySelector(".loading");
+        //     if (loadingElement) {
+        //         (loadingElement as HTMLElement).style.display = "none";
+        //     }
+        //     return;
+        // }
         try {
             const response = await fetch("/blocks.json");
             this.BLOCK_TYPES = await response.json();
@@ -105,11 +104,11 @@ export class Game {
      * */
     async loadGridInfo(): Promise<void> {
         try {
-            if (import.meta.env.MODE === "development") {
-                const { getMockGridInfo } = await import('./mockData');
-                this.GRID_INFO = await getMockGridInfo();
-                return;
-            }
+            // if (import.meta.env.MODE === "development") {
+            //     const { getMockGridInfo } = await import("./mockData");
+            //     this.GRID_INFO = await getMockGridInfo();
+            //     return;
+            // }
             const response = await fetch("/gridinfo.json");
             this.GRID_INFO = await response.json();
             const loadingElement = document.querySelector(".loading");
