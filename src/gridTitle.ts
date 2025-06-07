@@ -3,8 +3,7 @@ import { Game } from "./game";
 
 export class GridTitle {
     game: Game;
-    private x: number;
-    private y: number;
+    title: string;
     width: number;
     height: number;
     cellSize: number;
@@ -14,14 +13,12 @@ export class GridTitle {
 
     constructor(
         game: Game,
-        x: number,
-        y: number,
+        title: string,
         cellSize: number,
         aspect: number,
     ) {
         this.game = game;
-        this.x = x;
-        this.y = y;
+        this.title = title;
         this.width = 1;
         this.height = 1;
         this.cellSize = cellSize;
@@ -30,7 +27,6 @@ export class GridTitle {
         this.margin = [4, 4, 4, 4]; // 上下左右边距
 
         this.container = new PIXI.Container();
-        this.container.position.set(this.x, this.y);
 
         this.initUI();
     }
@@ -61,7 +57,21 @@ export class GridTitle {
             this.width * this.cellSize * this.aspect,
             this.height * this.cellSize,
         ); // 使用 this.cellSize
-        graphics.stroke({ width: 3, color: 0x666666 });
+
+        graphics.stroke({ width: 2, color: 0x666666 });
+        const titleText = new PIXI.Text({
+            text: this.title,
+            style: {
+                fontFamily: "Arial",
+                fontSize: 20,
+                fill: 0xffffff,
+                stroke: { color: "black", width: 3 },
+            },
+        });
+        titleText.anchor.set(0);
+        titleText.position.set(4, 4);
+        graphics.addChild(titleText);
+        
 
         this.container.addChild(graphics);
     }
@@ -72,8 +82,6 @@ export class GridTitle {
      * @param {number} y - The y coordinate
      * */
     setPosition(x: number, y: number) {
-        this.x = x;
-        this.y = y;
-        this.container.position.set(this.x, this.y);
+        this.container.position.set(x, y);
     }
 }

@@ -9,6 +9,7 @@ import { RegionSwitchUI } from "./regionSwitchUI";
 import { ScrollableContainer } from "./scrollableContainer";
 import { InfoDialog } from "./infoDialog";
 import { Timer } from "./timer";
+import { Inventory } from "./invntory";
 
 /**
  * The Game class represents the main game instance.
@@ -28,6 +29,7 @@ export class Game {
     isGameStarted: boolean;
     timer: Timer | null;
     scrollableContainer: ScrollableContainer | null;
+    playerInventory!: Inventory | null;
     infoDialog: InfoDialog | null;
     instances: Array<any> = [];
 
@@ -206,14 +208,21 @@ export class Game {
         this.totalValueDisplay = new TotalValueDisplay(this, 42, 186);
         this.regionSwitchUI = new RegionSwitchUI(this, 920, 86, () => {});
         this.regionSwitchUI.addToStage();
-        this.scrollableContainer = new ScrollableContainer(
+        // this.scrollableContainer = new ScrollableContainer(
+        //     this,
+        //     276,
+        //     124,
+        //     514,
+        //     580,
+        // );
+        // this.scrollableContainer.addToStage();
+        this.playerInventory = new Inventory(
             this,
+            true,
+            true,
             276,
-            124,
-            514,
-            580,
-        );
-        this.scrollableContainer.addToStage();
+            124
+        )
         this.timer = new Timer(
             this,
             42,
@@ -231,9 +240,9 @@ export class Game {
     }
 
     initGrids() {
-        for (const info of this.GRID_INFO) {
-            this.createObject(info);
-        }
+        // for (const info of this.GRID_INFO) {
+        //     this.createObject(info);
+        // }
 
         // Create spoils grids
         const spoilsInfo = {
@@ -283,8 +292,7 @@ export class Game {
         } else if (info.type === "GridTitle") {
             const gridTitle = new GridTitle(
                 this,
-                info.x,
-                info.y,
+                "title",
                 info.cellSize,
                 info.aspect,
             );
