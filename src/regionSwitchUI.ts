@@ -1,5 +1,6 @@
 import * as PIXI from "pixi.js";
 import { Game } from "./game";
+import { SpoilsManager } from "./spoilsManager";
 
 /**
  * 区域切换UI组件
@@ -93,8 +94,9 @@ export class RegionSwitchUI {
         this.container.addChild(nextText);
 
         // 区域指示文本
+        const sm = this.game.spoilsManager as SpoilsManager;
         this.regionText = new PIXI.Text({
-            text: `区域 ${this.game.currentRightRegion + 1}/${this.game.totalRightRegion}`,
+            text: `区域 ${sm.current + 1}/${sm.inventories.length}`,
             style: {
                 fontFamily: "Arial",
                 fontSize: 22,
@@ -108,15 +110,20 @@ export class RegionSwitchUI {
 
         // 按钮事件
         prevButton.on("pointerdown", () => {
-            if (this.game.currentRightRegion > 0) {
-                this.switchRegion(this.game.currentRightRegion - 1);
+            const sm = this.game.spoilsManager as SpoilsManager;
+            if (sm.current > 0) {
+                sm.switchTo(sm.current - 1);
+                this.regionText.text = `区域 ${sm.current + 1}/${sm.inventories.length}`;
             }
         });
 
         nextButton.on("pointerdown", () => {
-            if (this.game.currentRightRegion < this.game.totalRightRegion - 1) {
-                this.switchRegion(this.game.currentRightRegion + 1);
+            const sm = this.game.spoilsManager as SpoilsManager;
+            if (sm.current < sm.inventories.length - 1) {
+                sm.switchTo(sm.current + 1);
+                this.regionText.text = `区域 ${sm.current + 1}/${sm.inventories.length}`;
             }
+            // console.log(sm.current)
         });
 
         this.container.addChild(this.regionText);
@@ -138,7 +145,8 @@ export class RegionSwitchUI {
             spoilsStartIdx + this.game.currentRightRegion
         ].setVisible(true);
 
-        this.regionText.text = `区域 ${this.game.currentRightRegion + 1}/${this.game.totalRightRegion}`;
+        const sm = this.game.spoilsManager as SpoilsManager;
+        this.regionText.text = `区域 ${sm.current + 1}/${sm.inventories.length}`;
         if (this.switchRegionCallback) {
             this.switchRegionCallback(this.game.currentRightRegion);
         }

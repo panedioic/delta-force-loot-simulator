@@ -60,7 +60,7 @@ export class GridContainer {
         this.backgroundGrid = new Subgrid(
             this.game, 1, 1, 128, 1, true, this.countable, ["Null"], 'Null'
         );
-        this.container.addChild(this.backgroundGrid.container);
+        // this.container.addChild(this.backgroundGrid.container);
         this.additiveSize = { x: 0, y: 0}
 
         this.subgrids = [];
@@ -78,13 +78,6 @@ export class GridContainer {
         this.subgrids = [];
         this.additiveSize = { x: 0, y: 0}
 
-        // console.log(this.layout.length);
-        if (this.layout.length === 0) {
-            this.backgroundGrid.setVisible(true);
-            this.backgroundGrid.container.position.set(0, 0);
-            return;
-        }
-        this.backgroundGrid.setVisible(false);
         for (const element of this.layout) {
             const [width, height, x, y] = element;
             const subgrid = new Subgrid(

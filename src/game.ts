@@ -11,6 +11,7 @@ import { ScrollableContainer } from "./scrollableContainer";
 import { InfoDialog } from "./infoDialog";
 import { Timer } from "./timer";
 import { Inventory } from "./invntory";
+import { SpoilsManager } from "./spoilsManager";
 
 /**
  * The Game class represents the main game instance.
@@ -31,6 +32,7 @@ export class Game {
     timer: Timer | null;
     scrollableContainer: ScrollableContainer | null;
     playerInventory!: Inventory | null;
+    spoilsManager!: SpoilsManager | null;
     infoDialog: InfoDialog | null;
     instances: Array<any> = [];
 
@@ -46,6 +48,7 @@ export class Game {
         this.isGameStarted = false; // 是否开始游戏
         this.timer = null; // 计时器实例
         this.scrollableContainer = null; // 滚动容器实例
+        this.spoilsManager = null;
         this.infoDialog = null;
         this.instances = [];
     }
@@ -63,7 +66,7 @@ export class Game {
         this.initGameUI(); // 创建背景
         this.initGameUI();
         this.initGameComponents();
-        this.initGrids();
+        // this.initGrids();
 
         // 计算初始总价值
         if (this.totalValueDisplay) {
@@ -207,16 +210,6 @@ export class Game {
      * */
     initGameComponents() {
         this.totalValueDisplay = new TotalValueDisplay(this, 42, 186);
-        this.regionSwitchUI = new RegionSwitchUI(this, 920, 86, () => {});
-        this.regionSwitchUI.addToStage();
-        // this.scrollableContainer = new ScrollableContainer(
-        //     this,
-        //     276,
-        //     124,
-        //     514,
-        //     580,
-        // );
-        // this.scrollableContainer.addToStage();
         this.playerInventory = new Inventory(
             this,
             true,
@@ -224,6 +217,15 @@ export class Game {
             276,
             124
         )
+        this.spoilsManager = new SpoilsManager(
+            this,
+            806,
+            128,
+            6,
+            0
+        );
+        this.regionSwitchUI = new RegionSwitchUI(this, 920, 86, () => {});
+        this.regionSwitchUI.addToStage();
         this.timer = new Timer(
             this,
             42,

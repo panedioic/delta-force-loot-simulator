@@ -348,6 +348,10 @@ export class Subgrid {
         this.container.visible = visible;
     }
 
+    setEnabled(enabled: boolean) {
+        this.container.visible = enabled;
+    }
+
     /**
      * Get the bounds of the grid.
      * @returns {PIXI.Rectangle} - The bounds of the grid

@@ -64,6 +64,9 @@ export class Block {
         this.name = this.blockType.name;
         this.type = type || "collection";
         this.search = blockType.search || 1.2;
+        if(blockType.subgridLayout) {
+            this.subgridLayout = blockType.subgridLayout;
+        }
 
         // 只用作检查
         this.cellSize = this.parentGrid.cellSize;

@@ -25,6 +25,7 @@ export class Inventory {
     scrollable: boolean;
     baseY: number;
     maxHeight: number;
+    enabled: boolean;
 
     constructor(
         game: Game,
@@ -35,7 +36,7 @@ export class Inventory {
     ) {
         this.game = game;
         this.countable = countable || false;
-        this.scrollable = scrollable || true;
+        this.scrollable = scrollable;
         this.x = x;
         this.y = y;
         this.width = 514;
@@ -43,6 +44,7 @@ export class Inventory {
 
         this.baseY = 0;
         this.maxHeight = 128;
+        this.enabled = true;
 
         this.contents = {};
         this.container = new PIXI.Container();
@@ -52,7 +54,7 @@ export class Inventory {
         this.initContent();
         this.refreshUI();
 
-        console.log(this.contents)
+        // console.log(this.contents)
 
         // add to stage
         this.game.app.stage.addChild(this.container);
@@ -81,19 +83,19 @@ export class Inventory {
             for (const info of this.game.GRID_INFO) {
                 // this.createObject(info);
                 if (info.type === 'Grid') {
-                    const subgrid = new Subgrid(
-                        this.game,
-                        1,
-                        1,
-                        info.cellsize,
-                        info.aspect,
-                        info.fullfill,
-                        info.countable,
-                        info.accept,
-                        info.name
-                    );
-                    this.contents[info.name] = subgrid;
-                    this.container.addChild(subgrid.container);
+                        const subgrid = new Subgrid(
+                            this.game,
+                            1,
+                            1,
+                            info.cellsize,
+                            info.aspect,
+                            info.fullfill,
+                            info.countable,
+                            info.accept,
+                            info.name
+                        );
+                        this.contents[info.name] = subgrid;
+                        this.container.addChild(subgrid.container);
                 } else if (info.type === 'GridTitle') {
                     const gridTitle = new GridTitle(
                         this.game,
@@ -152,6 +154,20 @@ export class Inventory {
                 (this.contents['ContainerBackpack'] as GridContainer).initSubgrids();
                 this.refreshUI();
             }
+        } else {
+            const spoilsBox = new Subgrid(
+                this.game,
+                7,
+                8,
+                72,
+                1,
+                false,
+                false,
+                [],
+                "spoilsBox"
+            );
+            this.contents["spoilsBox"] = spoilsBox;
+            this.container.addChild(spoilsBox.container);
         }
     }
 
@@ -228,5 +244,17 @@ export class Inventory {
         }
         this.refreshUI();
         // console.log(this.baseY)
+    }
+
+    setEnabled(enabled: boolean) {
+        this.enabled = enabled;
+        // 遍历所有的subgrid并设置启用状态
+        for (const key in this.contents) {
+            const item = this.contents[key];
+            if (item instanceof Subgrid) {
+                item.setEnabled(enabled);
+            }
+        }
+        this.container.visible = enabled;
     }
 }
