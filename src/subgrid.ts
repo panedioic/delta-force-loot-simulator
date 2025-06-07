@@ -319,6 +319,8 @@ export class Subgrid {
             // console.log(obj.col, obj.row);
         }
 
+        // console.log('xxxx', this)
+
         if (this.onBlockMoved) {
             this.onBlockMoved(obj, col, row);
         }

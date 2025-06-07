@@ -64,9 +64,13 @@ export class Block {
         this.name = this.blockType.name;
         this.type = type || "collection";
         this.search = blockType.search || 1.2;
-        if(blockType.subgridLayout) {
-            this.subgridLayout = blockType.subgridLayout;
-        }
+        this.subgridLayout = blockType.subgridLayout;
+        // console.log('eee')
+        // if(blockType.subgridLayout) {
+        //     console.log('fff', this)
+        //     console.log('ggg', this.subgridLayout)
+            
+        // }
 
         // 只用作检查
         this.cellSize = this.parentGrid.cellSize;
@@ -89,8 +93,6 @@ export class Block {
         this.previewIndicator = null;
 
         this.addEventListeners();
-
-        this.subgridLayout = [];
         this.subgrid = null;
     }
 

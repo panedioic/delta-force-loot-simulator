@@ -134,6 +134,7 @@ export class Inventory {
             (this.contents['ContainerSecure'] as GridContainer).initSubgrids();
             // 胸挂回调函数
             (this.contents['Chest rig'] as Subgrid).onBlockMoved = (block, _col, _row) => {
+                console.log('there', block.subgridLayout);
                 (this.contents['ContainerChestRigs'] as GridContainer).layout = block.subgridLayout;
                 (this.contents['ContainerChestRigs'] as GridContainer).initSubgrids();
                 this.refreshUI();
@@ -145,6 +146,7 @@ export class Inventory {
             }
             // 背包回调函数
             (this.contents['Backpack'] as Subgrid).onBlockMoved = (block, _col, _row) => {
+                console.log('there');
                 (this.contents['ContainerBackpack'] as GridContainer).layout = block.subgridLayout;
                 (this.contents['ContainerBackpack'] as GridContainer).initSubgrids();
                 this.refreshUI();

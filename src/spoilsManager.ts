@@ -40,7 +40,7 @@ export class SpoilsManager {
                 0,
                 0
             );
-            console.log('bbb')
+            // console.log('bbb')
             this.inventories.push(inventory);
             this.container.addChild(inventory.container);
             inventory.setEnabled(false);
@@ -79,6 +79,7 @@ export class SpoilsManager {
     initInventoryItem(inv: number | Inventory, type: number) {
         const inventory = inv instanceof Inventory ? inv : this.inventories[inv];
         const item_infos = this.game.BLOCK_TYPES;
+        // console.log(item_infos)
 
         if (type === 0) {
             // Spoils box
@@ -110,7 +111,9 @@ export class SpoilsManager {
                             info,
                         );
                         subgrid.addBlock(item, col, row);
-                        // console.log('fff', subgrid)
+                        // if(item.subgridLayout){
+                        //     console.log(item)
+                        // }
 
                         items.shift(); // 移除已放置的方块类型
                     }
