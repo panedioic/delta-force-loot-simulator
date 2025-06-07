@@ -3,11 +3,12 @@ import * as PIXI from "pixi.js";
 
 import { Game } from "./game";
 import { Grid } from "./grid";
+import { Subgrid } from "./subgrid";
 import { GAME_WIDTH, GAME_HEIGHT } from "./config";
 
 export class Block {
     game: Game;
-    parentGrid: Grid;
+    parentGrid: Grid | Subgrid;
     col: number;
     row: number;
     x: number;
@@ -41,7 +42,7 @@ export class Block {
     dragOverlay: PIXI.Graphics | null;
     previewIndicator: PIXI.Graphics | null;
 
-    constructor(game: Game, parentGrid: Grid, type: string, blockType: any) {
+    constructor(game: Game, parentGrid: Grid | Subgrid, type: string, blockType: any) {
         this.game = game;
         this.parentGrid = parentGrid;
         this.col = 0;
