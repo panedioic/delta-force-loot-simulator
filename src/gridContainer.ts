@@ -73,13 +73,12 @@ export class GridContainer {
         }
         this.subgrids = [];
 
-        console.log(this.layout.length);
+        // console.log(this.layout.length);
         if (this.layout.length === 0) {
             this.backgroundGrid.setVisible(true);
             this.backgroundGrid.container.position.set(0, 0);
             return;
         }
-        console.log('1222')
         this.backgroundGrid.setVisible(false);
         for (const element of this.layout) {
             const [width, height, x, y] = element;

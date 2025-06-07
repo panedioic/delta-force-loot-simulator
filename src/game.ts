@@ -3,6 +3,7 @@ import { GAME_WIDTH, GAME_HEIGHT } from "./config";
 import { RIGHT_REGION_COUNT } from "./config";
 import { DEFAULT_CELL_SIZE } from "./config";
 import { Grid } from "./grid";
+import { Subgrid } from "./subgrid";
 import { GridTitle } from "./gridTitle";
 import { TotalValueDisplay } from "./totalValueDisplay";
 import { RegionSwitchUI } from "./regionSwitchUI";
@@ -19,7 +20,7 @@ export class Game {
     app: PIXI.Application;
     BLOCK_TYPES: any[];
     GRID_INFO: any[];
-    grids: Grid[];
+    grids: (Grid | Subgrid)[];
     currentRightRegion: number;
     totalRightRegion: number;
 

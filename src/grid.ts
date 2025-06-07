@@ -350,6 +350,7 @@ export class Grid {
      * @param {Array} blockTypes - The types of blocks to initialize
      * */
     initialBlocks(blockTypes: BlockType[]) {
+        console.log(blockTypes)
         const blocksNum = Math.floor(Math.random() * 10); // 随机生成0到9个方块
         let blocks = [];
         for (let i = 0; i < blocksNum; i++) {
@@ -357,8 +358,6 @@ export class Grid {
                 blockTypes[Math.floor(Math.random() * blockTypes.length)];
             blocks.push(blockType);
         }
-
-        // console.log(blocks);
 
         for (let row = 0; row < this.width; row++) {
             for (let col = 0; col < this.height; col++) {
@@ -371,6 +370,9 @@ export class Grid {
                     cellHeight: blockType.cellHeight,
                     blockType: blockType,
                     type: blockType.type,
+                    name: '',
+                    color: '',
+                    subgridLayout: blockType.subgridLayout
                 };
                 const canPlace =
                     !this.checkForOverlap(item, col, row) &&
@@ -384,6 +386,9 @@ export class Grid {
                         item.type,
                         blockType,
                     );
+                    if(blockType.subgridLayout) {
+                        block.subgridLayout = blockType.subgridLayout;
+                    }
                     this.addBlock(block, col, row);
 
                     blocks.shift(); // 移除已放置的方块类型

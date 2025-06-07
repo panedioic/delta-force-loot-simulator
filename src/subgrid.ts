@@ -23,6 +23,7 @@ export class Subgrid {
     container: PIXI.Container;
     blocks: Block[];
     title: string;
+    onBlockMoved?: (block: Block, col: number, row: number) => void;
 
     constructor(
         game: Game,
@@ -51,13 +52,14 @@ export class Subgrid {
 
         this.blocks = [];
 
-        this.initGrid();
+        this.initUI();
+        this.game.grids.push(this);
     }
 
     /**
      * Initialize the grid by creating the grid background and lines.
      */
-    initGrid() {
+    initUI() {
         // 创建网格背景
         const graphics = new PIXI.Graphics();
 
@@ -311,6 +313,10 @@ export class Subgrid {
             obj.setGridPosition(col, row); // 设置网格位置
             // console.log(obj.col, obj.row);
         }
+
+        if (this.onBlockMoved) {
+            this.onBlockMoved(obj, col, row);
+        }
     }
 
     /**
@@ -347,6 +353,7 @@ export class Subgrid {
      * @param {Array} blockTypes - The types of blocks to initialize
      * */
     initialBlocks(blockTypes: BlockType[]) {
+        console.log(blockTypes)
         const blocksNum = Math.floor(Math.random() * 10); // 随机生成0到9个方块
         let blocks = [];
         for (let i = 0; i < blocksNum; i++) {
@@ -354,8 +361,6 @@ export class Subgrid {
                 blockTypes[Math.floor(Math.random() * blockTypes.length)];
             blocks.push(blockType);
         }
-
-        // console.log(blocks);
 
         for (let row = 0; row < this.width; row++) {
             for (let col = 0; col < this.height; col++) {
@@ -368,6 +373,9 @@ export class Subgrid {
                     cellHeight: blockType.cellHeight,
                     blockType: blockType,
                     type: blockType.type,
+                    name: '',
+                    color: '',
+                    subgridLayout: blockType.subgridLayout
                 };
                 const canPlace =
                     !this.checkForOverlap(item, col, row) &&
@@ -381,6 +389,9 @@ export class Subgrid {
                         item.type,
                         blockType,
                     );
+                    if(blockType.subgridLayout) {
+                        block.subgridLayout = blockType.subgridLayout;
+                    }
                     this.addBlock(block, col, row);
 
                     blocks.shift(); // 移除已放置的方块类型

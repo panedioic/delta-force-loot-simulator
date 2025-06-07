@@ -31,6 +31,8 @@ export class Block {
     container: PIXI.Container;
     graphicsBg: PIXI.Graphics;
     graphicsText: PIXI.Container | null;
+    subgridLayout: any;
+    subgrid: Subgrid | null;
 
     /** 拖动相关 */
     dragStartParentContainer: PIXI.Container;
@@ -84,6 +86,9 @@ export class Block {
         this.previewIndicator = null;
 
         this.addEventListeners();
+
+        this.subgridLayout = [];
+        this.subgrid = null;
     }
 
     createBlockGraphics() {

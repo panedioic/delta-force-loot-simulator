@@ -129,9 +129,21 @@ export class Inventory {
             (this.contents['ContainerSecure'] as GridContainer).layout = [
                 [3, 3, 0, 0]
             ];
-            (this.contents['ContainerSecure'] as GridContainer).initSubgrids()
-
-            
+            (this.contents['ContainerSecure'] as GridContainer).initSubgrids();
+            // 胸挂回调函数
+            (this.contents['Chest rig'] as Subgrid).onBlockMoved = (block, _col, _row) => {
+                (this.contents['ContainerChestRigs'] as GridContainer).layout = block.subgridLayout;
+                (this.contents['ContainerChestRigs'] as GridContainer).initSubgrids();
+                this.refreshUI();
+                let pos = this.contents['ContainerChestRigs'].container.position
+                this.contents['ContainerChestRigs'].container.position.set(132, pos.y)
+            }
+            // 背包回调函数
+            (this.contents['Backpack'] as Subgrid).onBlockMoved = (block, _col, _row) => {
+                (this.contents['ContainerBackpack'] as GridContainer).layout = block.subgridLayout;
+                (this.contents['ContainerBackpack'] as GridContainer).initSubgrids();
+                this.refreshUI();
+            }
         }
     }
 
@@ -142,6 +154,12 @@ export class Inventory {
 
         for (const info of this.game.GRID_INFO) {
             const item = this.contents[info.name];
+        //     console.log(item);
+        //     if(item instanceof GridContainer && item.subgrids.length > 0) {
+        //     console.log(item.subgrids[0].container.position)
+        //     console.log(item.container.position)
+        // }
+        // console.log('now pos:', currentX, currentY, info.name)
             if (item instanceof GridTitle) {
                 // 标题位置设置
                 item.container.position.set(8, currentY);

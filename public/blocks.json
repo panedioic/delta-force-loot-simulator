@@ -354,7 +354,7 @@
         "name": "战术快拆背包",
         "value": 9012,
         "color": "367e68",
-        "subgrid": [
+        "subgridLayout": [
             [3, 5, 0, 0]
         ]
     },
@@ -365,7 +365,7 @@
         "name": "DASH战术背包",
         "value": 16562,
         "color": "4b6b87",
-        "subgrid": [
+        "subgridLayout": [
             [2, 2, 0, 0],
             [2, 2, 2.06, 0],
             [4, 3, 0.03, 2.06]
@@ -378,7 +378,7 @@
         "name": "GT1户外登山包",
         "value": 57282,
         "color": "695687",
-        "subgrid": [
+        "subgridLayout": [
             [5, 5, 0, 0]
         ]
     },
@@ -389,7 +389,7 @@
         "name": "GT5野战背包",
         "value": 148176,
         "color": "a16e50",
-        "subgrid": [
+        "subgridLayout": [
             [5, 6, 0, 0]
         ]
     },
@@ -400,7 +400,7 @@
         "name": "重型登山包",
         "value": 412622,
         "color": "a14a4c",
-        "subgrid": [
+        "subgridLayout": [
             [1, 2, 0, 0],
             [3, 2, 1.05, 0],
             [1, 2, 4.1, 0],
@@ -415,7 +415,7 @@
         "name": "通用战术胸挂",
         "value": 3940,
         "color": "367e68",
-        "subgrid": [
+        "subgridLayout": [
             [1, 2, 0, 0],
             [1, 2, 1.05, 0],
             [1, 2, 2.1, 0],
@@ -430,7 +430,7 @@
         "name": "G01战术胸挂",
         "value": 9914,
         "color": "4b6b87",
-        "subgrid": [
+        "subgridLayout": [
             [1, 2, 0, 0],
             [3, 1, 1.1, 0],
             [1, 2, 4.2, 0],
@@ -446,7 +446,7 @@
         "name": "GIR野战胸挂",
         "value": 112103,
         "color": "695687",
-        "subgrid": [
+        "subgridLayout": [
             [2, 2, 0.07, 0],
             [2, 2, 1.17, 0],
             [1, 3, 0, 2.05],
@@ -462,7 +462,7 @@
         "name": "DAR突击手胸挂",
         "value": 233260,
         "color": "a16e50",
-        "subgrid": [
+        "subgridLayout": [
             [2, 1, 0.03, 0],
             [2, 1, 2.8, 0],
             [2, 2, 0.03, 1.05],

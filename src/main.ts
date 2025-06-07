@@ -8,4 +8,5 @@ if (import.meta.env.MODE === "development") {
     const game = new Game();
     await game.init();
     console.log("Game initialized!");
+    console.log(game);
 })();
