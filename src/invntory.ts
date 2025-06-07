@@ -135,8 +135,6 @@ export class Inventory {
                 (this.contents['ContainerChestRigs'] as GridContainer).layout = block.subgridLayout;
                 (this.contents['ContainerChestRigs'] as GridContainer).initSubgrids();
                 this.refreshUI();
-                let pos = this.contents['ContainerChestRigs'].container.position
-                this.contents['ContainerChestRigs'].container.position.set(132, pos.y)
             }
             // 背包回调函数
             (this.contents['Backpack'] as Subgrid).onBlockMoved = (block, _col, _row) => {
@@ -182,8 +180,8 @@ export class Inventory {
                 } else {
                     // 普通容器的位置设置
                     item.container.position.set(currentX, currentY);
-                    maxHeight = item.container.height + 8;
-                    currentX += item.container.width + 8;
+                    maxHeight = item.additiveSize.y + 8;
+                    currentX += item.additiveSize.x + 8;
                     if (!item.fullfill) {
                         currentY += maxHeight;
                         maxHeight = 0;
@@ -192,8 +190,8 @@ export class Inventory {
                 }
             } else if (item instanceof GridContainer) {
                 item.container.position.set(currentX, currentY);
-                maxHeight = Math.max(maxHeight, item.container.height + 8);
-                currentX += item.container.width + 8;
+                maxHeight = Math.max(maxHeight, item.additiveSize.y + 8);
+                currentX += item.additiveSize.x + 8;
                 if (!item.fullfill) {
                     currentY += maxHeight;
                     maxHeight = 0;

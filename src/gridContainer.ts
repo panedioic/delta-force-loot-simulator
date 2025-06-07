@@ -26,6 +26,9 @@ export class GridContainer {
     maxWidth: number;
     backgroundGrid: Subgrid;
 
+    // 用于防止出现大小的bug
+    additiveSize: { x: number; y: number };
+
     constructor(
         game: Game,
         title: string,
@@ -58,6 +61,7 @@ export class GridContainer {
             this.game, 1, 1, 128, 1, true, this.countable, ["Null"], 'Null'
         );
         this.container.addChild(this.backgroundGrid.container);
+        this.additiveSize = { x: 0, y: 0}
 
         this.subgrids = [];
         this.initSubgrids();
@@ -96,6 +100,11 @@ export class GridContainer {
             subgrid.container.position.set(x * this.cellSize, y * this.cellSize);
             this.subgrids.push(subgrid);
             this.container.addChild(subgrid.container);
+            const oldAdditiveSize = this.additiveSize;
+            this.additiveSize = {
+                x: Math.max(oldAdditiveSize.x, (x + width) * this.cellSize),
+                y: Math.max(oldAdditiveSize.y, (y + height) * this.cellSize)
+            }
         }
     }
 

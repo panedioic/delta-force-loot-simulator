@@ -25,6 +25,9 @@ export class Subgrid {
     title: string;
     onBlockMoved?: (block: Block, col: number, row: number) => void;
 
+    // 用于防止出现大小的bug
+    additiveSize: { x: number; y: number };
+
     constructor(
         game: Game,
         width: number,
@@ -54,6 +57,7 @@ export class Subgrid {
 
         this.initUI();
         this.game.grids.push(this);
+        this.additiveSize = { x: this.container.width, y: this.container.height };
     }
 
     /**
