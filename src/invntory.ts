@@ -136,9 +136,19 @@ export class Inventory {
                 (this.contents['ContainerChestRigs'] as GridContainer).initSubgrids();
                 this.refreshUI();
             }
+            (this.contents['Chest rig'] as Subgrid).onBlockRemoved = (_) => {
+                (this.contents['ContainerChestRigs'] as GridContainer).layout = [];
+                (this.contents['ContainerChestRigs'] as GridContainer).initSubgrids();
+                this.refreshUI();
+            }
             // 背包回调函数
             (this.contents['Backpack'] as Subgrid).onBlockMoved = (block, _col, _row) => {
                 (this.contents['ContainerBackpack'] as GridContainer).layout = block.subgridLayout;
+                (this.contents['ContainerBackpack'] as GridContainer).initSubgrids();
+                this.refreshUI();
+            }
+            (this.contents['Backpack'] as Subgrid).onBlockRemoved = (_) => {
+                (this.contents['ContainerBackpack'] as GridContainer).layout = [];
                 (this.contents['ContainerBackpack'] as GridContainer).initSubgrids();
                 this.refreshUI();
             }

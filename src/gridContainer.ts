@@ -76,6 +76,7 @@ export class GridContainer {
             this.container.removeChild(subgrid.container);
         }
         this.subgrids = [];
+        this.additiveSize = { x: 0, y: 0}
 
         // console.log(this.layout.length);
         if (this.layout.length === 0) {

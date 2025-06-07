@@ -24,6 +24,7 @@ export class Subgrid {
     blocks: Block[];
     title: string;
     onBlockMoved?: (block: Block, col: number, row: number) => void;
+    onBlockRemoved?: (block: Block) => void;
 
     // 用于防止出现大小的bug
     additiveSize: { x: number; y: number };
@@ -333,6 +334,9 @@ export class Subgrid {
             this.blocks.splice(index, 1);
             this.container.removeChild(obj.container);
             // obj.parentGrid = null; // 清除父级网格引用
+            if (this.onBlockRemoved) {
+                this.onBlockRemoved(obj);
+            }
         }
     }
 
