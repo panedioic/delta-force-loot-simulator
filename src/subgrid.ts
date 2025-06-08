@@ -300,6 +300,11 @@ export class Subgrid {
      * @param {number} row - The row position of the block
      * */
     addItem(obj: Item, col: number = -1, row: number = -1): boolean {
+        // Check accept first
+        const bIsAccepted = this.checkAccept(obj);
+        if (!bIsAccepted) {
+            return false;
+        }
         let bFound = col >= 0 && row >= 0;
         // console.log('bFound', bFound, col, row)
         if (!bFound) {
@@ -388,54 +393,5 @@ export class Subgrid {
      * */
     getBounds(): PIXI.Bounds {
         return this.container.getBounds();
-    }
-
-    /**
-     * Initialize the blocks in the grid.
-     * @param {Array} itemTypes - The types of blocks to initialize
-     * */
-    initialBlocks(itemTypes: ItemType[]) {
-        console.log(itemTypes)
-        const itemsNum = Math.floor(Math.random() * 10); // 随机生成0到9个方块
-        let items = [];
-        for (let i = 0; i < itemsNum; i++) {
-            const itemType =
-                itemTypes[Math.floor(Math.random() * itemTypes.length)];
-            items.push(itemType);
-        }
-
-        // console.log(items);
-
-        for (let row = 0; row < this.width; row++) {
-            for (let col = 0; col < this.height; col++) {
-                const itemType = items[0];
-                if (!itemType) {
-                    return; // 如果没有更多方块类型，退出循环
-                }
-                const canPlace =
-                    !this.checkForOverlap(itemType, col, row) &&
-                    this.checkBoundary(itemType, col, row);
-                if (canPlace) {
-                    // console.log("aaa", itemType);
-                    // 使用 Block 类创建方块
-                    const newItem = new Item(
-                        this.game,
-                        this,
-                        itemType.type,
-                        itemType,
-                    );
-                    if(itemType.subgridLayout) {
-                        newItem.subgridLayout = itemType.subgridLayout;
-                    }
-                    this.addItem(newItem, col, row);
-
-                    items.shift(); // 移除已放置的方块类型
-                    if (items.length === 0) {
-                        // console.log(this.blocks);
-                        return;
-                    }
-                }
-            }
-        }
     }
 }

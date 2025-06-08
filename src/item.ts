@@ -249,6 +249,21 @@ export class Item {
             this.game.createItemInfoPanel(this);
         } else if (this.clickCount === 2) {
             // this.game.createItemInfoPanel(this);
+            if (!this.parentGrid) {
+                return;
+            }
+            // let bIsPlayerInventory = false;
+            // if (this.parentGrid instanceof Subgrid)
+            if (this.parentGrid.countable) {
+                if (!this.game.spoilsManager) {
+                    return;
+                }
+                this.game.spoilsManager.inventories[
+                    this.game.spoilsManager.current
+                ].addItem(this);
+            } else {
+                this.game.playerInventory?.addItem(this);
+            }
         }
     }
 
@@ -487,6 +502,6 @@ export class Item {
     }
 
     getValue() {
-        return this.baseValue;
+        return this.baseValue * this.currentStactCount;
     }
 }
