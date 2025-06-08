@@ -5,6 +5,7 @@ import { Game } from "./game";
 import { Subgrid } from "./subgrid";
 import { GAME_WIDTH, GAME_HEIGHT } from "./config";
 import { DEFAULT_CELL_SIZE } from "./config";
+// import type { Grid, Inventory } from "./types";
 
 export class Item {
     game: Game;
@@ -32,7 +33,7 @@ export class Item {
     graphicsBg: PIXI.Graphics;
     graphicsText: PIXI.Container | null;
     subgridLayout: any;
-    subgrid: Subgrid | null;
+    subgrids: { [key: string]: Subgrid };
     accessories: any[];
     maxStackCount: number;
     currentStactCount: number;
@@ -103,7 +104,7 @@ export class Item {
         this.previewIndicator = null;
 
         this.addEventListeners();
-        this.subgrid = null;
+        this.subgrids = {};
 
         this.clickTimeout = null;
         this.clickCount = 0;
@@ -267,7 +268,7 @@ export class Item {
         }
     }
 
-    onDragStart(event: PIXI.FederatedPointerEvent) {
+    onDragStart(_: PIXI.FederatedPointerEvent) {
 
     }
 
@@ -503,5 +504,57 @@ export class Item {
 
     getValue() {
         return this.baseValue * this.currentStactCount;
+    }
+
+    initAccessories() {
+        for(const info of this.accessories) {
+            const subgrid = new Subgrid(
+                this.game,
+                1,
+                1,
+                72,
+                1,
+                true,
+                false,
+                info.type,
+                info.title
+            );
+            this.subgrids[info.type] = subgrid;
+        }
+    }
+
+    /** 
+     * 交互回调。当把一个item挪到自己身上时，会触发自己的回调。
+     */
+    onItemInteract(item: Item, pos: {col: number, row: number}) {
+        // 暂时默认只有为true时会调用这个回调
+        if (item.type in this.accessories) {
+            // 可放入subgrid
+
+        } else if (this.maxStackCount > 1 && item.maxStackCount > 1 && this.name == item.name) {
+            // 可堆叠
+
+        } else {
+            //其他情况，交换位置
+            console.log(pos);
+        }
+
+    }
+
+    /**
+     * 交互回调预览
+     */
+    onItemInteractPreview(item: Item, pos: {col: number, row: number}) {
+        if (item.type in this.accessories) {
+            // 可放入subgrid
+
+        } else if (this.maxStackCount > 1 && item.maxStackCount > 1 && this.name == item.name) {
+            // 可堆叠
+
+        } else {
+            //其他情况，交换位置
+            console.log(pos);
+        }
+        return false;
     }
 }

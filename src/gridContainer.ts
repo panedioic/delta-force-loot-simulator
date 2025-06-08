@@ -132,4 +132,10 @@ export class GridContainer {
     setVisible(visible: boolean) {
         this.container.visible = visible;
     }
+
+    clearItem() {
+        for (const subgrid of this.subgrids) {
+            subgrid.clearItem();
+        }
+    }
 }

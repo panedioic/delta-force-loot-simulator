@@ -394,4 +394,31 @@ export class Subgrid {
     getBounds(): PIXI.Bounds {
         return this.container.getBounds();
     }
+
+    // 获取指定区域内的所有物品
+    getItemsInArea(x: number, y: number, width: number, height: number): Item[] {
+        const items: Item[] = [];
+        for (const item of this.blocks) {
+            if (Math.max(x, item.x) <= Math.min(x + width, item.x + item.cellWidth) &&
+                Math.max(y, item.y) <= Math.min(y + height, item.y + item.cellHeight)) {
+                items.push(item);
+            }
+        }
+        return items;
+    }
+
+    // 获取所有物品
+    getAllItems(): Item[] {
+        return this.blocks;
+    }
+
+    clearItem() {
+        for (const item of this.blocks) {
+            this.container.removeChild(item.container);
+            if (this.onBlockRemoved) {
+                this.onBlockRemoved(item);
+            }
+        }
+        this.blocks = [];
+    }
 }

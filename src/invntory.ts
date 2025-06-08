@@ -274,4 +274,13 @@ export class Inventory {
         }
         return bAdded;
     }
+
+    clearItem() {
+        for (const subgrid of Object.values(this.contents)) {
+            if (subgrid instanceof GridTitle) {
+                continue;
+            }
+            subgrid.clearItem();
+        }
+    }
 }

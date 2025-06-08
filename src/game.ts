@@ -1,9 +1,7 @@
 import * as PIXI from "pixi.js";
 import { GAME_WIDTH, GAME_HEIGHT } from "./config";
 import { RIGHT_REGION_COUNT } from "./config";
-import { DEFAULT_CELL_SIZE } from "./config";
 import { Subgrid } from "./subgrid";
-import { GridTitle } from "./gridTitle";
 import { TotalValueDisplay } from "./totalValueDisplay";
 import { RegionSwitchUI } from "./regionSwitchUI";
 import { ScrollableContainer } from "./scrollableContainer";
@@ -13,6 +11,7 @@ import { Inventory } from "./invntory";
 import { SpoilsManager } from "./spoilsManager";
 import { ItemInfoPanel } from "./itemInfoPanel";
 import { Item } from "./item";
+import { DebugTools } from "./debugTools";
 
 /**
  * The Game class represents the main game instance.
@@ -40,6 +39,9 @@ export class Game {
 
     activeItemInfoPanel: ItemInfoPanel | null;
 
+    // debug
+    debugTools: DebugTools | null;
+
     constructor() {
         this.app = new PIXI.Application();
         this.BLOCK_TYPES = [];
@@ -57,6 +59,7 @@ export class Game {
         this.infoDialog = null;
         this.instances = [];
         this.activeItemInfoPanel = null;
+        this.debugTools = null;
     }
 
     /**
@@ -80,6 +83,14 @@ export class Game {
             console.log(`初始总价值: ${this.totalValueDisplay.totalValue}`);
         } else {
             console.error("TotalValueDisplay is not initialized.");
+        }
+
+        // Debug Tools
+        if (import.meta.env.MODE === "development") {
+            this.debugTools = new DebugTools(this);
+            this.debugTools.initItems();
+        } else {
+            this.debugTools = null;
         }
     }
 
