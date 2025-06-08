@@ -299,7 +299,7 @@ export class Subgrid {
      * @param {number} col - The column position of the block
      * @param {number} row - The row position of the block
      * */
-    addBlock(obj: Item, col: number = -1, row: number = -1): boolean {
+    addItem(obj: Item, col: number = -1, row: number = -1): boolean {
         let bFound = col >= 0 && row >= 0;
         // console.log('bFound', bFound, col, row)
         if (!bFound) {
@@ -427,7 +427,7 @@ export class Subgrid {
                     if(itemType.subgridLayout) {
                         newItem.subgridLayout = itemType.subgridLayout;
                     }
-                    this.addBlock(newItem, col, row);
+                    this.addItem(newItem, col, row);
 
                     items.shift(); // 移除已放置的方块类型
                     if (items.length === 0) {

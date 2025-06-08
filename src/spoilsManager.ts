@@ -112,7 +112,7 @@ export class SpoilsManager {
                         if(info.subgridLayout) {
                             block.subgridLayout = info.subgridLayout;
                         }
-                        subgrid.addBlock(block, col, row);
+                        subgrid.addItem(block, col, row);
 
                         items.shift(); // 移除已放置的方块类型
                         if (items.length === 0) {
@@ -172,7 +172,7 @@ export class SpoilsManager {
                         info.type,
                         info,
                     );
-                    subgrid.addBlock(item);
+                    subgrid.addItem(item);
                 }
             }
             // 口袋、背包、胸挂特殊处理

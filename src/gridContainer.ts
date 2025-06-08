@@ -118,7 +118,7 @@ export class GridContainer {
      * */
     addItem(obj: Item) {
         for (const subgrid of this.subgrids) {
-            if (subgrid.addBlock(obj)) {
+            if (subgrid.addItem(obj)) {
                 return true;
             }
         }

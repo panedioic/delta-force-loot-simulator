@@ -2,14 +2,13 @@ import * as PIXI from "pixi.js";
 // import * as text from '@pixi/text';
 
 import { Game } from "./game";
-import { Grid } from "./grid";
 import { Subgrid } from "./subgrid";
 import { GAME_WIDTH, GAME_HEIGHT } from "./config";
 import { DEFAULT_CELL_SIZE } from "./config";
 
 export class Item {
     game: Game;
-    parentGrid: Grid | Subgrid | null;
+    parentGrid: Subgrid | null;
     col: number;
     row: number;
     x: number;
@@ -52,7 +51,7 @@ export class Item {
     clickTimeout: number | null;
     clickCount: number;
 
-    constructor(game: Game, parentGrid: Grid | Subgrid | null, type: string, itemType: any) {
+    constructor(game: Game, parentGrid: Subgrid | null, type: string, itemType: any) {
         this.game = game;
         this.parentGrid = parentGrid;
         this.col = 0;
@@ -328,7 +327,7 @@ export class Item {
                 }
 
                 // 添加到新的网格中
-                targetGrid.addBlock(this, gridPosition.clampedCol, gridPosition.clampedRow);
+                targetGrid.addItem(this, gridPosition.clampedCol, gridPosition.clampedRow);
             } else {
                 // 如果不能放置，返回原位置
                 if (this.parentGrid) {

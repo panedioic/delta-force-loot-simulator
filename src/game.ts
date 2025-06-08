@@ -2,7 +2,6 @@ import * as PIXI from "pixi.js";
 import { GAME_WIDTH, GAME_HEIGHT } from "./config";
 import { RIGHT_REGION_COUNT } from "./config";
 import { DEFAULT_CELL_SIZE } from "./config";
-import { Grid } from "./grid";
 import { Subgrid } from "./subgrid";
 import { GridTitle } from "./gridTitle";
 import { TotalValueDisplay } from "./totalValueDisplay";
@@ -24,7 +23,7 @@ export class Game {
     BLOCK_TYPES: any[];
     GRID_INFO: any[];
     GRID_INFO_SPOILS: any[];
-    grids: (Grid | Subgrid)[];
+    grids: Subgrid[];
     currentRightRegion: number;
     totalRightRegion: number;
 
@@ -274,70 +273,6 @@ export class Game {
         // Initialize info dialog
         this.infoDialog = new InfoDialog(this, 42, 386);
         this.infoDialog.initUI();
-    }
-
-    initGrids() {
-        // for (const info of this.GRID_INFO) {
-        //     this.createObject(info);
-        // }
-
-        // Create spoils grids
-        const spoilsInfo = {
-            type: "Grid",
-            x: 806,
-            y: 128,
-            width: 7,
-            height: 8,
-            cellsize: 72,
-            aspect: 1.0,
-            countable: false,
-        };
-        for (let i = 0; i < this.totalRightRegion; i += 1) {
-            this.createObject(spoilsInfo);
-        }
-        this.grids[this.grids.length - this.totalRightRegion].setVisible(true);
-    }
-
-    createObject(info: any) {
-        if (info.type === "Grid") {
-            let parentStage = info.scrollable
-                ? this.scrollableContainer
-                : this.app.stage;
-            if (!parentStage) {
-                parentStage = this.app.stage;
-            }
-            const grid = new Grid(
-                this,
-                info.x || 0,
-                info.y || 0,
-                info.width || 1,
-                info.height || 1,
-                info.cellsize || DEFAULT_CELL_SIZE,
-                info.aspect || 1.0,
-                info.fullfill || false,
-                info.countable || false,
-                info.accept || [],
-            );
-            this.grids.push(grid);
-            if (info.scrollable) {
-                this.scrollableContainer?.addObject(grid);
-            } else {
-                this.app.stage.addChild(grid.container);
-                grid.initialBlocks(this.BLOCK_TYPES);
-                grid.setVisible(false);
-            }
-        } else if (info.type === "GridTitle") {
-            const gridTitle = new GridTitle(
-                this,
-                "title",
-                info.cellSize,
-                info.aspect,
-            );
-            gridTitle.margin = [14, 6, 4, 4];
-            if (this.scrollableContainer) {
-                this.scrollableContainer.addObject(gridTitle);
-            }
-        }
     }
 
     createItemInfoPanel(item: Item) {
