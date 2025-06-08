@@ -5,10 +5,11 @@ import { Game } from "./game";
 import { Grid } from "./grid";
 import { Subgrid } from "./subgrid";
 import { GAME_WIDTH, GAME_HEIGHT } from "./config";
+import { DEFAULT_CELL_SIZE } from "./config";
 
 export class Block {
     game: Game;
-    parentGrid: Grid | Subgrid;
+    parentGrid: Grid | Subgrid | null;
     col: number;
     row: number;
     x: number;
@@ -44,7 +45,7 @@ export class Block {
     dragOverlay: PIXI.Graphics | null;
     previewIndicator: PIXI.Graphics | null;
 
-    constructor(game: Game, parentGrid: Grid | Subgrid, type: string, blockType: any) {
+    constructor(game: Game, parentGrid: Grid | Subgrid | null, type: string, blockType: any) {
         this.game = game;
         this.parentGrid = parentGrid;
         this.col = 0;
@@ -57,8 +58,8 @@ export class Block {
         this.originCellWidth = this.cellWidth;
         this.originCellHeight = this.cellHeight;
         this.pixelWidth =
-            this.cellWidth * this.parentGrid.cellSize * this.parentGrid.aspect;
-        this.pixelHeight = this.cellHeight * this.parentGrid.cellSize;
+            this.parentGrid ? this.cellWidth * this.parentGrid.cellSize * this.parentGrid.aspect : this.cellWidth * DEFAULT_CELL_SIZE;
+        this.pixelHeight = this.parentGrid ? this.cellHeight * this.parentGrid.cellSize : this.cellHeight * DEFAULT_CELL_SIZE;
         this.color = this.blockType.color;
         this.baseValue = this.blockType.value;
         this.name = this.blockType.name;
@@ -73,8 +74,8 @@ export class Block {
         // }
 
         // 只用作检查
-        this.cellSize = this.parentGrid.cellSize;
-        this.aspect = this.parentGrid.aspect;
+        this.cellSize = this.parentGrid ? this.parentGrid.cellSize : DEFAULT_CELL_SIZE;
+        this.aspect = this.parentGrid ? this.parentGrid.aspect : 1;
         this.fullfill = false;
 
         this.container = new PIXI.Container();
@@ -294,7 +295,9 @@ export class Block {
         // 检查重叠和边界
         if (canPlace) {
             // 如果可以放置，更新方块在网格中的位置
-            this.parentGrid.removeBlock(this);
+            if (this.parentGrid) {
+                this.parentGrid.removeBlock(this);
+            }
             grid.addBlock(this, clampedCol, clampedRow);
         } else {
             // 如果重叠或超出边界，返回拖动前的位置
@@ -449,6 +452,9 @@ export class Block {
     }
 
     setGridPosition(col: number, row: number) {
+        if (!this.parentGrid) {
+            return;
+        }
         this.col = col;
         this.row = row;
         this.x =
@@ -457,16 +463,6 @@ export class Block {
             this.parentGrid.aspect;
         this.y = (row + 0.5 * this.cellHeight) * this.parentGrid.cellSize;
         this.container.position.set(this.x, this.y);
-        // console.log(
-        //     col,
-        //     row,
-        //     this.parentGrid.cellSize,
-        //     this.parentGrid.aspect,
-        //     this.cellWidth,
-        //     this.x,
-        //     this.y,
-        //     this.graphicsBg.scale,
-        // );
     }
 
     getValue() {

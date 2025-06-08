@@ -289,13 +289,42 @@ export class Subgrid {
         stage.addChild(this.container);
     }
 
+    rearrange() {
+        // TODO
+    }
+
     /**
      * Add a block to the grid.
      * @param {Block} obj - The block to add
      * @param {number} col - The column position of the block
      * @param {number} row - The row position of the block
      * */
-    addBlock(obj: Block, col: number, row: number) {
+    addBlock(obj: Block, col: number = -1, row: number = -1): boolean{
+        let bFound = col >= 0 && row >= 0;
+        // console.log('bFound', bFound, col, row)
+        if (!bFound) {
+            // need to find pos annually
+            for (let r = 0; r < this.height; r++) {
+                for (let c = 0; c < this.width; c++) {
+                    const bOverlap = this.checkForOverlap(obj, c, r);
+                    const bBoundary = this.checkBoundary(obj, c, r);
+                    if(!bOverlap && bBoundary) {
+                        bFound = true;
+                        col = c;
+                        row = r;
+                        break;
+                    }
+                }
+                if(bFound) {
+                    break;
+                }
+            }
+        }
+        // console.log('bFound', bFound, col, row)
+        // TODO: this.rearrange();
+        if (!bFound) {
+            return false;
+        }
         this.blocks.push(obj);
         this.container.addChild(obj.container);
         obj.parentGrid = this; // 设置父级网格
@@ -319,11 +348,10 @@ export class Subgrid {
             // console.log(obj.col, obj.row);
         }
 
-        // console.log('xxxx', this)
-
         if (this.onBlockMoved) {
             this.onBlockMoved(obj, col, row);
         }
+        return true;
     }
 
     /**

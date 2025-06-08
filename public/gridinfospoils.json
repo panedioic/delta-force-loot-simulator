@@ -1,0 +1,118 @@
+[
+    {
+        "type": "Grid",
+        "name": "Primary weapon 1",
+        "accept": ["primaryWeapon"],
+        "cellsize": 128,
+        "aspect": 2.6,
+        "scrollable": true,
+        "fullfill": true,
+        "countable": true
+    },
+    {
+        "type": "Grid",
+        "accept": ["secondaryWeapon"],
+        "name": "Secondary",
+        "cellsize": 128,
+        "aspect": 1.2,
+        "scrollable": true,
+        "fullfill": true,
+        "countable": true
+    },
+    {
+        "type": "Grid",
+        "accept": ["primaryWeapon"],
+        "name": "Primary weapon 2",
+        "cellsize": 128,
+        "aspect": 2.6,
+        "scrollable": true,
+        "fullfill": true,
+        "countable": true
+    },
+    {
+        "type": "Grid",
+        "name": "Knife",
+        "accept": ["knife"],
+        "cellsize": 128,
+        "aspect": 1.2,
+        "scrollable": true,
+        "fullfill": true,
+        "countable": true
+    },
+    {
+        "type": "Grid",
+        "name": "Helmet",
+        "accept": ["helmet"],
+        "cellsize": 128,
+        "aspect": 1.9,
+        "scrollable": true,
+        "fullfill": true,
+        "countable": true
+    },
+    {
+        "type": "Grid",
+        "name": "Armor",
+        "accept": ["armor"],
+        "cellsize": 128,
+        "aspect": 1.9,
+        "scrollable": true,
+        "fullfill": true,
+        "countable": true
+    },
+    {
+        "type": "GridTitle",
+        "name": "胸挂",
+        "cellSize": 36,
+        "aspect": 13.8
+    },
+    {
+        "type": "Grid",
+        "name": "Chest rig",
+        "accept": ["chestRigs"],
+        "width": 1,
+        "height": 1,
+        "cellsize": 108,
+        "aspect": 1.0,
+        "scrollable": true,
+        "fullfill": true,
+        "countable": true
+    },
+    {
+        "type": "GridContainer",
+        "name": "ContainerChestRigs"
+    },
+    {
+        "type": "GridTitle",
+        "name": "口袋",
+        "x": 0,
+        "y": 0,
+        "cellSize": 36,
+        "aspect": 13.8
+    },
+    {
+        "type": "GridContainer",
+        "name": "pocket"
+    },
+    {
+        "type": "GridTitle",
+        "name": "背包",
+        "x": 0,
+        "y": 0,
+        "cellSize": 36,
+        "aspect": 13.8
+    },
+    {
+        "type": "Grid",
+        "name": "Backpack",
+        "accept": ["backpack"],
+        "cellsize": 100,
+        "aspect": 1.0,
+        "scrollable": true,
+        "fullfill": true,
+        "countable": true
+    },
+    {
+        "type": "GridContainer",
+        "name": "ContainerBackpack"
+    }
+]

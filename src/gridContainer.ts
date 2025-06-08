@@ -111,14 +111,18 @@ export class GridContainer {
     }
 
     /**
-     * Add a block to the grid.
-     * @param {Block} obj - The block to add
+     * Add a item to the grid.
+     * @param {Block} obj - The item to add
      * @param {number} col - The column position of the block
      * @param {number} row - The row position of the block
      * */
-    addBlock(obj: Block, col: number, row: number) {
-        // TODO
-        console.log(obj, col, row);
+    addItem(obj: Block) {
+        for (const subgrid of this.subgrids) {
+            if (subgrid.addBlock(obj)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

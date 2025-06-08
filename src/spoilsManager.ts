@@ -3,6 +3,7 @@ import { Game } from "./game";
 import { Inventory } from "./invntory";
 import { Block } from "./block";
 import { Subgrid } from "./subgrid";
+import { GridContainer } from "./gridContainer";
 
 
 
@@ -121,7 +122,99 @@ export class SpoilsManager {
             }
         } else {
             // TODO
-
+            const tasks1 = [
+                {
+                    type: 'primaryWeapon',
+                    subgrid: 'Primary weapon 1',
+                    probability: 0.9,
+                },
+                {
+                    type: 'secondaryWeapon',
+                    subgrid: 'Secondary',
+                    probability: 0.3,
+                },
+                {
+                    type: 'primaryWeapon',
+                    subgrid: 'Primary weapon 2',
+                    probability: 0.6,
+                },
+                {
+                    type: 'helmet',
+                    subgrid: 'Helmet',
+                    probability: 0.7,
+                },
+                {
+                    type: 'armor',
+                    subgrid: 'Armor',
+                    probability: 0.9,
+                },
+                {
+                    type: 'chestRigs',
+                    subgrid: 'Chest rig',
+                    probability: 1,
+                },
+                {
+                    type: 'backpack',
+                    subgrid: 'Backpack',
+                    probability: 1,
+                },
+            ]
+            for (const task of tasks1) {
+                if (Math.random() < task.probability) {
+                    const subgrid = inventory.contents[task.subgrid] as Subgrid;
+                    const acceptable_infos = this.game.BLOCK_TYPES.filter(item => item.type === task.type);
+                    const info = acceptable_infos[Math.floor(Math.random() * acceptable_infos.length)];
+                    const item = new Block(
+                        this.game,
+                        subgrid,
+                        info.type,
+                        info,
+                    );
+                    subgrid.addBlock(item);
+                }
+            }
+            // 口袋、背包、胸挂特殊处理
+            const tasks2 = [
+                {
+                    type: 'pocket',
+                    container: 'pocket',
+                    stop_probability: 0.12,
+                    prerequisite: null,
+                },
+                {
+                    type: 'chestRigs',
+                    container: 'ContainerChestRigs',
+                    stop_probability: 0.08,
+                    prerequisite: 'Backpack',
+                },
+                {
+                    type: 'backpack',
+                    container: 'ContainerBackpack',
+                    stop_probability: 0.1,
+                    prerequisite: 'Chest rig',
+                },
+            ];
+            for (const task of tasks2) {
+                while(true) {
+                    if (Math.random() < task.stop_probability) {
+                        break;
+                    }
+                    if (task.prerequisite && !inventory.contents[task.prerequisite]) {
+                        break;
+                    }
+                    const gridContainer = inventory.contents[task.container] as GridContainer;
+                    const infos = this.game.BLOCK_TYPES;
+                    const info = infos[Math.floor(Math.random() * infos.length)];
+                    // console.log('info', task.type, info, gridContainer);
+                    const item = new Block(
+                        this.game,
+                        null,
+                        info.type,
+                        info,
+                    );
+                    gridContainer.addItem(item);
+                }
+            }
         }
     }
 

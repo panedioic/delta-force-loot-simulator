@@ -21,6 +21,7 @@ export class Game {
     app: PIXI.Application;
     BLOCK_TYPES: any[];
     GRID_INFO: any[];
+    GRID_INFO_SPOILS: any[];
     grids: (Grid | Subgrid)[];
     currentRightRegion: number;
     totalRightRegion: number;
@@ -40,6 +41,7 @@ export class Game {
         this.app = new PIXI.Application();
         this.BLOCK_TYPES = [];
         this.GRID_INFO = [];
+        this.GRID_INFO_SPOILS = [];
         this.grids = [];
         this.currentRightRegion = 0;
         this.totalRightRegion = RIGHT_REGION_COUNT;
@@ -61,6 +63,7 @@ export class Game {
         // Load block types and grid info from JSON files
         await this.loadBlockTypes();
         await this.loadGridInfo();
+        await this.loadGridInfoSpoils();
         // Create PIXI application
         await this.createPixiApp();
         this.initGameUI(); // 创建背景
@@ -120,6 +123,33 @@ export class Game {
             // }
             const response = await fetch("/gridinfo.json");
             this.GRID_INFO = await response.json();
+            const loadingElement = document.querySelector(".loading");
+            if (loadingElement) {
+                (loadingElement as HTMLElement).style.display = "none";
+            }
+        } catch (error) {
+            console.error("Failed to load grid data:", error);
+            const loadingElement = document.querySelector(".loading");
+            if (loadingElement) {
+                loadingElement.textContent = "加载网格数据失败，请刷新重试";
+            }
+            throw error;
+        }
+    }
+
+    /**
+     * Load grid info(spoils) from a JSON file.
+     * @returns {Promise<void>} A promise that resolves when the grid info is loaded.
+     * */
+    async loadGridInfoSpoils(): Promise<void> {
+        try {
+            // if (import.meta.env.MODE === "development") {
+            //     const { getMockGridInfo } = await import("./mockData");
+            //     this.GRID_INFO = await getMockGridInfo();
+            //     return;
+            // }
+            const response = await fetch("/gridinfospoils.json");
+            this.GRID_INFO_SPOILS = await response.json();
             const loadingElement = document.querySelector(".loading");
             if (loadingElement) {
                 (loadingElement as HTMLElement).style.display = "none";
@@ -221,8 +251,8 @@ export class Game {
             this,
             806,
             128,
-            6,
-            0
+            3,
+            3
         );
         this.regionSwitchUI = new RegionSwitchUI(this, 920, 86, () => {});
         this.regionSwitchUI.addToStage();
