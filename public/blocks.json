@@ -289,10 +289,18 @@
         "value": 20000,
         "color": "808080",
         "accessories": [
-            "Ammo76239",
-            "RearGrip", "Barrel", "Muzzle", "Stock", "ButtPad", 
-            "Foregrip", "Magazine", "MagazineMount", "Scope", 
-            "SideSight", "PullHandle"
+            {"title": "7.62x39mm Ammo", "type": "Ammo76239"},
+            {"title": "后握把", "type": "RearGrip"}, 
+            {"title": "枪管", "type": "Barrel"}, 
+            {"title": "枪口", "type": "Muzzle"}, 
+            {"title": "枪托", "type": "Stock"}, 
+            {"title": "枪托垫", "type": "ButtPad"}, 
+            {"title": "前握把", "type": "Foregrip"}, 
+            {"title": "弹匣", "type": "Magazine"}, 
+            {"title": "弹匣座", "type": "MagazineMount"}, 
+            {"title": "瞄准镜", "type": "Scope"}, 
+            {"title": "侧瞄具", "type": "SideSight"}, 
+            {"title": "拉机柄", "type": "PullHandle"}
         ]
     },
     {
@@ -303,11 +311,24 @@
         "value": 30000,
         "color": "808080",
         "accessories": [
-            "Ammo55645",
-            "RearGrip", "Barrel", "Muzzle", "Stock", "Foregrip", 
-            "RailTripod", "Rail", "Rail", "Rail", "Patch", "Patch", 
-            "Patch", "Magazine", "MagazineMount", "Scope", 
-            "SideSight", "ButtKit"
+            {"title": "5.56x45mm Ammo", "type": "Ammo55645"},
+            {"title": "后握把", "type": "RearGrip"},
+            {"title": "枪管", "type": "Barrel"},
+            {"title": "枪口", "type": "Muzzle"},
+            {"title": "枪托", "type": "Stock"},
+            {"title": "前握把", "type": "Foregrip"},
+            {"title": "脚架", "type": "RailTripod"},
+            {"title": "左导轨", "type": "Rail"},
+            {"title": "右导轨", "type": "Rail"},
+            {"title": "上导轨", "type": "Rail"},
+            {"title": "贴片1", "type": "Patch"},
+            {"title": "贴片2", "type": "Patch"},
+            {"title": "贴片3", "type": "Patch"},
+            {"title": "弹匣", "type": "Magazine"},
+            {"title": "弹匣座", "type": "MagazineMount"},
+            {"title": "瞄准镜", "type": "Scope"},
+            {"title": "侧瞄具", "type": "SideSight"},
+            {"title": "枪托套件", "type": "ButtKit"}
         ]
     },
     {
@@ -318,10 +339,18 @@
         "value": 40000,
         "color": "808080",
         "accessories": [
-            "Ammo55645",
-            "Barrel", "Muzzle", "Stock", "Handguard", "Foregrip", 
-            "RailTripod", "Rail", "Rail", "Magazine","Scope", 
-            "SideSight"
+            {"title": "5.56x45mm Ammo", "type": "Ammo55645"},
+            {"title": "枪管", "type": "Barrel"},
+            {"title": "枪口", "type": "Muzzle"},
+            {"title": "枪托", "type": "Stock"},
+            {"title": "护木", "type": "Handguard"},
+            {"title": "前握把", "type": "Foregrip"},
+            {"title": "脚架", "type": "RailTripod"},
+            {"title": "左导轨", "type": "Rail"},
+            {"title": "右导轨", "type": "Rail"},
+            {"title": "弹匣", "type": "Magazine"},
+            {"title": "瞄准镜", "type": "Scope"},
+            {"title": "侧瞄具", "type": "SideSight"}
         ]
     },
     {
@@ -332,10 +361,16 @@
         "value": 35000,
         "color": "808080",
         "accessories": [
-            "Ammo76251",
-            "Barrel", "Muzzle", "Handguard", "CheekBracket", 
-            "Magazine", "MagazineMount", "Scope", 
-            "SideSight", "HandguardKit"
+            {"title": "7.62x51mm Ammo", "type": "Ammo76251"},
+            {"title": "枪管", "type": "Barrel"},
+            {"title": "枪口", "type": "Muzzle"},
+            {"title": "护木", "type": "Handguard"},
+            {"title": "面颊托", "type": "CheekBracket"},
+            {"title": "弹匣", "type": "Magazine"},
+            {"title": "弹匣座", "type": "MagazineMount"},
+            {"title": "瞄准镜", "type": "Scope"},
+            {"title": "侧瞄具", "type": "SideSight"},
+            {"title": "护木套件", "type": "HandguardKit"}
         ]
     },
     {
@@ -346,9 +381,13 @@
         "value": 50000,
         "color": "808080",
         "accessories": [
-            "Ammo338",
-            "Barrel", "Muzzle","MagazineMount", "Unique", 
-            "Scope", "SideSight"
+            {"title": ".338 Lap Mag Ammo", "type": "Ammo338"},
+            {"title": "枪管", "type": "Barrel"},
+            {"title": "枪口", "type": "Muzzle"},
+            {"title": "弹匣座", "type": "MagazineMount"},
+            {"title": "特制部件", "type": "Unique"},
+            {"title": "瞄准镜", "type": "Scope"},
+            {"title": "侧瞄具", "type": "SideSight"}
         ]
     },
 
@@ -360,9 +399,13 @@
         "value": 5000,
         "color": "808080",
         "accessories": [
-            "Ammo919",
-            "RearGrip", "Barrel", "Muzzle", "Magazine", 
-            "Scope", "Rail"
+            {"title": "9x19mm Ammo", "type": "Ammo919"},
+            {"title": "后握把", "type": "RearGrip"},
+            {"title": "枪管", "type": "Barrel"},
+            {"title": "枪口", "type": "Muzzle"},
+            {"title": "弹匣", "type": "Magazine"},
+            {"title": "瞄准镜", "type": "Scope"},
+            {"title": "导轨", "type": "Rail"}
         ]
     },
     {
@@ -373,9 +416,13 @@
         "value": 6000,
         "color": "808080",
         "accessories": [
-            "Ammo919",
-            "RearGrip", "Barrel", "Muzzle", "Magazine", 
-            "Scope", "Rail"
+            {"title": "9x19mm Ammo", "type": "Ammo919"},
+            {"title": "后握把", "type": "RearGrip"},
+            {"title": "枪管", "type": "Barrel"},
+            {"title": "枪口", "type": "Muzzle"},
+            {"title": "弹匣", "type": "Magazine"},
+            {"title": "瞄准镜", "type": "Scope"},
+            {"title": "导轨", "type": "Rail"}
         ]
     },
     {
@@ -386,9 +433,13 @@
         "value": 7000,
         "color": "808080",
         "accessories": [
-            "Ammo919",
-            "RearGrip", "Barrel", "Muzzle", "Magazine", 
-            "Scope", "Rail"
+            {"title": "9x19mm Ammo", "type": "Ammo919"},
+            {"title": "后握把", "type": "RearGrip"},
+            {"title": "枪管", "type": "Barrel"},
+            {"title": "枪口", "type": "Muzzle"},
+            {"title": "弹匣", "type": "Magazine"},
+            {"title": "瞄准镜", "type": "Scope"},
+            {"title": "导轨", "type": "Rail"}
         ]
     },
     {
