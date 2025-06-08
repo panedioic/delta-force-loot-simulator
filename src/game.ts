@@ -60,8 +60,7 @@ export class Game {
      * @returns {Promise<void>} A promise that resolves when the block types are loaded.
      * */
     async init(): Promise<void> {
-        // Load block types and grid info from JSON files
-        await this.loadBlockTypes();
+        await this.loadItemTypes();
         await this.loadGridInfo();
         await this.loadGridInfoSpoils();
         // Create PIXI application
@@ -84,7 +83,7 @@ export class Game {
      * Load block types from a JSON file.
      * @returns {Promise<void>} A promise that resolves when the block types are loaded.
      * */
-    async loadBlockTypes(): Promise<void> {
+    async loadItemTypes(): Promise<void> {
         // if (import.meta.env.MODE === "development") {
         //     this.BLOCK_TYPES = await getMockBlocks();
         //     const loadingElement = document.querySelector(".loading");

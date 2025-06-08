@@ -1,9 +1,11 @@
-export interface BlockType {
+export interface ItemType {
     cellWidth: number;
     cellHeight: number;
-    blockType: any; // Assuming blockType is an object with properties
-    type: string;
     color: string;
     name: string;
+    type: string;
+    value: number;
+    search: number;
+    itemType: any; // Assuming itemType is an object with properties
     subgridLayout: any[] | null;
 }

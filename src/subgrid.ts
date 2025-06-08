@@ -1,8 +1,8 @@
 import * as PIXI from "pixi.js";
-import { Block } from "./block";
+import { Item } from "./item";
 import { Game } from "./game";
 import { DEFAULT_CELL_SIZE } from "./config";
-import { BlockType } from "./types";
+import { ItemType } from "./types";
 
 /**
  * This class represents a grid in the game.
@@ -21,10 +21,10 @@ export class Subgrid {
     acceptedTypes: string[];
     margin: number[];
     container: PIXI.Container;
-    blocks: Block[];
+    blocks: Item[];
     title: string;
-    onBlockMoved?: (block: Block, col: number, row: number) => void;
-    onBlockRemoved?: (block: Block) => void;
+    onBlockMoved?: (item: Item, col: number, row: number) => void;
+    onBlockRemoved?: (item: Item) => void;
 
     // 用于防止出现大小的bug
     additiveSize: { x: number; y: number };
@@ -144,13 +144,13 @@ export class Subgrid {
      * Get the grid position from the global coordinates
      * @param {number} globalX - The global X coordinate
      * @param {number} globalY - The global Y coordinate
-     * @param {Block} item - The block item to check
+     * @param {Item} item - The block item to check
      * @returns {object} - Returns an object containing the clamped column, clamped row, snap X, and snap Y
      */
     getGridPositionFromGlobal(
         globalX: number,
         globalY: number,
-        item: Block | null,
+        item: Item | null,
     ): {
         clampedCol: number;
         clampedRow: number;
@@ -189,13 +189,13 @@ export class Subgrid {
 
     /**
      * Check for overlap between the item and other items in the grid.
-     * @param {Block} item - The block item to check
+     * @param {Item} item - The block item to check
      * @param {number} col - The column position of the item
      * @param {number} row - The row position of the item
      * @returns {boolean} - Returns true if there is an overlap, false otherwise
      */
     checkForOverlap(
-        item: Block | BlockType,
+        item: Item | ItemType,
         col: number,
         row: number,
     ): boolean {
@@ -235,12 +235,12 @@ export class Subgrid {
 
     /**
      * Check if the item is within the boundary of the grid.
-     * @param {Block} item - The block item to check
+     * @param {Item} item - The block item to check
      * @param {number} col - The column position of the item
      * @param {number} row - The row position of the item
      * @returns {boolean} - Returns true if the item is within the boundary, false otherwise
      * */
-    checkBoundary(item: Block | BlockType, col: number, row: number): boolean {
+    checkBoundary(item: Item | ItemType, col: number, row: number): boolean {
         if (this.fullfill) {
             return col === 0 && row === 0;
         }
@@ -263,10 +263,10 @@ export class Subgrid {
 
     /**
      * Check if the item is acceptable by the grid.
-     * @param {Block} item - The block item to check
+     * @param {Item} item - The block item to check
      * @returns {boolean} - Returns true if the item is accepted, false otherwise
      * */
-    checkAccept(item: Block): boolean {
+    checkAccept(item: Item): boolean {
         if (this.acceptedTypes.length === 0) {
             return true; // 如果没有指定接受的类型，则默认接受所有类型
         }
@@ -295,11 +295,11 @@ export class Subgrid {
 
     /**
      * Add a block to the grid.
-     * @param {Block} obj - The block to add
+     * @param {Item} obj - The block to add
      * @param {number} col - The column position of the block
      * @param {number} row - The row position of the block
      * */
-    addBlock(obj: Block, col: number = -1, row: number = -1): boolean{
+    addBlock(obj: Item, col: number = -1, row: number = -1): boolean {
         let bFound = col >= 0 && row >= 0;
         // console.log('bFound', bFound, col, row)
         if (!bFound) {
@@ -356,9 +356,9 @@ export class Subgrid {
 
     /**
      * Remove a block from the grid.
-     * @param {Block} obj - The block to remove
+     * @param {Item} obj - The block to remove
      * */
-    removeBlock(obj: Block) {
+    removeBlock(obj: Item) {
         const index = this.blocks.indexOf(obj);
         if (index !== -1) {
             this.blocks.splice(index, 1);
@@ -392,52 +392,45 @@ export class Subgrid {
 
     /**
      * Initialize the blocks in the grid.
-     * @param {Array} blockTypes - The types of blocks to initialize
+     * @param {Array} itemTypes - The types of blocks to initialize
      * */
-    initialBlocks(blockTypes: BlockType[]) {
-        console.log(blockTypes)
-        const blocksNum = Math.floor(Math.random() * 10); // 随机生成0到9个方块
-        let blocks = [];
-        for (let i = 0; i < blocksNum; i++) {
-            const blockType =
-                blockTypes[Math.floor(Math.random() * blockTypes.length)];
-            blocks.push(blockType);
+    initialBlocks(itemTypes: ItemType[]) {
+        console.log(itemTypes)
+        const itemsNum = Math.floor(Math.random() * 10); // 随机生成0到9个方块
+        let items = [];
+        for (let i = 0; i < itemsNum; i++) {
+            const itemType =
+                itemTypes[Math.floor(Math.random() * itemTypes.length)];
+            items.push(itemType);
         }
+
+        // console.log(items);
 
         for (let row = 0; row < this.width; row++) {
             for (let col = 0; col < this.height; col++) {
-                const blockType = blocks[0];
-                if (!blockType) {
+                const itemType = items[0];
+                if (!itemType) {
                     return; // 如果没有更多方块类型，退出循环
                 }
-                const item = {
-                    cellWidth: blockType.cellWidth,
-                    cellHeight: blockType.cellHeight,
-                    blockType: blockType,
-                    type: blockType.type,
-                    name: '',
-                    color: '',
-                    subgridLayout: blockType.subgridLayout
-                };
                 const canPlace =
-                    !this.checkForOverlap(item, col, row) &&
-                    this.checkBoundary(item, col, row);
+                    !this.checkForOverlap(itemType, col, row) &&
+                    this.checkBoundary(itemType, col, row);
                 if (canPlace) {
-                    // console.log("aaa", blockType, item);
+                    // console.log("aaa", itemType);
                     // 使用 Block 类创建方块
-                    const block = new Block(
+                    const newItem = new Item(
                         this.game,
                         this,
-                        item.type,
-                        blockType,
+                        itemType.type,
+                        itemType,
                     );
-                    if(blockType.subgridLayout) {
-                        block.subgridLayout = blockType.subgridLayout;
+                    if(itemType.subgridLayout) {
+                        newItem.subgridLayout = itemType.subgridLayout;
                     }
-                    this.addBlock(block, col, row);
+                    this.addBlock(newItem, col, row);
 
-                    blocks.shift(); // 移除已放置的方块类型
-                    if (blocks.length === 0) {
+                    items.shift(); // 移除已放置的方块类型
+                    if (items.length === 0) {
                         // console.log(this.blocks);
                         return;
                     }

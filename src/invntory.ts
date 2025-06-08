@@ -35,7 +35,7 @@ export class Inventory {
         y: number,
     ) {
         this.game = game;
-        this.countable = countable || false;
+        this.countable = countable;
         this.scrollable = scrollable;
         this.x = x;
         this.y = y;
@@ -90,7 +90,7 @@ export class Inventory {
                             info.cellsize,
                             info.aspect,
                             info.fullfill,
-                            info.countable,
+                            this.countable,
                             info.accept,
                             info.name
                         );
@@ -133,9 +133,9 @@ export class Inventory {
             ];
             (this.contents['ContainerSecure'] as GridContainer).initSubgrids();
             // 胸挂回调函数
-            (this.contents['Chest rig'] as Subgrid).onBlockMoved = (block, _col, _row) => {
-                // console.log('there', block.subgridLayout);
-                (this.contents['ContainerChestRigs'] as GridContainer).layout = block.subgridLayout;
+            (this.contents['Chest rig'] as Subgrid).onBlockMoved = (item, _col, _row) => {
+                // console.log('there', item.subgridLayout);
+                (this.contents['ContainerChestRigs'] as GridContainer).layout = item.subgridLayout;
                 (this.contents['ContainerChestRigs'] as GridContainer).initSubgrids();
                 this.refreshUI();
             }
@@ -145,9 +145,9 @@ export class Inventory {
                 this.refreshUI();
             }
             // 背包回调函数
-            (this.contents['Backpack'] as Subgrid).onBlockMoved = (block, _col, _row) => {
+            (this.contents['Backpack'] as Subgrid).onBlockMoved = (item, _col, _row) => {
                 // console.log('there');
-                (this.contents['ContainerBackpack'] as GridContainer).layout = block.subgridLayout;
+                (this.contents['ContainerBackpack'] as GridContainer).layout = item.subgridLayout;
                 (this.contents['ContainerBackpack'] as GridContainer).initSubgrids();
                 this.refreshUI();
             }

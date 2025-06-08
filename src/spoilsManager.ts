@@ -1,11 +1,9 @@
 import * as PIXI from "pixi.js";
 import { Game } from "./game";
-import { Inventory } from "./invntory";
-import { Block } from "./block";
+import { Item } from "./item";
 import { Subgrid } from "./subgrid";
 import { GridContainer } from "./gridContainer";
-
-
+import { Inventory } from "./invntory";
 
 export class SpoilsManager {
     game: Game;
@@ -105,18 +103,22 @@ export class SpoilsManager {
                     if (!bOverlap && bBoundary) {
                         // console.log("aaa", blockType, item);
                         // 使用 Block 类创建方块
-                        const item = new Block(
+                        const block = new Item(
                             this.game,
                             subgrid,
                             info.type,
                             info,
                         );
-                        subgrid.addBlock(item, col, row);
-                        // if(item.subgridLayout){
-                        //     console.log(item)
-                        // }
+                        if(info.subgridLayout) {
+                            block.subgridLayout = info.subgridLayout;
+                        }
+                        subgrid.addBlock(block, col, row);
 
                         items.shift(); // 移除已放置的方块类型
+                        if (items.length === 0) {
+                            // console.log(this.blocks);
+                            return;
+                        }
                     }
                 }
             }
@@ -164,7 +166,7 @@ export class SpoilsManager {
                     const subgrid = inventory.contents[task.subgrid] as Subgrid;
                     const acceptable_infos = this.game.BLOCK_TYPES.filter(item => item.type === task.type);
                     const info = acceptable_infos[Math.floor(Math.random() * acceptable_infos.length)];
-                    const item = new Block(
+                    const item = new Item(
                         this.game,
                         subgrid,
                         info.type,
@@ -206,7 +208,7 @@ export class SpoilsManager {
                     const infos = this.game.BLOCK_TYPES;
                     const info = infos[Math.floor(Math.random() * infos.length)];
                     // console.log('info', task.type, info, gridContainer);
-                    const item = new Block(
+                    const item = new Item(
                         this.game,
                         null,
                         info.type,

@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import { Block } from "./block";
+import { Item } from "./item";
 import { Game } from "./game";
 import { DEFAULT_CELL_SIZE } from "./config";
 import { Subgrid } from "./subgrid";
@@ -116,7 +116,7 @@ export class GridContainer {
      * @param {number} col - The column position of the block
      * @param {number} row - The row position of the block
      * */
-    addItem(obj: Block) {
+    addItem(obj: Item) {
         for (const subgrid of this.subgrids) {
             if (subgrid.addBlock(obj)) {
                 return true;

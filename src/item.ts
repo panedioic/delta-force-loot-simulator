@@ -7,14 +7,14 @@ import { Subgrid } from "./subgrid";
 import { GAME_WIDTH, GAME_HEIGHT } from "./config";
 import { DEFAULT_CELL_SIZE } from "./config";
 
-export class Block {
+export class Item {
     game: Game;
     parentGrid: Grid | Subgrid | null;
     col: number;
     row: number;
     x: number;
     y: number;
-    blockType: any;
+    itemType: any;
     cellWidth: number;
     cellHeight: number;
     originCellWidth: number;
@@ -37,37 +37,37 @@ export class Block {
 
     /** 拖动相关 */
     dragStartParentContainer: PIXI.Container;
-    dragStartBlockLocalPosition: PIXI.Point;
-    dragStartBlockGlobalPosition: PIXI.Point;
+    dragStartItemLocalPosition: PIXI.Point;
+    dragStartItemGlobalPosition: PIXI.Point;
     dragStartMouseGlobalPoint: PIXI.Point;
     isDragging: boolean;
     hasMoved: boolean;
     dragOverlay: PIXI.Graphics | null;
     previewIndicator: PIXI.Graphics | null;
 
-    constructor(game: Game, parentGrid: Grid | Subgrid | null, type: string, blockType: any) {
+    constructor(game: Game, parentGrid: Grid | Subgrid | null, type: string, itemType: any) {
         this.game = game;
         this.parentGrid = parentGrid;
         this.col = 0;
         this.row = 0;
         this.x = 0;
         this.y = 0;
-        this.blockType = blockType;
-        this.cellWidth = this.blockType.cellWidth;
-        this.cellHeight = this.blockType.cellHeight;
+        this.itemType = itemType;
+        this.cellWidth = this.itemType.cellWidth;
+        this.cellHeight = this.itemType.cellHeight;
         this.originCellWidth = this.cellWidth;
         this.originCellHeight = this.cellHeight;
         this.pixelWidth =
             this.parentGrid ? this.cellWidth * this.parentGrid.cellSize * this.parentGrid.aspect : this.cellWidth * DEFAULT_CELL_SIZE;
         this.pixelHeight = this.parentGrid ? this.cellHeight * this.parentGrid.cellSize : this.cellHeight * DEFAULT_CELL_SIZE;
-        this.color = this.blockType.color;
-        this.baseValue = this.blockType.value;
-        this.name = this.blockType.name;
+        this.color = this.itemType.color;
+        this.baseValue = this.itemType.value;
+        this.name = this.itemType.name;
         this.type = type || "collection";
-        this.search = blockType.search || 1.2;
-        this.subgridLayout = blockType.subgridLayout;
+        this.search = itemType.search || 1.2;
+        this.subgridLayout = itemType.subgridLayout;
         // console.log('eee')
-        // if(blockType.subgridLayout) {
+        // if(itemType.subgridLayout) {
         //     console.log('fff', this)
         //     console.log('ggg', this.subgridLayout)
             
@@ -82,11 +82,11 @@ export class Block {
         // this.container.position.set(this.x, this.y);
         this.graphicsBg = new PIXI.Graphics();
         this.graphicsText = null;
-        this.createBlockGraphics();
+        this.createItemGraphics();
 
         this.dragStartParentContainer = this.container.parent;
-        this.dragStartBlockLocalPosition = new PIXI.Point(this.x, this.y);
-        this.dragStartBlockGlobalPosition = new PIXI.Point(this.x, this.y);
+        this.dragStartItemLocalPosition = new PIXI.Point(this.x, this.y);
+        this.dragStartItemGlobalPosition = new PIXI.Point(this.x, this.y);
         this.dragStartMouseGlobalPoint = new PIXI.Point(this.x, this.y);
         this.isDragging = false;
         this.hasMoved = false;
@@ -97,7 +97,7 @@ export class Block {
         this.subgrid = null;
     }
 
-    createBlockGraphics() {
+    createItemGraphics() {
         // 清空之前的图形内容（避免重复绘制）
         if (this.graphicsBg) {
             this.container.removeChild(this.graphicsBg);
@@ -191,7 +191,7 @@ export class Block {
             })
             .on("pointerup", this.onDragEnd.bind(this))
             .on("pointerupoutside", this.onDragEnd.bind(this))
-            .on("click", this.onBlockClick.bind(this));
+            .on("click", this.onItemClick.bind(this));
 
         // 添加全局键盘事件监听
         window.addEventListener("keydown", this.onKeyDown.bind(this));
@@ -202,8 +202,8 @@ export class Block {
         this.hasMoved = false;
         // Keep track of the starting position and container
         this.dragStartParentContainer = this.container.parent;
-        this.dragStartBlockLocalPosition = this.container.position.clone();
-        this.dragStartBlockGlobalPosition = this.container.getGlobalPosition();
+        this.dragStartItemLocalPosition = this.container.position.clone();
+        this.dragStartItemGlobalPosition = this.container.getGlobalPosition();
         // Get the global mouse position at the start of the drag
         this.dragStartMouseGlobalPoint = event.global.clone();
         this.container.alpha = 0.7;
@@ -230,7 +230,7 @@ export class Block {
 
         const globalPosition = this.container.getGlobalPosition();
 
-        // 将原本的 block 移动到 app.stage 顶层
+        // 将原本的 item 移动到 app.stage 顶层
         // console.log(this.app)
         this.game.app.stage.addChild(this.container);
         this.container.position.set(globalPosition.x, globalPosition.y);
@@ -302,7 +302,7 @@ export class Block {
         } else {
             // 如果重叠或超出边界，返回拖动前的位置
             this.dragStartParentContainer.addChild(this.container);
-            this.container.position.copyFrom(this.dragStartBlockLocalPosition);
+            this.container.position.copyFrom(this.dragStartItemLocalPosition);
             // console.log(checkForOverlap(container, this.container, snapX, snapY), checkBoundary(container, this.container, clampedCol, clampedRow));
         }
         // console.log("2", this.previewIndicator.position.x);
@@ -329,7 +329,7 @@ export class Block {
         this.container.off("pointermove", this.onDragMove.bind(this));
 
         if (!this.hasMoved) {
-            this.showBlockDetails(newPosition.x, newPosition.y);
+            this.showItemDetails(newPosition.x, newPosition.y);
         }
         this.hasMoved = false;
     }
@@ -343,12 +343,12 @@ export class Block {
         const dy = event.global.y - this.dragStartMouseGlobalPoint.y;
 
         const currentBlockGlobalPosition = {
-            x: this.dragStartBlockGlobalPosition.x + dx,
-            y: this.dragStartBlockGlobalPosition.y + dy,
+            x: this.dragStartItemGlobalPosition.x + dx,
+            y: this.dragStartItemGlobalPosition.y + dy,
         };
 
         // console.log(
-        //     this.dragStartBlockGlobalPosition,
+        //     this.dragStartItemGlobalPosition,
         //     currentBlockGlobalPosition,
         // );
 
@@ -367,7 +367,7 @@ export class Block {
         // console.log("1", this.graphicsBg.position.x);
     }
 
-    onBlockClick(event: any) {
+    onItemClick(event: any) {
         event.stopPropagation();
     }
 
@@ -389,7 +389,7 @@ export class Block {
         }
     }
 
-    showBlockDetails(x: number, y: number) {
+    showItemDetails(x: number, y: number) {
         // Implement block details display logic here
         console.log(`Showing details for block at (${x}, ${y})`);
     }
