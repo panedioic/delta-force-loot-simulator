@@ -14,7 +14,7 @@ export class Item {
     row: number;
     x: number;
     y: number;
-    itemType: any;
+    // itemType: any;
     cellWidth: number;
     cellHeight: number;
     originCellWidth: number;
@@ -34,6 +34,9 @@ export class Item {
     graphicsText: PIXI.Container | null;
     subgridLayout: any;
     subgrid: Subgrid | null;
+    accessories: any[];
+    maxStackCount: number;
+    currentStactCount: number;
 
     /** 拖动相关 */
     dragStartParentContainer: PIXI.Container;
@@ -45,6 +48,10 @@ export class Item {
     dragOverlay: PIXI.Graphics | null;
     previewIndicator: PIXI.Graphics | null;
 
+    /** 单双击相关 */
+    clickTimeout: number | null;
+    clickCount: number;
+
     constructor(game: Game, parentGrid: Grid | Subgrid | null, type: string, itemType: any) {
         this.game = game;
         this.parentGrid = parentGrid;
@@ -52,20 +59,23 @@ export class Item {
         this.row = 0;
         this.x = 0;
         this.y = 0;
-        this.itemType = itemType;
-        this.cellWidth = this.itemType.cellWidth;
-        this.cellHeight = this.itemType.cellHeight;
+        // this.itemType = itemType;
+        this.cellWidth = itemType.cellWidth;
+        this.cellHeight = itemType.cellHeight;
         this.originCellWidth = this.cellWidth;
         this.originCellHeight = this.cellHeight;
         this.pixelWidth =
             this.parentGrid ? this.cellWidth * this.parentGrid.cellSize * this.parentGrid.aspect : this.cellWidth * DEFAULT_CELL_SIZE;
         this.pixelHeight = this.parentGrid ? this.cellHeight * this.parentGrid.cellSize : this.cellHeight * DEFAULT_CELL_SIZE;
-        this.color = this.itemType.color;
-        this.baseValue = this.itemType.value;
-        this.name = this.itemType.name;
+        this.color = itemType.color;
+        this.baseValue = itemType.value;
+        this.name = itemType.name;
         this.type = type || "collection";
         this.search = itemType.search || 1.2;
         this.subgridLayout = itemType.subgridLayout;
+        this.accessories = itemType.accessories || [];
+        this.maxStackCount = itemType.maxStack || 1;
+        this.currentStactCount = itemType.stack || 1;
         // console.log('eee')
         // if(itemType.subgridLayout) {
         //     console.log('fff', this)
@@ -95,6 +105,9 @@ export class Item {
 
         this.addEventListeners();
         this.subgrid = null;
+
+        this.clickTimeout = null;
+        this.clickCount = 0;
     }
 
     createItemGraphics() {
@@ -178,65 +191,70 @@ export class Item {
     }
 
     addEventListeners() {
-        // this.container.interactive = true;
-        // this.container.buttonMode = true;
         this.container.eventMode = "static";
 
-        this.container
-            .on("pointerdown", (event) => {
-                if (this.game.isGameStarted) {
-                    // 只有游戏开始后才能拖动
-                    this.onDragStart(event);
+        this.container.on('pointerdown', (event) => {
+            if (this.game.isGameStarted) {
+                // 增加点击数量
+                this.clickCount++;
+
+                // 进行拖动相关判定
+                this.isDragging = false;
+                this.hasMoved = false;
+
+                // 记录初始位置
+                this.dragStartParentContainer = this.container.parent;
+                this.dragStartItemLocalPosition = this.container.position.clone();
+                this.dragStartItemGlobalPosition = this.container.getGlobalPosition();
+                this.dragStartMouseGlobalPoint = event.global.clone();
+        
+                // 绑定移动事件
+                this.container.on("pointermove", this.onDragMove.bind(this));
+                this.onDragStart(event);
+            }
+        });
+
+        this.container.on("pointerup", () => {
+            // 移除拖动时的事件监听
+            this.container.off("pointermove");
+            if (this.isDragging) {
+                // 如果发生拖动，就不再处理单击或双击
+                this.clickCount = 0;
+                this.onDragEnd();
+            } else {
+                if (this.clickCount === 1) {
+                    // 200ms 内如果没有第二次点击，就认为是单击
+                    this.clickTimeout = window.setTimeout(() => {
+                        this.onClick();
+                        this.clickCount = 0;
+                        this.clickTimeout = null;
+                    }, 200); 
+                } else if (this.clickCount === 2) {
+                    // 如果是双击，直接触发双击行为，不再等待三击，清除单击效果
+                    if (this.clickTimeout) { 
+                        window.clearTimeout(this.clickTimeout);
+                    }
+                    this.onClick();
+                    this.clickCount = 0;
+                    this.clickTimeout = null;
                 }
-            })
-            .on("pointerup", this.onDragEnd.bind(this))
-            .on("pointerupoutside", this.onDragEnd.bind(this))
-            .on("click", this.onItemClick.bind(this));
+            }
+        });
 
         // 添加全局键盘事件监听
         window.addEventListener("keydown", this.onKeyDown.bind(this));
     }
 
-    onDragStart(event: PIXI.FederatedMouseEvent) {
-        this.isDragging = true;
-        this.hasMoved = false;
-        // Keep track of the starting position and container
-        this.dragStartParentContainer = this.container.parent;
-        this.dragStartItemLocalPosition = this.container.position.clone();
-        this.dragStartItemGlobalPosition = this.container.getGlobalPosition();
-        // Get the global mouse position at the start of the drag
-        this.dragStartMouseGlobalPoint = event.global.clone();
-        this.container.alpha = 0.7;
-
-        // 创建预览指示器
-        if (!this.previewIndicator) {
-            this.previewIndicator = new PIXI.Graphics();
-            this.game.app.stage.addChild(this.previewIndicator);
+    onClick() {
+        if (this.clickCount === 1) {
+            this.game.createItemInfoPanel(this);
+        } else if (this.clickCount === 2) {
+            // this.game.createItemInfoPanel(this);
         }
+    }
 
-        // 创建一个完全透明的大矩形覆盖整个屏幕
-        if (!this.dragOverlay) {
-            this.dragOverlay = new PIXI.Graphics();
-            this.dragOverlay.beginFill(0x000000, 0.1); // 完全透明
-            this.dragOverlay.drawRect(
-                -GAME_WIDTH,
-                -GAME_HEIGHT,
-                GAME_WIDTH * 3,
-                GAME_HEIGHT * 3,
-            ); // 大范围矩形
-            this.dragOverlay.endFill();
-            this.container.addChild(this.dragOverlay);
-        }
+    onDragStart(event: PIXI.FederatedPointerEvent) {
 
-        const globalPosition = this.container.getGlobalPosition();
-
-        // 将原本的 item 移动到 app.stage 顶层
-        // console.log(this.app)
-        this.game.app.stage.addChild(this.container);
-        this.container.position.set(globalPosition.x, globalPosition.y);
-
-        // bind
-        this.container.on("pointermove", this.onDragMove.bind(this));
     }
 
     /**
@@ -269,106 +287,115 @@ export class Item {
      */
     onDragEnd() {
         this.container.alpha = 1;
-        this.isDragging = false;
 
-        const newPosition = this.container.getGlobalPosition();
+        if (!this.isDragging) return;
 
-        const grid = this.findGrid(newPosition.x, newPosition.y);
-        if (!grid) {
-            console.log("没有找到对应的网格");
-            return;
-        }
-
-        // 获取网格的全局位置
-        const { clampedCol, clampedRow } = grid.getGridPositionFromGlobal(
-            newPosition.x,
-            newPosition.y,
-            this,
-        );
-        // console.log(clampedCol, clampedRow);
-
-        const canPlace =
-            !grid.checkForOverlap(this, clampedCol, clampedRow) &&
-            grid.checkBoundary(this, clampedCol, clampedRow) &&
-            grid.checkAccept(this);
-
-        // 检查重叠和边界
-        if (canPlace) {
-            // 如果可以放置，更新方块在网格中的位置
-            if (this.parentGrid) {
-                this.parentGrid.removeBlock(this);
-            }
-            grid.addBlock(this, clampedCol, clampedRow);
-        } else {
-            // 如果重叠或超出边界，返回拖动前的位置
-            this.dragStartParentContainer.addChild(this.container);
-            this.container.position.copyFrom(this.dragStartItemLocalPosition);
-            // console.log(checkForOverlap(container, this.container, snapX, snapY), checkBoundary(container, this.container, clampedCol, clampedRow));
-        }
-        // console.log("2", this.previewIndicator.position.x);
-        // console.log("2", this.graphicsBg.position.x);
-
-        // Remove the preview indicator
+        // 移除预览指示器
         if (this.previewIndicator) {
             this.game.app.stage.removeChild(this.previewIndicator);
             this.previewIndicator = null;
         }
 
-        // Remove the drag overlay
+        // 移除拖动覆盖层
         if (this.dragOverlay) {
             this.container.removeChild(this.dragOverlay);
             this.dragOverlay = null;
         }
 
-        // Update the total value display
+        // 获取当前鼠标位置对应的网格
+        const mousePosition = this.game.app.renderer.events.pointer.global;
+        const targetGrid = this.findGrid(mousePosition.x, mousePosition.y);
+
+        // 如果找到了目标网格
+        if (targetGrid) {
+            // 获取网格中的位置
+            const gridPosition = targetGrid.getGridPositionFromGlobal(
+                mousePosition.x,
+                mousePosition.y,
+                this,
+            );
+
+            // 检查是否可以放置
+            const canPlace =
+                !targetGrid.checkForOverlap(this, gridPosition.clampedCol, gridPosition.clampedRow) &&
+                targetGrid.checkBoundary(this, gridPosition.clampedCol, gridPosition.clampedRow) &&
+                targetGrid.checkAccept(this);
+
+            if (canPlace) {
+                // 如果可以放置，则从原来的网格中移除
+                if (this.parentGrid) {
+                    this.parentGrid.removeBlock(this);
+                }
+
+                // 添加到新的网格中
+                targetGrid.addBlock(this, gridPosition.clampedCol, gridPosition.clampedRow);
+            } else {
+                // 如果不能放置，返回原位置
+                if (this.parentGrid) {
+                    this.container.position.copyFrom(this.dragStartItemLocalPosition);
+                    this.dragStartParentContainer.addChild(this.container);
+                }
+            }
+        } else {
+            // 如果没有找到目标网格，返回原位置
+            if (this.parentGrid) {
+                this.container.position.copyFrom(this.dragStartItemLocalPosition);
+                this.dragStartParentContainer.addChild(this.container);
+            }
+        }
+
+        // 更新总价值显示
         if (this.game.totalValueDisplay) {
             this.game.totalValueDisplay.updateTotalValue();
         }
-
-        // Remove the event listener for pointermove
-        this.container.off("pointermove", this.onDragMove.bind(this));
-
-        if (!this.hasMoved) {
-            this.showItemDetails(newPosition.x, newPosition.y);
-        }
+        
+        this.isDragging = false;
         this.hasMoved = false;
     }
 
-    onDragMove(event: PIXI.FederatedMouseEvent) {
-        if (this.isDragging === false) {
-            return;
-        }
-        this.hasMoved = true;
+    onDragMove(event: PIXI.FederatedPointerEvent) {
+        // 检查是否移动超过阈值（5像素）才开始真正的拖动
         const dx = event.global.x - this.dragStartMouseGlobalPoint.x;
         const dy = event.global.y - this.dragStartMouseGlobalPoint.y;
+        if (!this.isDragging && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
+            this.isDragging = true;
+            this.container.alpha = 0.7;
 
-        const currentBlockGlobalPosition = {
-            x: this.dragStartItemGlobalPosition.x + dx,
-            y: this.dragStartItemGlobalPosition.y + dy,
-        };
+            // 创建预览指示器
+            if (!this.previewIndicator) {
+                this.previewIndicator = new PIXI.Graphics();
+                this.game.app.stage.addChild(this.previewIndicator);
+            }
 
-        // console.log(
-        //     this.dragStartItemGlobalPosition,
-        //     currentBlockGlobalPosition,
-        // );
+            // 创建拖动覆盖层
+            if (!this.dragOverlay) {
+                this.dragOverlay = new PIXI.Graphics();
+                this.dragOverlay.beginFill(0x000000, 0.1);
+                this.dragOverlay.drawRect(
+                    -GAME_WIDTH,
+                    -GAME_HEIGHT,
+                    GAME_WIDTH * 3,
+                    GAME_HEIGHT * 3,
+                );
+                this.dragOverlay.endFill();
+                this.container.addChild(this.dragOverlay);
+            }
 
-        // 更新方块位置
-        this.container.position.set(
-            currentBlockGlobalPosition.x,
-            currentBlockGlobalPosition.y,
-        );
+            // 移动到舞台顶层
+            const globalPosition = this.container.getGlobalPosition();
+            this.game.app.stage.addChild(this.container);
+            this.container.position.set(globalPosition.x, globalPosition.y);
+        }
 
-        // 更新预览指示器
-        this.updatePreviewIndicator(
-            currentBlockGlobalPosition.x,
-            currentBlockGlobalPosition.y,
-        );
-        // console.log("1", this.dragOverlay.position.x);
-        // console.log("1", this.graphicsBg.position.x);
-    }
+        if (this.isDragging) {
+            // 更新位置
+            const newX = this.dragStartItemGlobalPosition.x + dx;
+            const newY = this.dragStartItemGlobalPosition.y + dy;
+            this.container.position.set(newX, newY);
 
-    onItemClick(event: any) {
-        event.stopPropagation();
+            // 更新预览指示器
+            this.updatePreviewIndicator(event.global.x, event.global.y);
+        }
     }
 
     onKeyDown(event: any) {
@@ -387,11 +414,6 @@ export class Item {
                 // console.log('方块已旋转');
             }
         }
-    }
-
-    showItemDetails(x: number, y: number) {
-        // Implement block details display logic here
-        console.log(`Showing details for block at (${x}, ${y})`);
     }
 
     updatePreviewIndicator(x: number, y: number) {

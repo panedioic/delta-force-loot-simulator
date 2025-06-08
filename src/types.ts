@@ -8,4 +8,6 @@ export interface ItemType {
     search: number;
     itemType: any; // Assuming itemType is an object with properties
     subgridLayout: any[] | null;
+    accessories: any[] | null;
+    stack: number | null;
 }

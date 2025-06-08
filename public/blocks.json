@@ -287,7 +287,13 @@
         "type": "primaryWeapon",
         "name": "AKM",
         "value": 20000,
-        "color": "808080"
+        "color": "808080",
+        "accessories": [
+            "Ammo76239",
+            "RearGrip", "Barrel", "Muzzle", "Stock", "ButtPad", 
+            "Foregrip", "Magazine", "MagazineMount", "Scope", 
+            "SideSight", "PullHandle"
+        ]
     },
     {
         "cellWidth": 5,
@@ -295,7 +301,14 @@
         "type": "primaryWeapon",
         "name": "M4A1",
         "value": 30000,
-        "color": "808080"
+        "color": "808080",
+        "accessories": [
+            "Ammo55645",
+            "RearGrip", "Barrel", "Muzzle", "Stock", "Foregrip", 
+            "RailTripod", "Rail", "Rail", "Rail", "Patch", "Patch", 
+            "Patch", "Magazine", "MagazineMount", "Scope", 
+            "SideSight", "ButtKit"
+        ]
     },
     {
         "cellWidth": 5,
@@ -303,7 +316,13 @@
         "type": "primaryWeapon",
         "name": "M249",
         "value": 40000,
-        "color": "808080"
+        "color": "808080",
+        "accessories": [
+            "Ammo55645",
+            "Barrel", "Muzzle", "Stock", "Handguard", "Foregrip", 
+            "RailTripod", "Rail", "Rail", "Magazine","Scope", 
+            "SideSight"
+        ]
     },
     {
         "cellWidth": 5,
@@ -311,7 +330,13 @@
         "type": "primaryWeapon",
         "name": "M14",
         "value": 35000,
-        "color": "808080"
+        "color": "808080",
+        "accessories": [
+            "Ammo76251",
+            "Barrel", "Muzzle", "Handguard", "CheekBracket", 
+            "Magazine", "MagazineMount", "Scope", 
+            "SideSight", "HandguardKit"
+        ]
     },
     {
         "cellWidth": 6,
@@ -319,7 +344,12 @@
         "type": "primaryWeapon",
         "name": "AWM",
         "value": 50000,
-        "color": "808080"
+        "color": "808080",
+        "accessories": [
+            "Ammo338",
+            "Barrel", "Muzzle","MagazineMount", "Unique", 
+            "Scope", "SideSight"
+        ]
     },
 
     {
@@ -328,7 +358,12 @@
         "type": "secondaryWeapon",
         "name": "G17",
         "value": 5000,
-        "color": "808080"
+        "color": "808080",
+        "accessories": [
+            "Ammo919",
+            "RearGrip", "Barrel", "Muzzle", "Magazine", 
+            "Scope", "Rail"
+        ]
     },
     {
         "cellWidth": 2,
@@ -336,7 +371,12 @@
         "type": "secondaryWeapon",
         "name": "G18",
         "value": 6000,
-        "color": "808080"
+        "color": "808080",
+        "accessories": [
+            "Ammo919",
+            "RearGrip", "Barrel", "Muzzle", "Magazine", 
+            "Scope", "Rail"
+        ]
     },
     {
         "cellWidth": 2,
@@ -344,7 +384,75 @@
         "type": "secondaryWeapon",
         "name": "93R",
         "value": 7000,
-        "color": "808080"
+        "color": "808080",
+        "accessories": [
+            "Ammo919",
+            "RearGrip", "Barrel", "Muzzle", "Magazine", 
+            "Scope", "Rail"
+        ]
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "Ammo76239",
+        "name": "7.62x39mm AP",
+        "value": 3171,
+        "color": "a16e50",
+        "maxStack": 60
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "Ammo76239",
+        "name": "7.62x39mm BP",
+        "value": 1751,
+        "color": "695687",
+        "maxStack": 60
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "Ammo55645",
+        "name": "5.56x45mm M995",
+        "value": 3822,
+        "color": "a16e50",
+        "maxStack": 60
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "Ammo55645",
+        "name": "5.56x45mm M855A1",
+        "value": 1751,
+        "color": "695687",
+        "maxStack": 60
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "Ammo76251",
+        "name": "7.62x51mm M62",
+        "value": 4267,
+        "color": "a16e50",
+        "maxStack": 60
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "Ammo76251",
+        "name": "7.62x51mm M80",
+        "value": 2138,
+        "color": "695687",
+        "maxStack": 60
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "Ammo338",
+        "name": ".338 Lap Mag AP",
+        "value": 35532,
+        "color": "a14a4c",
+        "maxStack": 20
     },
 
     {

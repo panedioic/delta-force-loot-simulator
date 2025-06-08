@@ -12,6 +12,8 @@ import { InfoDialog } from "./infoDialog";
 import { Timer } from "./timer";
 import { Inventory } from "./invntory";
 import { SpoilsManager } from "./spoilsManager";
+import { ItemInfoPanel } from "./itemInfoPanel";
+import { Item } from "./item";
 
 /**
  * The Game class represents the main game instance.
@@ -37,6 +39,8 @@ export class Game {
     infoDialog: InfoDialog | null;
     instances: Array<any> = [];
 
+    activeItemInfoPanel: ItemInfoPanel | null;
+
     constructor() {
         this.app = new PIXI.Application();
         this.BLOCK_TYPES = [];
@@ -53,6 +57,7 @@ export class Game {
         this.spoilsManager = null;
         this.infoDialog = null;
         this.instances = [];
+        this.activeItemInfoPanel = null;
     }
 
     /**
@@ -333,5 +338,48 @@ export class Game {
                 this.scrollableContainer.addObject(gridTitle);
             }
         }
+    }
+
+    createItemInfoPanel(item: Item) {
+        // 如果已经存在面板，则不创建新的
+        if (this.activeItemInfoPanel) {
+            return;
+        }
+
+        // 如果游戏还没开始，不创建面板
+        if (!this.isGameStarted) {
+            return;
+        }
+
+        // 创建面板
+        this.activeItemInfoPanel = new ItemInfoPanel(
+            this,
+            item,
+            (this.app.screen.width - 420) / 2,  // 居中显示
+            (this.app.screen.height - 636) / 2,
+            [
+                {
+                    text: "丢弃",
+                    callback: () => {
+                        if (item.parentGrid) {
+                            item.parentGrid.removeBlock(item);
+                            this.activeItemInfoPanel?.close();
+                        }
+                    }
+                },
+                {
+                    text: "旋转",
+                    callback: () => {
+                        const temp = item.cellWidth;
+                        item.cellWidth = item.cellHeight;
+                        item.cellHeight = temp;
+                        item.resize(
+                            item.cellWidth * item.cellSize * item.aspect,
+                            item.cellHeight * item.cellSize,
+                        );
+                    }
+                }
+            ]
+        );
     }
 }

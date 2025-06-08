@@ -4,6 +4,7 @@ import { GridTitle } from "./gridTitle";
 import { Subgrid } from "./subgrid";
 import { GridContainer } from "./gridContainer";
 import { DEFAULT_CELL_SIZE } from "./config";
+import { Item } from "./item";
 
 /**
  * Inventory, contain multiple gridcontainers.
@@ -258,5 +259,19 @@ export class Inventory {
             }
         }
         this.container.visible = enabled;
+    }
+
+    addItem(item: Item) {
+        let bAdded = false;
+        for (const subgrid of Object.values(this.contents)) {
+            if (subgrid instanceof GridTitle) {
+                continue;
+            }
+            bAdded = subgrid.addItem(item);
+            if (bAdded) {
+                break;
+            }
+        }
+        return bAdded;
     }
 }
