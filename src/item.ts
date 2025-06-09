@@ -292,31 +292,6 @@ export class Item {
     }
 
     /**
-     * 查找当前坐标对应的网格
-     * @param {number} x - 鼠标的 x 坐标
-     * @param {number} y - 鼠标的 y 坐标
-     * @returns {Grid|null} - 返回找到的网格实例或 null
-     */
-    findGrid(x: number, y: number) {
-        for (let i = 0; i < this.game.grids.length; i++) {
-            const grid = this.game.grids[i];
-            const bounds = grid.container.getBounds();
-
-            // 检查坐标是否在当前网格的范围内
-            if (
-                x >= bounds.x &&
-                x <= bounds.x + bounds.width &&
-                y >= bounds.y &&
-                y <= bounds.y + bounds.height
-            ) {
-                // console.log(bounds.x, bounds.y, bounds.width, bounds.height)
-                return grid; // 返回找到的 Grid 实例
-            }
-        }
-        return null; // 如果没有找到对应的 Grid，则返回 null
-    }
-
-    /**
      * 结束拖动事件
      */
     onDragEnd() {
@@ -338,7 +313,7 @@ export class Item {
 
         // 获取当前鼠标位置对应的网格
         const mousePosition = this.game.app.renderer.events.pointer.global;
-        const targetGrid = this.findGrid(mousePosition.x, mousePosition.y);
+        const targetGrid = this.game.findGrid(mousePosition.x, mousePosition.y);
 
         // 如果找到了目标网格
         if (targetGrid) {
@@ -457,7 +432,7 @@ export class Item {
 
         // 确定在哪个区域
         let globalPos, baseX, baseY, grid;
-        grid = this.findGrid(x, y);
+        grid = this.game.findGrid(x, y);
         if (!grid) {
             // console.log('没有找到对应的网格');
             return;

@@ -328,4 +328,51 @@ export class Game {
             ]
         );
     }
+
+    /**
+     * 工具函数，根据全局坐标查找对应的 Subgrid
+     * @param x x坐标
+     * @param y y坐标
+     * @returns 返回找到的 Subgrid 或 null 表示没有找到
+     */
+    findGrid(x: number, y: number) {
+        // 先检查是否位于 itemInfoPanel 的 Subgrid 内
+        if (this.activeItemInfoPanel) {
+            for (const subgrid of this.activeItemInfoPanel.getSubgrids()) {
+                const bounds = subgrid.container.getBounds();
+                if (
+                    x >= bounds.x &&
+                    x <= bounds.x + bounds.width &&
+                    y >= bounds.y &&
+                    y <= bounds.y + bounds.height
+                ) {
+                    // console.log(bounds.x, bounds.y, bounds.width, bounds.height)
+                    return subgrid;
+                }
+            }
+            const bounds = this.activeItemInfoPanel.getBounds()
+            if (
+                x >= bounds.x &&
+                x <= bounds.x + bounds.width &&
+                y >= bounds.y &&
+                y <= bounds.y + bounds.height
+            ) {
+                return null;
+            }
+        }
+        // 不位于 itemInfoPanel，也没有被遮挡
+        for (const subgrid of this.grids) {
+            const bounds = subgrid.container.getBounds();
+            // 检查坐标是否在当前网格的范围内
+            if (
+                x >= bounds.x &&
+                x <= bounds.x + bounds.width &&
+                y >= bounds.y &&
+                y <= bounds.y + bounds.height
+            ) {
+                return subgrid; // 返回找到的 Grid 实例
+            }
+        }
+        return null; // 如果没有找到对应的 Grid，则返回 null
+    }
 }

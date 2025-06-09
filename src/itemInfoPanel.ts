@@ -46,6 +46,8 @@ export class ItemInfoPanel {
         // 创建主容器
         this.container = new PIXI.Container();
         this.container.position.set(x, y);
+        this.container.eventMode = 'static';
+        this.container.hitArea = new PIXI.Rectangle(0, 0, this.WIDTH, this.HEIGHT);
         
         // 创建内容容器（用于滚动）
         this.contentContainer = new PIXI.Container();
@@ -406,5 +408,13 @@ export class ItemInfoPanel {
 
     public setPosition(pos: PIXI.Point) {
         this.container.position.copyFrom(pos);
+    }
+
+    public getSubgrids() {
+        return this.subgrids;
+    }
+
+    public getBounds() {
+        return this.container.getBounds();
     }
 }
