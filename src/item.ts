@@ -299,13 +299,11 @@ export class Item {
 
         if (!this.isDragging) return;
 
-        // 移除预览指示器
+        // 移除预览指示器 & 移除拖动覆盖层
         if (this.previewIndicator) {
             this.game.app.stage.removeChild(this.previewIndicator);
             this.previewIndicator = null;
         }
-
-        // 移除拖动覆盖层
         if (this.dragOverlay) {
             this.container.removeChild(this.dragOverlay);
             this.dragOverlay = null;
@@ -314,6 +312,9 @@ export class Item {
         // 获取当前鼠标位置对应的网格
         const mousePosition = this.game.app.renderer.events.pointer.global;
         const targetGrid = this.game.findGrid(mousePosition.x, mousePosition.y);
+
+        // 位置不合法或不可交互，返回原位置
+        let bReturnToOriginalPosition = false;
 
         // 如果找到了目标网格
         if (targetGrid) {
@@ -324,29 +325,56 @@ export class Item {
                 this,
             );
 
-            // 检查是否可以放置
-            const canPlace =
-                !targetGrid.checkForOverlap(this, gridPosition.clampedCol, gridPosition.clampedRow) &&
-                targetGrid.checkBoundary(this, gridPosition.clampedCol, gridPosition.clampedRow) &&
-                targetGrid.checkAccept(this);
-
-            if (canPlace) {
-                // 如果可以放置，则从原来的网格中移除
-                if (this.parentGrid) {
-                    this.parentGrid.removeBlock(this);
+            // 获取重叠的物品
+            const overlappingItems = targetGrid.getOverlappingItems(this, gridPosition.clampedCol, gridPosition.clampedRow);
+            
+            if (overlappingItems.length === 0) {
+                // 无重叠物品，检查边界和类型
+                const isPositionValid = 
+                    targetGrid.checkBoundary(this, gridPosition.clampedCol, gridPosition.clampedRow) &&
+                    targetGrid.checkAccept(this); //
+                if (!isPositionValid) {
+                    // 如果位置不合法，返回原位置
+                    bReturnToOriginalPosition = true;
+                } else {
+                    // 可以直接放置
+                    if (this.parentGrid) {
+                        this.parentGrid.removeBlock(this);
+                    }
+                    targetGrid.addItem(this, gridPosition.clampedCol, gridPosition.clampedRow);
+                }
+            } else {
+                // 先检查是否可以交互
+                // 有重叠的物品，尝试触发交互
+                let bCanInteract = true;
+                for (const overlappingItem of overlappingItems) {
+                    bCanInteract = bCanInteract && overlappingItem.onItemInteractPreview(this, {
+                        col: gridPosition.clampedCol,
+                        row: gridPosition.clampedRow
+                    });
+                    if (bCanInteract === false) {
+                        break;
+                    }
                 }
 
-                // 添加到新的网格中
-                targetGrid.addItem(this, gridPosition.clampedCol, gridPosition.clampedRow);
-            } else {
-                // 如果不能放置，返回原位置
-                if (this.parentGrid) {
-                    this.container.position.copyFrom(this.dragStartItemLocalPosition);
-                    this.dragStartParentContainer.addChild(this.container);
+                // 可以交互，进行交互
+                if (bCanInteract) {
+                    for (const overlappingItem of overlappingItems) {
+                        overlappingItem.onItemInteract(this, {
+                            col: gridPosition.clampedCol,
+                            row: gridPosition.clampedRow
+                        });
+                    }
+                } else {
+                    bReturnToOriginalPosition = true;
                 }
             }
         } else {
             // 如果没有找到目标网格，返回原位置
+            bReturnToOriginalPosition = true;
+        }
+
+        if (bReturnToOriginalPosition) {
             if (this.parentGrid) {
                 this.container.position.copyFrom(this.dragStartItemLocalPosition);
                 this.dragStartParentContainer.addChild(this.container);
@@ -438,7 +466,7 @@ export class Item {
             return;
         }
 
-        // 获取网格的全局位置
+        // 获取网格的全局位置和放置位置
         const { clampedCol, clampedRow, snapX, snapY } =
             grid.getGridPositionFromGlobal(x, y, this);
 
@@ -446,11 +474,28 @@ export class Item {
         baseX = globalPos.x;
         baseY = globalPos.y;
 
-        // 检查是否可以放置
-        const canPlace =
-            !grid.checkForOverlap(this, clampedCol, clampedRow) &&
-            grid.checkBoundary(this, clampedCol, clampedRow) &&
-            grid.checkAccept(this);
+        // 获取重叠的物品
+        const overlappingItems = grid.getOverlappingItems(this, clampedCol, clampedRow);
+        
+        // 判断是否可以放置
+        let canPlace = false;
+        if (overlappingItems.length === 0) {
+            // 无重叠物品，检查边界和类型
+            canPlace = grid.checkBoundary(this, clampedCol, clampedRow) &&
+                      grid.checkAccept(this);
+        } else {
+            // 有重叠物品，检查是否可以交互
+            canPlace = true;
+            for (const overlappingItem of overlappingItems) {
+                canPlace = canPlace && overlappingItem.onItemInteractPreview(this, {
+                    col: clampedCol,
+                    row: clampedRow
+                });
+                if (canPlace === false) {
+                    break;
+                }
+            }
+        }
 
         // 设置预览颜色
         const previewColor = canPlace ? 0x88ff88 : 0xff8888; // 浅绿色或浅红色
@@ -520,7 +565,7 @@ export class Item {
                 info.title
             );
             this.subgrids[info.title] = subgrid;
-            subgrid.onBlockMoved = (item, col, row) => {
+            subgrid.onBlockMoved = (_item, _col, _row) => {
                 this.refreshUI();
                 if (this.game.activeItemInfoPanel) {
                     const pos = this.game.activeItemInfoPanel.getPosition();
@@ -531,7 +576,7 @@ export class Item {
                     }
                 }
             }
-            subgrid.onBlockRemoved = (item) => {
+            subgrid.onBlockRemoved = (_item) => {
                 this.refreshUI();
                 if (this.game.activeItemInfoPanel) {
                     const pos = this.game.activeItemInfoPanel.getPosition();
@@ -548,36 +593,71 @@ export class Item {
 
     /** 
      * 交互回调。当把一个item挪到自己身上时，会触发自己的回调。
+     * @returns {boolean} 返回 true 表示已处理交互，false 表示未处理
      */
-    onItemInteract(item: Item, pos: {col: number, row: number}) {
-        // 暂时默认只有为true时会调用这个回调
+    onItemInteract(item: Item, pos: {col: number, row: number}): boolean {
         if (item.type in this.accessories) {
             // 可放入subgrid
-
+            return true;
         } else if (this.maxStackCount > 1 && item.maxStackCount > 1 && this.name == item.name) {
             // 可堆叠
-
+            return true;
         } else {
-            //其他情况，交换位置
-            console.log(pos);
-        }
+            // 交换位置
+            if (!this.parentGrid || !item.parentGrid) {
+                return false;
+            }
 
+            // 保存原始位置
+            const thisGrid = this.parentGrid;
+            const thisCol = this.col;
+            const thisRow = this.row;
+            const itemGrid = item.parentGrid;
+            const itemCol = item.col;
+            const itemRow = item.row;
+
+            // 从原网格中移除
+            thisGrid.removeBlock(this);
+            itemGrid.removeBlock(item);
+
+            // 添加到新位置
+            itemGrid.addItem(this, itemCol, itemRow);
+            thisGrid.addItem(item, pos.col, pos.row);
+
+            return true;
+        }
     }
 
     /**
      * 交互回调预览
+     * @returns {boolean} 返回 true 表示可以交互，false 表示不能交互
      */
-    onItemInteractPreview(item: Item, pos: {col: number, row: number}) {
+    onItemInteractPreview(item: Item, pos: {col: number, row: number}): boolean {
         if (item.type in this.accessories) {
             // 可放入subgrid
-
+            return true;
         } else if (this.maxStackCount > 1 && item.maxStackCount > 1 && this.name == item.name) {
             // 可堆叠
-
+            return true;
         } else {
-            //其他情况，交换位置
-            console.log(pos);
+            // 检查是否可以交换位置
+            if (!this.parentGrid || !item.parentGrid) {
+                return false;
+            }
+
+            // 检查目标物品的原位置是否可以放置当前物品
+            const canPlaceHere = item.parentGrid.checkBoundary(this, this.col, this.row) &&
+                               item.parentGrid.checkAccept(this) &&
+                               item.parentGrid.getOverlappingItems(this, this.col, this.row)
+                                   .filter(i => i !== item && i !== this).length === 0;
+
+            // 检查当前物品的原位置是否可以放置目标物品
+            const canPlaceThere = this.parentGrid.checkBoundary(item, pos.col, pos.row) &&
+                                this.parentGrid.checkAccept(item) &&
+                                this.parentGrid.getOverlappingItems(item, pos.col, pos.row)
+                                    .filter(i => i !== item && i !== this).length === 0;
+
+            return canPlaceHere && canPlaceThere;
         }
-        return false;
     }
 }

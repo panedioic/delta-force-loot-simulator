@@ -189,49 +189,50 @@ export class Subgrid {
     }
 
     /**
-     * Check for overlap between the item and other items in the grid.
-     * @param {Item} item - The block item to check
-     * @param {number} col - The column position of the item
-     * @param {number} row - The row position of the item
-     * @returns {boolean} - Returns true if there is an overlap, false otherwise
+     * 获取与指定位置重叠的所有物品
+     * @param {Item} item - 要检查的物品
+     * @param {number} col - 列位置
+     * @param {number} row - 行位置
+     * @returns {Item[]} - 返回所有重叠的物品数组
+     */
+    getOverlappingItems(
+        item: Item | ItemType,
+        col: number,
+        row: number
+    ): Item[] {
+        const overlappingItems: Item[] = [];
+        
+        for (const block of this.blocks) {
+            // 如果是同一个物品，跳过
+            if (block === item) continue;
+
+            // 检查是否有重叠
+            const itemRight = col + (item.cellWidth || 1);
+            const itemBottom = row + (item.cellHeight || 1);
+            const blockRight = block.col + block.cellWidth;
+            const blockBottom = block.row + block.cellHeight;
+
+            if (
+                col < blockRight &&
+                itemRight > block.col &&
+                row < blockBottom &&
+                itemBottom > block.row
+            ) {
+                overlappingItems.push(block);
+            }
+        }
+        return overlappingItems;
+    }
+
+    /**
+     * 检查是否有重叠（保留此方法以保持向后兼容）
      */
     checkForOverlap(
         item: Item | ItemType,
         col: number,
-        row: number,
+        row: number
     ): boolean {
-        // 获取当前容器中的所有方块，排除当前检测的方块
-        const items = this.blocks.filter((child) => child !== item);
-
-        // 计算当前方块的边界
-        const itemBounds = {
-            col: col,
-            row: row,
-            right: col + item.cellWidth,
-            bottom: row + item.cellHeight,
-        };
-
-        // 遍历其他方块，检查是否有重叠
-        for (const otherItem of items) {
-            const otherBounds = {
-                col: otherItem.col,
-                row: otherItem.row,
-                right: otherItem.col + otherItem.cellWidth,
-                bottom: otherItem.row + otherItem.cellHeight,
-            };
-
-            // 检查是否重叠
-            if (
-                itemBounds.col < otherBounds.right &&
-                itemBounds.right > otherBounds.col &&
-                itemBounds.row < otherBounds.bottom &&
-                itemBounds.bottom > otherBounds.row
-            ) {
-                return true; // 存在重叠
-            }
-        }
-
-        return false; // 无重叠
+        return this.getOverlappingItems(item, col, row).length > 0;
     }
 
     /**
@@ -412,6 +413,36 @@ export class Subgrid {
     // 获取所有物品
     getAllItems(): Item[] {
         return this.blocks;
+    }
+
+    /**
+     * 获取与指定位置重叠的物品
+     * @param {Item} item - 要检查的物品
+     * @param {number} col - 列位置
+     * @param {number} row - 行位置
+     * @returns {Item|null} - 返回重叠的物品，如果没有重叠则返回 null
+     */
+    getOverlappingItem(item: Item, col: number, row: number): Item | null {
+        for (const block of this.blocks) {
+            // 跳过自己
+            if (block === item) continue;
+
+            // 检查是否有重叠
+            const itemRight = col + item.cellWidth;
+            const itemBottom = row + item.cellHeight;
+            const blockRight = block.col + block.cellWidth;
+            const blockBottom = block.row + block.cellHeight;
+
+            if (
+                col < blockRight &&
+                itemRight > block.col &&
+                row < blockBottom &&
+                itemBottom > block.row
+            ) {
+                return block;
+            }
+        }
+        return null;
     }
 
     clearItem() {
