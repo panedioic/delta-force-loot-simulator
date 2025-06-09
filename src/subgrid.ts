@@ -465,6 +465,9 @@ export class Subgrid {
 
     tryPlaceItem(item: Item, ignores: (Item | ItemPlace)[], blocks: (Item | ItemPlace)[]): { col: number, row: number } | null {
         // console.log('======')
+        if (!this.checkAccept(item)) {
+            return null;
+        }
         for (let row = 0; row < this.height; row+=1) {
             for (let col = 0; col < this.width; col+=1) {
                 // 检查是否在边界内

@@ -671,8 +671,12 @@ export class Item {
 
             // 首先判断二者不同 Parent Grid 的情况
             if (this.parentGrid !== draggingItem.parentGrid) {
-                // TODO 直接判断
-                return true;
+                // 做完了别的再来看这里好像也没什么难的
+                if (this.parentGrid.tryPlaceItem(this, [draggingItem], [])) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
 
             // 先检测是否是一个 item 完全覆盖另一个 item。
