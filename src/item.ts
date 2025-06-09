@@ -92,7 +92,6 @@ export class Item {
         // this.container.position.set(this.x, this.y);
         this.graphicsBg = new PIXI.Graphics();
         this.graphicsText = null;
-        this.initUI();
 
         this.dragStartParentContainer = this.container.parent;
         this.dragStartItemLocalPosition = new PIXI.Point(this.x, this.y);
@@ -110,6 +109,8 @@ export class Item {
 
         this.clickTimeout = null;
         this.clickCount = 0;
+
+        this.initUI();
     }
 
     initUI() {
@@ -168,11 +169,9 @@ export class Item {
 
         // 添加方块价值
         const valueText = new PIXI.Text({
-            text: this.baseValue
-                ? this.baseValue
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                : "0",
+            text: this.getValue()
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ","),
             style: {
                 fontFamily: "Arial",
                 fontSize: 21,
@@ -184,6 +183,29 @@ export class Item {
         valueText.anchor.set(0.5);
         valueText.position.set(0, 10); // 价值显示在方块中心下方
         this.graphicsText.addChild(valueText);
+        console.log('asasasasaassaasas')
+        console.log(this.currentStactCount)
+        console.log(this.getValue())
+
+        // 如果物品可堆叠，添加堆叠数量显示
+        if (this.maxStackCount > 1) {
+            const stackText = new PIXI.Text({
+                text: `x${this.currentStactCount}`,
+                style: {
+                    fontFamily: "Arial",
+                    fontSize: 16,
+                    fill: 0xffffff,
+                    fontWeight: "bold",
+                    stroke: { color: "black", width: 3 },
+                },
+            });
+            stackText.anchor.set(1, 1); // 右下角对齐
+            stackText.position.set(
+                this.pixelWidth / 2 - 5,  // 右边缘留5像素边距
+                this.pixelHeight / 2 - 5   // 下边缘留5像素边距
+            );
+            this.graphicsText.addChild(stackText);
+        }
 
         // 设置文字容器的位置
         this.graphicsText.position.set(0, 0);
@@ -244,18 +266,18 @@ export class Item {
                 if (this.clickCount === 1) {
                     // 200ms 内如果没有第二次点击，就认为是单击
                     this.clickTimeout = window.setTimeout(() => {
-                        this.onClick();
                         this.clickCount = 0;
                         this.clickTimeout = null;
+                        this.onClick();
                     }, 200); 
                 } else if (this.clickCount === 2) {
                     // 如果是双击，直接触发双击行为，不再等待三击，清除单击效果
                     if (this.clickTimeout) { 
                         window.clearTimeout(this.clickTimeout);
                     }
-                    this.onClick();
                     this.clickCount = 0;
                     this.clickTimeout = null;
+                    this.onClick();
                 }
             }
         });
@@ -264,10 +286,10 @@ export class Item {
         window.addEventListener("keydown", this.onKeyDown.bind(this));
     }
 
-    onClick() {
-        if (this.clickCount === 1) {
+    onClick(clickCount=1) {
+        if (clickCount === 1) {
             this.game.createItemInfoPanel(this);
-        } else if (this.clickCount === 2) {
+        } else if (clickCount === 2) {
             // this.game.createItemInfoPanel(this);
             if (!this.parentGrid) {
                 return;
@@ -543,6 +565,7 @@ export class Item {
 
     getValue() {
         let ret = this.baseValue * this.currentStactCount;
+        console.log(this.baseValue, this.currentStactCount, ret)
         for (const subgrid of Object.values(this.subgrids)) {
             for (const item of Object.values(subgrid.blocks)) {
                 ret += item.getValue();
@@ -598,8 +621,30 @@ export class Item {
     onItemInteract(draggingItem: Item, pos: {col: number, row: number}, interacting: Item[]) {
         if (draggingItem.type in this.accessories) {
             // 可放入subgrid
-        } else if (this.maxStackCount > 1 && draggingItem.maxStackCount > 1 && this.name == draggingItem.name) {
-            // 可堆叠
+        } else if (this.maxStackCount > 1 && this.name == draggingItem.name) {
+            if (this.currentStactCount < this.maxStackCount) {
+                const transAmmoCount = Math.min(
+                    this.maxStackCount - this.currentStactCount, draggingItem.currentStactCount);
+                this.currentStactCount += transAmmoCount;
+                draggingItem.currentStactCount -= transAmmoCount;
+                
+                // 更新显示
+                this.refreshUI();
+                draggingItem.refreshUI();
+
+                // 如果拖动的物品数量为0，从网格中移除并销毁它
+                if (draggingItem.currentStactCount === 0) {
+                    if (draggingItem.parentGrid) {
+                        draggingItem.parentGrid.removeBlock(draggingItem);
+                        // 确保从舞台中移除
+                        if (draggingItem.container.parent) {
+                            draggingItem.container.parent.removeChild(draggingItem.container);
+                        }
+                        draggingItem.container.destroy();
+                    }
+                }
+            }
+            return true;
         } else {
             // 交换位置
             if (!this.parentGrid || !draggingItem.parentGrid) {
@@ -660,7 +705,7 @@ export class Item {
         //     // 可放入subgrid
         //     return true;
         // } else 
-        if (this.maxStackCount > 1 && draggingItem.maxStackCount > 1 && this.name == draggingItem.name) {
+        if (this.maxStackCount > 1 && this.name == draggingItem.name) {
             // 可堆叠
             return true;
         } else {

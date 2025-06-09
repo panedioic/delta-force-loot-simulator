@@ -312,18 +312,6 @@ export class Game {
                             this.activeItemInfoPanel?.close();
                         }
                     }
-                },
-                {
-                    text: "旋转",
-                    callback: () => {
-                        const temp = item.cellWidth;
-                        item.cellWidth = item.cellHeight;
-                        item.cellHeight = temp;
-                        item.resize(
-                            item.cellWidth * item.cellSize * item.aspect,
-                            item.cellHeight * item.cellSize,
-                        );
-                    }
                 }
             ]
         );

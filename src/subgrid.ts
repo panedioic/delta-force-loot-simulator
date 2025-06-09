@@ -281,7 +281,7 @@ export class Subgrid {
             return true; // 如果没有指定接受的类型，则默认接受所有类型
         }
         let ret = false;
-        console.log(this)
+        // console.log(this)
         this.acceptedTypes.forEach((type) => {
             // console.log(item.type, type, item.type === type)
             if (item.type === type) {

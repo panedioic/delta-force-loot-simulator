@@ -1,6 +1,6 @@
 import { Game } from "./game";
 import { Item } from "./item";
-import { Subgrid } from "./subgrid";
+// import { Subgrid } from "./subgrid";
 
 export class DebugTools {
     private game: Game;
@@ -52,7 +52,7 @@ export class DebugTools {
         for (const itemInfo of itemInfoToBeAdded) {
             if (itemInfo) {
                 const item = new Item(this.game, null, itemInfo.type, itemInfo);
-                const res = inventory.addItem(item);
+                inventory.addItem(item);
                 // console.log(res, item);
             }
         }

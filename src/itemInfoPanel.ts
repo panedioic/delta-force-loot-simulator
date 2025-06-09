@@ -25,6 +25,8 @@ export class ItemInfoPanel {
     private dragOverlay: PIXI.Graphics | null;
     private maxHeight: number;
     private ammoType: string;
+    private splitPanel: PIXI.Container | null = null;
+    private selectedSplitAmount: number = 1;
 
     private readonly WIDTH = 420;
     private readonly HEIGHT = 636;
@@ -35,6 +37,8 @@ export class ItemInfoPanel {
     private readonly BUTTON_GAP = 4;
     private readonly SUBGRID_SIZE = 72;
     private readonly AMMO_START_POS_X = 24;
+    private readonly SPLIT_PANEL_WIDTH = 300;
+    private readonly SPLIT_PANEL_HEIGHT = 200;
 
     constructor(game: Game, item: Item, x: number, y: number, buttonConfigs: ButtonConfig[]) {
         this.game = game;
@@ -42,6 +46,15 @@ export class ItemInfoPanel {
         this.ammoType = '';
 
         this.dragOverlay = null;
+
+        // 如果物品可堆叠，添加拆分按钮
+        if (this.item.maxStackCount > 1 && this.item.currentStactCount > 1) {
+            const splitButton: ButtonConfig = {
+                text: "拆分",
+                callback: () => this.showSplitPanel()
+            };
+            buttonConfigs.push(splitButton);
+        }
         
         // 创建主容器
         this.container = new PIXI.Container();
@@ -150,7 +163,7 @@ export class ItemInfoPanel {
         // 背景色块
         const colorBlock = new PIXI.Graphics();
         colorBlock.rect(0, 0, this.WIDTH, this.IMAGE_HEIGHT);
-        colorBlock.fill({ color: parseInt(this.item.color), alpha: 1.0 });
+        colorBlock.fill({ color: parseInt(this.item.color, 16), alpha: 1.0 });
         imageArea.addChild(colorBlock);
         
         // 物品名称
@@ -169,17 +182,28 @@ export class ItemInfoPanel {
         );
         imageArea.addChild(nameText);
         
-        // 物品价值
+        // 物品价值和数量信息
+        let valueInfo: string;
+        if (this.item.maxStackCount > 1) {
+            // 可堆叠物品显示：单价 × 数量 = 总价 (最大堆叠数：xx)
+            valueInfo = `${this.item.baseValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} × ${this.item.currentStactCount} = ${this.item.getValue().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}\n(最大堆叠数：${this.item.maxStackCount})`;
+        } else {
+            // 不可堆叠物品只显示价值
+            valueInfo = this.item.getValue().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
         const valueText = new PIXI.Text({
-            text: this.item.getValue().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+            text: valueInfo,
             style: {
                 fontFamily: "Arial",
                 fontSize: 20,
-                fill: 0xffffff
+                fill: 0xffffff,
+                align: 'center'
             }
         });
+        valueText.anchor.set(0.5, 0);
         valueText.position.set(
-            (this.WIDTH - valueText.width) / 2,
+            this.WIDTH / 2,
             this.IMAGE_HEIGHT / 2 + 10
         );
         imageArea.addChild(valueText);
@@ -416,5 +440,172 @@ export class ItemInfoPanel {
 
     public getBounds() {
         return this.container.getBounds();
+    }
+
+    private showSplitPanel() {
+        if (this.splitPanel) return;
+
+        // 创建拆分面板
+        this.splitPanel = new PIXI.Container();
+        this.selectedSplitAmount = 1;
+
+        // 半透明背景遮罩
+        const overlay = new PIXI.Graphics();
+        overlay.beginFill(0x000000, 0.5);
+        overlay.drawRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+        overlay.endFill();
+        this.game.app.stage.addChild(overlay);
+
+        // 面板背景
+        const background = new PIXI.Graphics();
+        background.beginFill(0x1f2121, 0.95);
+        background.lineStyle(1, 0x686F75);
+        background.drawRect(0, 0, this.SPLIT_PANEL_WIDTH, this.SPLIT_PANEL_HEIGHT);
+        background.endFill();
+        this.splitPanel.addChild(background);
+
+        // 数量显示文本
+        const countText = new PIXI.Text({
+            text: `数量：${this.selectedSplitAmount}/${this.item.currentStactCount}`,
+            style: {
+                fontFamily: "Arial",
+                fontSize: 14,
+                fill: 0xffffff
+            }
+        });
+        countText.position.set(10, 10);
+        this.splitPanel.addChild(countText);
+
+        // 减号按钮
+        const minusButton = this.createButton("-", () => {
+            this.selectedSplitAmount = Math.max(1, this.selectedSplitAmount - 1);
+            this.updateSplitPanel();
+        }, 20, 50, 40, 40);
+        this.splitPanel.addChild(minusButton);
+
+        // 滑动条背景
+        const sliderBg = new PIXI.Graphics();
+        sliderBg.beginFill(0x333333);
+        sliderBg.drawRect(70, 65, 160, 10);
+        sliderBg.endFill();
+        this.splitPanel.addChild(sliderBg);
+
+        // 滑动条把手
+        const slider = new PIXI.Graphics();
+        slider.beginFill(0xffffff);
+        slider.drawCircle(0, 0, 10);
+        slider.endFill();
+        slider.position.set(70, 70);
+        slider.eventMode = 'static';
+        slider.cursor = 'pointer';
+
+        let isDragging = false;
+        slider.on('pointerdown', () => isDragging = true);
+        slider.on('globalpointermove', (e: PIXI.FederatedPointerEvent) => {
+            if (!isDragging) return;
+            const bounds = sliderBg.getBounds();
+            const x = Math.max(bounds.x, Math.min(e.global.x, bounds.x + bounds.width));
+            const progress = (x - bounds.x) / bounds.width;
+            this.selectedSplitAmount = Math.max(1, Math.min(
+                Math.round(progress * (this.item.currentStactCount - 1)) + 1,
+                this.item.currentStactCount - 1
+            ));
+            slider.position.x = x;
+            this.updateSplitPanel();
+        });
+        slider.on('pointerup', () => isDragging = false);
+        slider.on('pointerupoutside', () => isDragging = false);
+        this.splitPanel.addChild(slider);
+
+        // 加号按钮
+        const plusButton = this.createButton("+", () => {
+            this.selectedSplitAmount = Math.min(this.item.currentStactCount - 1, this.selectedSplitAmount + 1);
+            this.updateSplitPanel();
+        }, 240, 50, 40, 40);
+        this.splitPanel.addChild(plusButton);
+
+        // 取消按钮
+        const cancelButton = this.createButton("取消", () => {
+            this.closeSplitPanel();
+        }, 20, this.SPLIT_PANEL_HEIGHT - 60, 120, 40);
+        this.splitPanel.addChild(cancelButton);
+
+        // 确认按钮
+        const confirmButton = this.createButton("确认", () => {
+            this.splitItem();
+            this.closeSplitPanel();
+        }, 160, this.SPLIT_PANEL_HEIGHT - 60, 120, 40);
+        this.splitPanel.addChild(confirmButton);
+
+        // 设置面板位置
+        this.splitPanel.position.set(
+            (GAME_WIDTH - this.SPLIT_PANEL_WIDTH) / 2,
+            (GAME_HEIGHT - this.SPLIT_PANEL_HEIGHT) / 2
+        );
+
+        this.game.app.stage.addChild(this.splitPanel);
+    }
+
+    private createButton(text: string, callback: () => void, x: number, y: number, width: number, height: number) {
+        const button = new PIXI.Container();
+        button.position.set(x, y);
+
+        const bg = new PIXI.Graphics();
+        bg.beginFill(0x313131);
+        bg.drawRect(0, 0, width, height);
+        bg.endFill();
+        button.addChild(bg);
+
+        const buttonText = new PIXI.Text({
+            text,
+            style: {
+                fontFamily: "Arial",
+                fontSize: 16,
+                fill: 0xffffff
+            }
+        });
+        buttonText.anchor.set(0.5);
+        buttonText.position.set(width / 2, height / 2);
+        button.addChild(buttonText);
+
+        button.eventMode = 'static';
+        button.cursor = 'pointer';
+        button.on('pointerdown', callback);
+
+        return button;
+    }
+
+    private updateSplitPanel() {
+        if (!this.splitPanel) return;
+        const countText = this.splitPanel.children[1] as PIXI.Text;
+        countText.text = `数量：${this.selectedSplitAmount}/${this.item.currentStactCount}`;
+    }
+
+    private closeSplitPanel() {
+        if (!this.splitPanel) return;
+        // 移除遮罩
+        const overlay = this.game.app.stage.children[this.game.app.stage.children.length - 2];
+        this.game.app.stage.removeChild(overlay);
+        // 移除面板
+        this.game.app.stage.removeChild(this.splitPanel);
+        this.splitPanel = null;
+    }
+
+    private splitItem() {
+        if (!this.item.parentGrid) return;
+        if (this.item.currentStactCount === 1) return;
+
+        // 创建新的物品
+        const newItemInfo = this.game.BLOCK_TYPES.find((item: any) => item.name === this.item.name);
+        const newItem = new Item(this.game, null, newItemInfo.type, newItemInfo);
+        newItem.currentStactCount = this.selectedSplitAmount;
+
+        // 更新原物品的堆叠数量
+        this.item.currentStactCount -= this.selectedSplitAmount;
+        this.item.refreshUI();
+
+        // 将新物品添加到原物品所在的网格中
+        this.item.parentGrid.addItem(newItem);
+        newItem.refreshUI();
     }
 }
