@@ -92,7 +92,7 @@ export class Item {
         // this.container.position.set(this.x, this.y);
         this.graphicsBg = new PIXI.Graphics();
         this.graphicsText = null;
-        this.createItemGraphics();
+        this.initUI();
 
         this.dragStartParentContainer = this.container.parent;
         this.dragStartItemLocalPosition = new PIXI.Point(this.x, this.y);
@@ -103,14 +103,16 @@ export class Item {
         this.dragOverlay = null;
         this.previewIndicator = null;
 
-        this.addEventListeners();
         this.subgrids = {};
+        this.initAccessories();
+
+        this.addEventListeners();
 
         this.clickTimeout = null;
         this.clickCount = 0;
     }
 
-    createItemGraphics() {
+    initUI() {
         // 清空之前的图形内容（避免重复绘制）
         if (this.graphicsBg) {
             this.container.removeChild(this.graphicsBg);
@@ -188,6 +190,23 @@ export class Item {
 
         // 添加文字到容器
         this.container.addChild(this.graphicsText);
+    }
+
+    refreshUI() {
+        if (!this.graphicsText) return;
+        
+        // 更新价值显示
+        const valueText = this.graphicsText.children[1] as PIXI.Text;
+        const totalValue = this.getValue();
+        valueText.text = totalValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        // 更新堆叠数量显示
+        if (this.maxStackCount > 1) {
+            const stackText = this.graphicsText.children[2] as PIXI.Text;
+            if (stackText) {
+                stackText.text = `x${this.currentStactCount}`;
+            }
+        }
     }
 
     addEventListeners() {
@@ -503,7 +522,13 @@ export class Item {
     }
 
     getValue() {
-        return this.baseValue * this.currentStactCount;
+        let ret = this.baseValue * this.currentStactCount;
+        for (const subgrid of Object.values(this.subgrids)) {
+            for (const item of Object.values(subgrid.blocks)) {
+                ret += item.getValue();
+            }
+        }
+        return ret;
     }
 
     initAccessories() {
@@ -516,10 +541,33 @@ export class Item {
                 1,
                 true,
                 false,
-                info.type,
+                [info.type],
                 info.title
             );
-            this.subgrids[info.type] = subgrid;
+            this.subgrids[info.title] = subgrid;
+            subgrid.onBlockMoved = (item, col, row) => {
+                this.refreshUI();
+                if (this.game.activeItemInfoPanel) {
+                    const pos = this.game.activeItemInfoPanel.getPosition();
+                    this.game.activeItemInfoPanel.close();
+                    this.game.createItemInfoPanel(this);
+                    if (this.game.activeItemInfoPanel) {
+                        this.game.activeItemInfoPanel.setPosition(pos);
+                    }
+                }
+            }
+            subgrid.onBlockRemoved = (item) => {
+                this.refreshUI();
+                if (this.game.activeItemInfoPanel) {
+                    const pos = this.game.activeItemInfoPanel.getPosition();
+                    this.game.activeItemInfoPanel.close();
+                    this.game.createItemInfoPanel(this);
+                    if (this.game.activeItemInfoPanel) {
+                        this.game.activeItemInfoPanel.setPosition(pos);
+                    }
+                }
+            }
+            subgrid.setEnabled(false);
         }
     }
 

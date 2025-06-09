@@ -358,7 +358,7 @@
         "cellHeight": 2,
         "type": "primaryWeapon",
         "name": "M14",
-        "value": 35000,
+        "value": 88391,
         "color": "808080",
         "accessories": [
             {"title": "7.62x51mm Ammo", "type": "Ammo76251"},
@@ -504,6 +504,95 @@
         "value": 35532,
         "color": "a14a4c",
         "maxStack": 20
+    },
+
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "Muzzle",
+        "name": "堡垒水平补偿器",
+        "value": 60547,
+        "color": "695687"
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 1,
+        "type": "Barrel",
+        "name": "M14洞察超长枪管",
+        "value": 128092,
+        "color": "4b6b87"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "Rail",
+        "name": "PEQ-2红色激光镭指",
+        "value": 322654,
+        "color": "695687"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "Patch",
+        "name": "游侠护木片",
+        "value": 5631,
+        "color": "367e68"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "Patch",
+        "name": "KC猎犬护木片",
+        "value": 5131,
+        "color": "367e68"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "Foregrip",
+        "name": "共振人体工程握把",
+        "value": 68465,
+        "color": "695687"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "Magazine",
+        "name": "M14 30发弹匣",
+        "value": 26471,
+        "color": "695687"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "MagazineMount",
+        "name": "灰熊权威里快拔套（沙色）",
+        "value": 5137,
+        "color": "367e68"
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 1,
+        "type": "Scope",
+        "name": "M157火控光学系统",
+        "value": 51839,
+        "color": "695687"
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 1,
+        "type": "HandguardKit",
+        "name": "M14先进枪身系统",
+        "value": 127570,
+        "color": "4b6b87"
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 1,
+        "type": "Stock",
+        "name": "影袭导轨枪托",
+        "value": 68357,
+        "color": "4b6b87"
     },
 
     {

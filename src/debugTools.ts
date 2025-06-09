@@ -10,6 +10,8 @@ export class DebugTools {
         this.game = game;
         this.loadItemTypes();
         this.setupKeyboardShortcuts();
+        this.game.timer?.start();
+        this.game.isGameStarted = true;
     }
 
     initItems() {
@@ -28,7 +30,19 @@ export class DebugTools {
             "7.62x51mm M62", 
             "7.62x51mm M80", 
             "7.62x51mm M80", 
-            "7.62x51mm M80"
+            "7.62x51mm M80", 
+            "堡垒水平补偿器", 
+            "M14洞察超长枪管", 
+            "PEQ-2红色激光镭指", 
+            "游侠护木片", 
+            "游侠护木片", 
+            "KC猎犬护木片", 
+            "共振人体工程握把", 
+            "M14 30发弹匣", 
+            "灰熊权威里快拔套（沙色）", 
+            "M157火控光学系统", 
+            "M14先进枪身系统", 
+            "影袭导轨枪托"
         ];
 
         const itemInfoToBeAdded = itemToBeAdded.map(itemName => 
@@ -39,7 +53,7 @@ export class DebugTools {
             if (itemInfo) {
                 const item = new Item(this.game, null, itemInfo.type, itemInfo);
                 const res = inventory.addItem(item);
-                console.log(res, item);
+                // console.log(res, item);
             }
         }
     }

@@ -59,6 +59,7 @@ export class Subgrid {
         this.initUI();
         this.game.grids.push(this);
         this.additiveSize = { x: this.container.width, y: this.container.height };
+        // console.log(this)
     }
 
     /**
@@ -271,6 +272,7 @@ export class Subgrid {
             return true; // 如果没有指定接受的类型，则默认接受所有类型
         }
         let ret = false;
+        console.log(this)
         this.acceptedTypes.forEach((type) => {
             // console.log(item.type, type, item.type === type)
             if (item.type === type) {

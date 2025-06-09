@@ -24,6 +24,7 @@ export class ItemInfoPanel {
     private maxScrollY: number = 0;
     private dragOverlay: PIXI.Graphics | null;
     private maxHeight: number;
+    private ammoType: string;
 
     private readonly WIDTH = 420;
     private readonly HEIGHT = 636;
@@ -38,6 +39,7 @@ export class ItemInfoPanel {
     constructor(game: Game, item: Item, x: number, y: number, buttonConfigs: ButtonConfig[]) {
         this.game = game;
         this.item = item;
+        this.ammoType = '';
 
         this.dragOverlay = null;
         
@@ -88,6 +90,7 @@ export class ItemInfoPanel {
         this.container.addChild(this.background);
     }
 
+    // TODO: title应该在content外，不随滚轮滑动而改变位置
     private createTitleBar() {
         const titleBar = new PIXI.Container();
         
@@ -166,7 +169,7 @@ export class ItemInfoPanel {
         
         // 物品价值
         const valueText = new PIXI.Text({
-            text: this.item.baseValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+            text: this.item.getValue().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
             style: {
                 fontFamily: "Arial",
                 fontSize: 20,
@@ -235,17 +238,9 @@ export class ItemInfoPanel {
         let currentY = lastButton.y + lastButton.height + 24;
         
         // 创建弹药格子
-        const ammoGrid = new Subgrid(
-            this.game,
-            1,
-            1,
-            this.SUBGRID_SIZE,
-            1,
-            false,
-            false,
-            ["ammo"],
-            "弹药"
-        );
+        this.ammoType = this.item.accessories[0].title;
+        const ammoGrid = this.item.subgrids[this.ammoType];
+        ammoGrid.setEnabled(true);
         ammoGrid.container.position.set(
             this.AMMO_START_POS_X,
             currentY
@@ -283,29 +278,35 @@ export class ItemInfoPanel {
         let currentY = startY;
         
         // 创建配件格子
-        for (let i = 0; i < 15; i++) {
-            const attachmentGrid = new Subgrid(
-                this.game,
-                1,
-                1,
-                this.SUBGRID_SIZE,
-                1,
-                false,
-                false,
-                ["attachment"],
-                `配件${i + 1}`
-            );
+        // this.ammoType = this.item.accessories[0].title;
+        // const ammoGrid = this.item.subgrids[this.ammoType];
+        // ammoGrid.setEnabled(true);
+        // ammoGrid.container.position.set(
+        //     this.AMMO_START_POS_X,
+        //     currentY
+        // );
+        // this.subgrids.push(ammoGrid);
+        // this.contentContainer.addChild(ammoGrid.container);
+        let count = 0;
+        for (const accessory of this.item.accessories) {
+            const accessoryType = accessory.title;
+            if (accessoryType === this.ammoType) {
+                continue;
+            }
+            const subgrid = this.item.subgrids[accessoryType];
+            subgrid.setEnabled(true);
             
-            if (i > 0 && i % 5 === 0) {
+            if (count > 0 && count % 5 === 0) {
                 currentY += this.SUBGRID_SIZE + this.BUTTON_GAP;
                 currentX = (this.WIDTH - 5 * (this.SUBGRID_SIZE + this.BUTTON_GAP) + this.BUTTON_GAP) / 2;
             }
             
-            attachmentGrid.container.position.set(currentX, currentY);
+            subgrid.container.position.set(currentX, currentY);
             currentX += this.SUBGRID_SIZE + this.BUTTON_GAP;
             
-            this.subgrids.push(attachmentGrid);
-            this.contentContainer.addChild(attachmentGrid.container);
+            this.subgrids.push(subgrid);
+            this.contentContainer.addChild(subgrid.container);
+            count += 1;
         }
     }
 
@@ -386,9 +387,8 @@ export class ItemInfoPanel {
     }
 
     public close() {
-        // 移除所有子网格
         this.subgrids.forEach(grid => {
-            grid.container.destroy();
+            grid.setEnabled(false);
         });
         
         // 移除面板
@@ -398,5 +398,13 @@ export class ItemInfoPanel {
         if (this.game.activeItemInfoPanel === this) {
             this.game.activeItemInfoPanel = null;
         }
+    }
+
+    public getPosition(): PIXI.Point {
+        return this.container.position.clone();
+    }
+
+    public setPosition(pos: PIXI.Point) {
+        this.container.position.copyFrom(pos);
     }
 }
