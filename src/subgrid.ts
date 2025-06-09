@@ -4,6 +4,14 @@ import { Game } from "./game";
 import { DEFAULT_CELL_SIZE } from "./config";
 import { ItemType } from "./types";
 
+interface ItemPlace {
+    col: number;
+    row: number;
+    cellWidth: number;
+    cellHeight: number;
+}
+
+
 /**
  * This class represents a grid in the game.
  * @param {Game} game - The game instance
@@ -297,7 +305,7 @@ export class Subgrid {
     }
 
     /**
-     * Add a block to the grid.
+     * Add a block to the grid. 若给定具体 col 和 row，则不会判断是否发生重叠，直接加入。
      * @param {Item} obj - The block to add
      * @param {number} col - The column position of the block
      * @param {number} row - The row position of the block
@@ -453,5 +461,75 @@ export class Subgrid {
             }
         }
         this.blocks = [];
+    }
+
+    tryPlaceItem(item: Item, ignores: (Item | ItemPlace)[], blocks: (Item | ItemPlace)[]): { col: number, row: number } | null {
+        // console.log('======')
+        for (let row = 0; row < this.height; row+=1) {
+            for (let col = 0; col < this.width; col+=1) {
+                // 检查是否在边界内
+                if (!this.checkBoundary(item, col, row)) {
+                    continue;
+                }
+
+                // 检查是否与blocks重叠
+                let hasOverlap = false;
+                for (const blockedItem of blocks) {
+                    const blockedItemRight = blockedItem.col + blockedItem.cellWidth;
+                    const blockedItemBottom = blockedItem.row + blockedItem.cellHeight;
+                    const itemRight = col + item.cellWidth;
+                    const itemBottom = row + item.cellHeight;
+                    // if(col === 0 && row === 0 ) {
+                    //     console.log('ffff')
+                    //     console.log(col, row, itemRight, itemBottom, blockedItem)
+                    // }
+
+                    if (
+                        col < blockedItemRight &&
+                        itemRight > blockedItem.col &&
+                        row < blockedItemBottom &&
+                        itemBottom > blockedItem.row
+                    ) {
+                        // if(col === 0 && row === 0 ) {
+                        //     console.log('gggg')
+                        //     console.log(col, row, itemRight, itemBottom, blockedItem)
+                        // }
+                        hasOverlap = true;
+                        break;
+                    }
+                }
+                if (hasOverlap) {
+                    // console.log(col, row, 'hhhh')
+                    continue;
+                }
+                // console.log(col, row, 'iiii')
+                hasOverlap = false;
+                for (const originalItem of this.blocks) {
+                    if (ignores.includes(originalItem)) {
+                        continue;
+                    }
+                    const blockRight = originalItem.col + originalItem.cellWidth;
+                    const blockBottom = originalItem.row + originalItem.cellHeight;
+                    const itemRight = col + item.cellWidth;
+                    const itemBottom = row + item.cellHeight;
+
+                    if (
+                        col < blockRight &&
+                        itemRight > originalItem.col &&
+                        row < blockBottom &&
+                        itemBottom > originalItem.row
+                    ) {
+                        hasOverlap = true;
+                        break;
+                    }
+                }
+                if (hasOverlap) {
+                    continue;
+                }
+                return { col, row };
+            }
+        }
+        // TODO: rearrange
+        return null;
     }
 }

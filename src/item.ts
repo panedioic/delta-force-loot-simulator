@@ -351,7 +351,7 @@ export class Item {
                     bCanInteract = bCanInteract && overlappingItem.onItemInteractPreview(this, {
                         col: gridPosition.clampedCol,
                         row: gridPosition.clampedRow
-                    });
+                    }, overlappingItems);
                     if (bCanInteract === false) {
                         break;
                     }
@@ -363,7 +363,7 @@ export class Item {
                         overlappingItem.onItemInteract(this, {
                             col: gridPosition.clampedCol,
                             row: gridPosition.clampedRow
-                        });
+                        }, overlappingItems);
                     }
                 } else {
                     bReturnToOriginalPosition = true;
@@ -490,7 +490,7 @@ export class Item {
                 canPlace = canPlace && overlappingItem.onItemInteractPreview(this, {
                     col: clampedCol,
                     row: clampedRow
-                });
+                }, overlappingItems);
                 if (canPlace === false) {
                     break;
                 }
@@ -595,36 +595,59 @@ export class Item {
      * 交互回调。当把一个item挪到自己身上时，会触发自己的回调。
      * @returns {boolean} 返回 true 表示已处理交互，false 表示未处理
      */
-    onItemInteract(item: Item, pos: {col: number, row: number}): boolean {
-        if (item.type in this.accessories) {
+    onItemInteract(draggingItem: Item, pos: {col: number, row: number}, interacting: Item[]) {
+        if (draggingItem.type in this.accessories) {
             // 可放入subgrid
-            return true;
-        } else if (this.maxStackCount > 1 && item.maxStackCount > 1 && this.name == item.name) {
+        } else if (this.maxStackCount > 1 && draggingItem.maxStackCount > 1 && this.name == draggingItem.name) {
             // 可堆叠
-            return true;
         } else {
             // 交换位置
-            if (!this.parentGrid || !item.parentGrid) {
+            if (!this.parentGrid || !draggingItem.parentGrid) {
                 return false;
             }
 
-            // 保存原始位置
-            const thisGrid = this.parentGrid;
-            const thisCol = this.col;
-            const thisRow = this.row;
-            const itemGrid = item.parentGrid;
-            const itemCol = item.col;
-            const itemRow = item.row;
+            // 特殊情况：二者长宽完全相同，直接交换位置
+            if (this.cellWidth === draggingItem.cellWidth && this.cellHeight === draggingItem.cellHeight) {
+                // 保存原始位置
+                const thisGrid = this.parentGrid;
+                // const thisCol = this.col;
+                // const thisRow = this.row;
+                const itemGrid = draggingItem.parentGrid;
+                const itemCol = draggingItem.col;
+                const itemRow = draggingItem.row;
 
-            // 从原网格中移除
-            thisGrid.removeBlock(this);
-            itemGrid.removeBlock(item);
+                // 从原网格中移除
+                thisGrid.removeBlock(this);
+                itemGrid.removeBlock(draggingItem);
 
-            // 添加到新位置
-            itemGrid.addItem(this, itemCol, itemRow);
-            thisGrid.addItem(item, pos.col, pos.row);
+                // 添加到新位置
+                itemGrid.addItem(this, itemCol, itemRow);
+                thisGrid.addItem(draggingItem, pos.col, pos.row);
 
-            return true;
+                return true;
+            }
+
+            // 找到自己的新位置
+            const draggingItemPlace = {
+                col: pos.col,
+                row: pos.row,
+                cellWidth: draggingItem.cellWidth,
+                cellHeight: draggingItem.cellHeight
+            }
+            const targetPosition = 
+                this.parentGrid === draggingItem.parentGrid ?
+                this.parentGrid.tryPlaceItem(this, [this, draggingItem], [draggingItemPlace]) :
+                draggingItem.parentGrid.tryPlaceItem(this, [draggingItem], [])
+            if (targetPosition) {
+                // 移动当前物品到新位置
+                this.parentGrid.removeBlock(this);
+                this.parentGrid.addItem(this, targetPosition.col, targetPosition.row);
+                // 如果是最后一个被交互的物品，移动拖动的物品到目标位置
+                if (this === interacting[interacting.length-1]) {
+                    draggingItem.parentGrid.removeBlock(draggingItem);
+                    this.parentGrid.addItem(draggingItem, pos.col, pos.row);
+                }
+            }
         }
     }
 
@@ -632,32 +655,61 @@ export class Item {
      * 交互回调预览
      * @returns {boolean} 返回 true 表示可以交互，false 表示不能交互
      */
-    onItemInteractPreview(item: Item, pos: {col: number, row: number}): boolean {
-        if (item.type in this.accessories) {
-            // 可放入subgrid
-            return true;
-        } else if (this.maxStackCount > 1 && item.maxStackCount > 1 && this.name == item.name) {
+    onItemInteractPreview(draggingItem: Item, pos: {col: number, row: number}, _interacting: Item[]): boolean {
+        // if (item.type in this.accessories) {
+        //     // 可放入subgrid
+        //     return true;
+        // } else 
+        if (this.maxStackCount > 1 && draggingItem.maxStackCount > 1 && this.name == draggingItem.name) {
             // 可堆叠
             return true;
         } else {
             // 检查是否可以交换位置
-            if (!this.parentGrid || !item.parentGrid) {
+            if (!this.parentGrid || !draggingItem.parentGrid) {
                 return false;
             }
 
-            // 检查目标物品的原位置是否可以放置当前物品
-            const canPlaceHere = item.parentGrid.checkBoundary(this, this.col, this.row) &&
-                               item.parentGrid.checkAccept(this) &&
-                               item.parentGrid.getOverlappingItems(this, this.col, this.row)
-                                   .filter(i => i !== item && i !== this).length === 0;
+            // 首先判断二者不同 Parent Grid 的情况
+            if (this.parentGrid !== draggingItem.parentGrid) {
+                // TODO 直接判断
+                return true;
+            }
 
-            // 检查当前物品的原位置是否可以放置目标物品
-            const canPlaceThere = this.parentGrid.checkBoundary(item, pos.col, pos.row) &&
-                                this.parentGrid.checkAccept(item) &&
-                                this.parentGrid.getOverlappingItems(item, pos.col, pos.row)
-                                    .filter(i => i !== item && i !== this).length === 0;
+            // 先检测是否是一个 item 完全覆盖另一个 item。
+            const bDraggingItemCoverThisItem = 
+                pos.col <= this.col &&
+                pos.col + draggingItem.cellWidth >= this.col + this.cellWidth &&
+                pos.row <= this.row &&
+                pos.row + draggingItem.cellHeight >= this.row + this.cellHeight;
+            // 如果 Dragging Item 比 this 大，只要其他的 Interact 也没有问题
+            // 那么 Dragging Item 被挪开释放的空间一定是足够所有被覆盖的 Item 使用的
+            if (bDraggingItemCoverThisItem) {
+                return true;
+            }
 
-            return canPlaceHere && canPlaceThere;
+            const bThisItemCoverDraggingItem = 
+                this.col <= pos.col &&
+                this.col + this.cellWidth >= pos.col + draggingItem.cellWidth &&
+                this.row <= pos.row &&
+                this.row + this.cellHeight >= pos.row + draggingItem.cellHeight;
+            // 如果 This Item 比 Dragging Item 大，说明 Dragging Item 必然只覆盖了 This 一个 item，
+            // 那么只要 This Item 有新的位置可以放，那就可以交换
+            if (bThisItemCoverDraggingItem) {
+                const deaggingItemPlace = {
+                    col: pos.col,
+                    row: pos.row,
+                    cellWidth: draggingItem.cellWidth,
+                    cellHeight: draggingItem.cellHeight
+                }
+                if (this.parentGrid.tryPlaceItem(this, [this, draggingItem], [deaggingItemPlace])) {
+                    // console.log(this.parentGrid.tryPlaceItem(this, [this, draggingItem], [deaggingItemPlace]))
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
         }
     }
 }
