@@ -12,6 +12,13 @@ import { ItemInfoPanel } from "./itemInfoPanel";
 import { Item } from "./item";
 import { DebugTools } from "./debugTools";
 
+declare global {
+    interface Window {
+        game: Game;
+        app: HTMLElement;
+    }
+}
+
 /**
  * The Game class represents the main game instance.
  * It initializes the PIXI application, loads block types, and creates the game UI.
@@ -189,7 +196,12 @@ export class Game {
             backgroundColor: 0x000000,
             resolution: window.devicePixelRatio || 1,
         });
-        document.body.appendChild(this.app.canvas);
+        const appElement = document.getElementById("app");
+        if (appElement) {
+            appElement.appendChild(this.app.canvas);
+            window.app = appElement;
+        }
+        window.game = this;
     }
 
     /**
@@ -281,7 +293,7 @@ export class Game {
             },
         );
         // Initialize info dialog
-        this.infoDialog = new InfoDialog(this, 42, 386);
+        this.infoDialog = new InfoDialog(this);
         this.infoDialog.initUI();
     }
 
