@@ -540,4 +540,11 @@ export class Subgrid {
         // TODO: rearrange
         return null;
     }
+
+    public gridToPixel(col: number, row: number): { x: number, y: number } {
+        return {
+            x: col * this.cellSize * this.aspect,
+            y: row * this.cellSize
+        };
+    }
 }

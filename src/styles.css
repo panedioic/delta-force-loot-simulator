@@ -1,0 +1,205 @@
+.item {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #666666;
+    cursor: pointer;
+    user-select: none;
+}
+
+.item-name {
+    color: white;
+    font-family: Arial;
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.item-value {
+    color: white;
+    font-family: Arial;
+    font-size: 21px;
+    font-weight: bold;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+.item-stack {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    color: white;
+    font-family: Arial;
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+.item-ammo {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    color: white;
+    font-family: Arial;
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+.item-info-panel {
+    position: absolute;
+    width: 420px;
+    height: 636px;
+    background-color: rgba(31, 33, 33, 0.95);
+    border: 1px solid #686F75;
+}
+
+.info-panel-title {
+    height: 40px;
+    background-color: #2a2f2f;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    cursor: move;
+}
+
+.info-panel-title h2 {
+    color: white;
+    font-family: Arial;
+    font-size: 16px;
+    margin: 0;
+}
+
+.info-panel-close {
+    color: white;
+    font-size: 40px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    line-height: 1;
+}
+
+.info-panel-image {
+    height: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.info-panel-image h1 {
+    color: white;
+    font-family: Arial;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+}
+
+.info-panel-image p {
+    color: white;
+    font-family: Arial;
+    font-size: 20px;
+    text-align: center;
+    margin: 0;
+}
+
+.info-panel-buttons {
+    padding: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.info-panel-button {
+    width: 186px;
+    height: 46px;
+    background-color: #313131;
+    border: none;
+    color: white;
+    font-family: Arial;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.info-panel-content {
+    height: calc(100% - 40px);
+    overflow-y: auto;
+}
+
+.info-panel-ammo,
+.info-panel-attachments {
+    padding: 16px;
+}
+
+.info-panel-ammo h3,
+.info-panel-attachments h3 {
+    color: white;
+    font-family: Arial;
+    font-size: 16px;
+    margin: 0 0 10px 0;
+}
+
+.split-panel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 200px;
+    background-color: rgba(31, 33, 33, 0.95);
+    border: 1px solid #686F75;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.split-panel h3 {
+    color: white;
+    font-family: Arial;
+    font-size: 18px;
+    margin: 0 0 20px 0;
+}
+
+.split-panel-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.split-panel-controls button {
+    width: 30px;
+    height: 30px;
+    background-color: #313131;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.split-panel-controls span {
+    color: white;
+    font-family: Arial;
+    font-size: 18px;
+}
+
+.split-panel-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.split-panel-buttons button {
+    padding: 8px 20px;
+    background-color: #313131;
+    border: none;
+    color: white;
+    font-family: Arial;
+    font-size: 16px;
+    cursor: pointer;
+} 
