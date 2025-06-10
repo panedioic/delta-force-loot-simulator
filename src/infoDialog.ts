@@ -1,5 +1,6 @@
 import * as PIXI from "pixi.js";
 import { Game } from "./game";
+import { version } from "../package.json";
 
 export class InfoDialog {
     private game: Game;
@@ -129,7 +130,7 @@ export class InfoDialog {
                 "2. 按R键可以旋转物品",
                 "3. 合理安排空间以获得最大收益",
                 "",
-                "游戏版本：0.3.1",
+                "游戏版本：" + version,
                 "项目作者：依言（Y1yan）",
                 "项目地址：",
                 "讨论群：还没有建好（",

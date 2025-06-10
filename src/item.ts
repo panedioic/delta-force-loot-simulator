@@ -183,9 +183,9 @@ export class Item {
         valueText.anchor.set(0.5);
         valueText.position.set(0, 10); // 价值显示在方块中心下方
         this.graphicsText.addChild(valueText);
-        console.log('asasasasaassaasas')
-        console.log(this.currentStactCount)
-        console.log(this.getValue())
+        // console.log('asasasasaassaasas')
+        // console.log(this.currentStactCount)
+        // console.log(this.getValue())
 
         // 如果物品可堆叠，添加堆叠数量显示
         if (this.maxStackCount > 1) {
@@ -349,15 +349,29 @@ export class Item {
 
             // 获取重叠的物品
             const overlappingItems = targetGrid.getOverlappingItems(this, gridPosition.clampedCol, gridPosition.clampedRow);
+            const overlappingItemsRotated = targetGrid.getOverlappingItems(this, gridPosition.clampedCol, gridPosition.clampedRow, true);
             
-            if (overlappingItems.length === 0) {
+            if (overlappingItems.length === 0 || overlappingItemsRotated.length === 0) {
                 // 无重叠物品，检查边界和类型
                 const isPositionValid = 
                     targetGrid.checkBoundary(this, gridPosition.clampedCol, gridPosition.clampedRow) &&
                     targetGrid.checkAccept(this); //
                 if (!isPositionValid) {
-                    // 如果位置不合法，返回原位置
-                    bReturnToOriginalPosition = true;
+                    // 如果位置不合法，检查旋转
+                    const isPositionValidRotated = 
+                        targetGrid.checkBoundary(this, gridPosition.clampedCol, gridPosition.clampedRow, true) &&
+                        targetGrid.checkAccept(this);
+                    if (!isPositionValidRotated) {
+                        bReturnToOriginalPosition = true;
+                    } else {
+                        const temp = this.cellWidth;
+                        this.cellWidth = this.cellHeight;
+                        this.cellHeight = temp;
+                        if (this.parentGrid) {
+                            this.parentGrid.removeBlock(this);
+                        }
+                        targetGrid.addItem(this, gridPosition.clampedCol, gridPosition.clampedRow);
+                    }
                 } else {
                     // 可以直接放置
                     if (this.parentGrid) {
@@ -378,7 +392,6 @@ export class Item {
                         break;
                     }
                 }
-
                 // 可以交互，进行交互
                 if (bCanInteract) {
                     for (const overlappingItem of overlappingItems) {
@@ -388,7 +401,23 @@ export class Item {
                         }, overlappingItems);
                     }
                 } else {
-                    bReturnToOriginalPosition = true;
+                    let bCanInteractRotated = true;
+                    for (const overlappingItem of overlappingItemsRotated) {
+                        bCanInteractRotated = bCanInteractRotated && overlappingItem.onItemInteractPreview(this, {
+                            col: gridPosition.clampedCol,
+                            row: gridPosition.clampedRow
+                        }, overlappingItemsRotated);
+                    }
+                    if(bCanInteractRotated) {
+                        for (const overlappingItem of overlappingItemsRotated) {
+                            overlappingItem.onItemInteract(this, {
+                                col: gridPosition.clampedCol,
+                                row: gridPosition.clampedRow
+                            }, overlappingItemsRotated);
+                        }
+                    } else {
+                        bReturnToOriginalPosition = true;
+                    }
                 }
             }
         } else {
@@ -498,56 +527,93 @@ export class Item {
 
         // 获取重叠的物品
         const overlappingItems = grid.getOverlappingItems(this, clampedCol, clampedRow);
+        const overlappingItemsRotated = grid.getOverlappingItems(this, clampedCol, clampedRow, true);
         
         // 判断是否可以放置
         let canPlace = false;
         let canPlaceRotated = false;
         let bCanInteract = false;
-        if (overlappingItems.length === 0) {
+        let bCanInteractRotated = false;
+        if (overlappingItems.length === 0 || overlappingItemsRotated.length === 0) {
             // 无重叠物品，检查边界和类型
-            canPlace = grid.checkBoundary(this, clampedCol, clampedRow) &&
-                      grid.checkAccept(this);
+            canPlace = overlappingItems.length === 0 &&
+                grid.checkBoundary(this, clampedCol, clampedRow) &&
+                grid.checkAccept(this);
             if (!canPlace) {
                 canPlaceRotated = grid.checkBoundary(this, clampedCol, clampedRow, true) &&
                     grid.checkAccept(this);
             }
         } else {
             // 有重叠物品，检查是否可以交互
-            canPlace = true;
+            bCanInteract = true;
             for (const overlappingItem of overlappingItems) {
-                canPlace = canPlace && overlappingItem.onItemInteractPreview(this, {
+                bCanInteract = bCanInteract && overlappingItem.onItemInteractPreview(this, {
                     col: clampedCol,
                     row: clampedRow
                 }, overlappingItems);
-                if (canPlace === false) {
+                if (bCanInteract === false) {
                     break;
                 }
             }
+            if (!bCanInteract) {
+                bCanInteractRotated = true;
+                for (const overlappingItem of overlappingItemsRotated) {
+                    bCanInteractRotated = bCanInteractRotated && overlappingItem.onItemInteractPreview(this, {
+                        col: clampedCol,
+                        row: clampedRow
+                    }, overlappingItems);
+                    if (bCanInteractRotated === false) {
+                        break;
+                    }
+                }
+            }
         }
+        // console.log(canPlace, canPlaceRotated, bCanInteract, bCanInteractRotated)
 
         // 设置预览颜色
-        const previewColor = (canPlace || canPlaceRotated || bCanInteract) ? 0x88ff88 : 0xff8888; // 浅绿色或浅红色
+        const previewColor = (canPlace || canPlaceRotated || bCanInteract || bCanInteractRotated) ? 0x88ff88 : 0xff8888; // 浅绿色或浅红色
+
+        const drawX = grid.fullfill ? baseX :
+            (bCanInteract || bCanInteractRotated) ? baseX +  + snapX - (this.cellWidth * this.cellSize) / 2 : // TODO
+            baseX +  + snapX - (this.cellWidth * this.cellSize) / 2;
+        const drawY = grid.fullfill ? baseY :
+            (bCanInteract || bCanInteractRotated) ? baseY +  + snapY - (this.cellHeight * this.cellSize) / 2 : // TODO
+            baseY +  + snapY - (this.cellHeight * this.cellSize) / 2;
+        const drawWidth = grid.fullfill ? grid.width * grid.cellSize * grid.aspect :
+            bCanInteract ? this.cellWidth * this.cellSize : // TODO
+            bCanInteractRotated ? this.cellHeight * this.cellSize :
+            canPlaceRotated ? this.cellHeight * this.cellSize :
+            this.cellWidth * this.cellSize;
+        const drawHeight = grid.fullfill ? grid.height * grid.cellSize :
+            bCanInteract ? this.cellHeight * this.cellSize : // TODO
+            bCanInteractRotated ? this.cellWidth * this.cellSize :
+            canPlaceRotated ? this.cellWidth * this.cellSize :
+            this.cellHeight * this.cellSize;
+
+        // Draw Preview
+        this.previewIndicator.rect(drawX, drawY, drawWidth, drawHeight);
+        this.previewIndicator.fill({ color: previewColor, alpha: 0.5 });
 
         // 绘制预览
-        if (grid.fullfill) {
-            this.previewIndicator.beginFill(previewColor);
-            this.previewIndicator.drawRect(
-                baseX,
-                baseY,
-                grid.width * grid.cellSize * grid.aspect,
-                grid.height * grid.cellSize,
-            );
-            this.previewIndicator.endFill();
-        } else {
-            this.previewIndicator.beginFill(previewColor);
-            this.previewIndicator.drawRect(
-                baseX + snapX - (this.cellWidth * this.cellSize) / 2,
-                baseY + snapY - (this.cellHeight * this.cellSize) / 2,
-                this.cellWidth * this.cellSize,
-                this.cellHeight * this.cellSize,
-            );
-            this.previewIndicator.endFill();
-        }
+        // if (grid.fullfill) {
+        //     this.previewIndicator.beginFill(previewColor);
+        //     this.previewIndicator.drawRect(
+        //         baseX,
+        //         baseY,
+        //         grid.width * grid.cellSize * grid.aspect,
+        //         grid.height * grid.cellSize,
+        //     );
+        //     this.previewIndicator.endFill();
+        // } else {
+        //     this.previewIndicator.beginFill(previewColor);
+        //     this.previewIndicator.drawRect(
+        //         baseX + snapX - (this.cellWidth * this.cellSize) / 2,
+        //         baseY + snapY - (this.cellHeight * this.cellSize) / 2,
+        //         this.cellWidth * this.cellSize,
+        //         this.cellHeight * this.cellSize,
+        //     );
+        //     this.previewIndicator.endFill();
+        // }
     }
 
     resize(sizeX: number, sizeY: number) {
@@ -571,7 +637,7 @@ export class Item {
 
     getValue() {
         let ret = this.baseValue * this.currentStactCount;
-        console.log(this.baseValue, this.currentStactCount, ret)
+        // console.log(this.baseValue, this.currentStactCount, ret)
         for (const subgrid of Object.values(this.subgrids)) {
             for (const item of Object.values(subgrid.blocks)) {
                 ret += item.getValue();

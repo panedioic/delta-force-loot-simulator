@@ -1,4 +1,5 @@
 import { Game } from "./game";
+import { version } from "../package.json";
 
 if (import.meta.env.MODE === "development") {
     console.log("Development mode!");
@@ -8,5 +9,6 @@ if (import.meta.env.MODE === "development") {
     const game = new Game();
     await game.init();
     console.log("Game initialized!");
-    console.log(game);
+    console.log("version:", version);
+    console.log("game:", game);
 })();

@@ -185,8 +185,8 @@ export class Subgrid {
         );
 
         // 限制在网格范围内
-        const clampedCol = Math.max(0, Math.min(col, this.width - cellWidth));
-        const clampedRow = Math.max(0, Math.min(row, this.height - cellHeight));
+        const clampedCol = Math.max(0, Math.min(col, this.width));
+        const clampedRow = Math.max(0, Math.min(row, this.height));
 
         // 计算对齐后的位置
         const snapX =
