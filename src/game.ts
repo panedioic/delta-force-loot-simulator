@@ -4,7 +4,6 @@ import { RIGHT_REGION_COUNT } from "./config";
 import { Subgrid } from "./subgrid";
 import { TotalValueDisplay } from "./totalValueDisplay";
 import { RegionSwitchUI } from "./regionSwitchUI";
-import { ScrollableContainer } from "./scrollableContainer";
 import { InfoDialog } from "./infoDialog";
 import { Timer } from "./timer";
 import { Inventory } from "./invntory";
@@ -31,7 +30,7 @@ export class Game {
     regionSwitchUI: RegionSwitchUI | null;
     isGameStarted: boolean;
     timer: Timer | null;
-    scrollableContainer: ScrollableContainer | null;
+    // scrollableContainer: ScrollableContainer | null;
     playerInventory!: Inventory | null;
     spoilsManager!: SpoilsManager | null;
     infoDialog: InfoDialog | null;
@@ -54,7 +53,7 @@ export class Game {
         this.regionSwitchUI = null;
         this.isGameStarted = false; // 是否开始游戏
         this.timer = null; // 计时器实例
-        this.scrollableContainer = null; // 滚动容器实例
+        // this.scrollableContainer = null; // 滚动容器实例
         this.spoilsManager = null;
         this.infoDialog = null;
         this.instances = [];

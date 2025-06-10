@@ -206,7 +206,8 @@ export class Subgrid {
     getOverlappingItems(
         item: Item | ItemType,
         col: number,
-        row: number
+        row: number,
+        rotated: boolean=false
     ): Item[] {
         const overlappingItems: Item[] = [];
         
@@ -215,8 +216,8 @@ export class Subgrid {
             if (block === item) continue;
 
             // 检查是否有重叠
-            const itemRight = col + (item.cellWidth || 1);
-            const itemBottom = row + (item.cellHeight || 1);
+            const itemRight = rotated ? col + (item.cellHeight || 1) : col + (item.cellWidth || 1);
+            const itemBottom = rotated ? row + (item.cellWidth || 1) : row + (item.cellHeight || 1);
             const blockRight = block.col + block.cellWidth;
             const blockBottom = block.row + block.cellHeight;
 
@@ -250,7 +251,7 @@ export class Subgrid {
      * @param {number} row - The row position of the item
      * @returns {boolean} - Returns true if the item is within the boundary, false otherwise
      * */
-    checkBoundary(item: Item | ItemType, col: number, row: number): boolean {
+    checkBoundary(item: Item | ItemType | ItemPlace, col: number, row: number, rotated: boolean=false): boolean {
         if (this.fullfill) {
             return col === 0 && row === 0;
         }
@@ -259,8 +260,8 @@ export class Subgrid {
         const gridHeight = this.height;
 
         // 计算方块的右边界和下边界
-        const blockRight = col + item.cellWidth;
-        const blockBottom = row + item.cellHeight;
+        const blockRight = rotated ? col + item.cellHeight : col + item.cellWidth;
+        const blockBottom = rotated ? row + item.cellWidth : row + item.cellHeight;
 
         // 检查是否在网格范围内
         return (

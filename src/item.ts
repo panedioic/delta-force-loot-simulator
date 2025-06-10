@@ -501,10 +501,16 @@ export class Item {
         
         // 判断是否可以放置
         let canPlace = false;
+        let canPlaceRotated = false;
+        let bCanInteract = false;
         if (overlappingItems.length === 0) {
             // 无重叠物品，检查边界和类型
             canPlace = grid.checkBoundary(this, clampedCol, clampedRow) &&
                       grid.checkAccept(this);
+            if (!canPlace) {
+                canPlaceRotated = grid.checkBoundary(this, clampedCol, clampedRow, true) &&
+                    grid.checkAccept(this);
+            }
         } else {
             // 有重叠物品，检查是否可以交互
             canPlace = true;
@@ -520,7 +526,7 @@ export class Item {
         }
 
         // 设置预览颜色
-        const previewColor = canPlace ? 0x88ff88 : 0xff8888; // 浅绿色或浅红色
+        const previewColor = (canPlace || canPlaceRotated || bCanInteract) ? 0x88ff88 : 0xff8888; // 浅绿色或浅红色
 
         // 绘制预览
         if (grid.fullfill) {
