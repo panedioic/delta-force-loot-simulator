@@ -13,6 +13,9 @@ export interface ItemType {
     subgridLayout: any[] | null;
     accessories: any[] | null;
     stack: number | null;
+    ammo: string | null;
+    capacity: number | null;
+    conflict: any[] | null;
 }
 
 export interface Grid {

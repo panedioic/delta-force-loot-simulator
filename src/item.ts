@@ -32,11 +32,15 @@ export class Item {
     container: PIXI.Container;
     graphicsBg: PIXI.Graphics;
     graphicsText: PIXI.Container | null;
-    subgridLayout: any;
-    subgrids: { [key: string]: Subgrid };
-    accessories: any[];
+    subgridLayout: Array<[number, number, number, number]> = [];
+    subgrids: { [key: string]: Subgrid } = {};
+    accessories: Array<{type: string, title: string}> = [];
     maxStackCount: number;
     currentStactCount: number;
+    ammoType: string | null;
+    ammo: { [key: string]: number } = {};
+    capacity: number | null;
+    conflicts: { [key: string]: string[] } = {};
 
     /** 拖动相关 */
     dragStartParentContainer: PIXI.Container;
@@ -81,12 +85,9 @@ export class Item {
         this.accessories = itemType.accessories || [];
         this.maxStackCount = itemType.maxStack || 1;
         this.currentStactCount = itemType.stack || 1;
-        // console.log('eee')
-        // if(itemType.subgridLayout) {
-        //     console.log('fff', this)
-        //     console.log('ggg', this.subgridLayout)
-            
-        // }
+        this.ammoType = itemType.ammo;
+        this.capacity = itemType.capacity;
+        this.conflicts = itemType.conflict;
 
         // 只用作检查
         this.cellSize = this.parentGrid ? this.parentGrid.cellSize : DEFAULT_CELL_SIZE;
@@ -115,11 +116,33 @@ export class Item {
         this.clickTimeout = null;
         this.clickCount = 0;
 
-        this.searched = false;
         this.searchTime = 1;
-        this.searchMask = new PIXI.Graphics();
+        if (window.game.needSearch) {
+            this.searched = false;
+            this.searchMask = new PIXI.Graphics();
+        } else {
+            this.searched = true;
+            this.searchMask = new PIXI.Graphics();
+            this.searchMask.visible = false;
+        }
 
         this.initUI();
+
+        // 处理冲突列表
+        if (itemType.conflict) {
+            // 将冲突列表转换为字典形式
+            for (const [type1, type2] of itemType.conflict) {
+                // 添加双向冲突
+                if (!this.conflicts[type1]) {
+                    this.conflicts[type1] = [];
+                }
+                if (!this.conflicts[type2]) {
+                    this.conflicts[type2] = [];
+                }
+                this.conflicts[type1].push(type2);
+                this.conflicts[type2].push(type1);
+            }
+        }
     }
 
     initUI() {
@@ -216,6 +239,26 @@ export class Item {
             this.graphicsText.addChild(stackText);
         }
 
+        // 有子弹，需要显示子弹数量
+        if (this.ammoType) {
+            const stackText = new PIXI.Text({
+                text: `${this.getTotalAmmo()}/${this.capacity}`,
+                style: {
+                    fontFamily: "Arial",
+                    fontSize: 16,
+                    fill: 0xffffff,
+                    fontWeight: "bold",
+                    stroke: { color: "black", width: 3 },
+                },
+            });
+            stackText.anchor.set(1, 1); // 右下角对齐
+            stackText.position.set(
+                this.pixelWidth / 2 - 5,  // 右边缘留5像素边距
+                this.pixelHeight / 2 - 5   // 下边缘留5像素边距
+            );
+            this.graphicsText.addChild(stackText);
+        }
+
         // 设置文字容器的位置
         this.graphicsText.position.set(0, 0);
 
@@ -252,6 +295,15 @@ export class Item {
             const stackText = this.graphicsText.children[2] as PIXI.Text;
             if (stackText) {
                 stackText.text = `x${this.currentStactCount}`;
+            }
+        }
+
+        // 更新子弹数量显示
+        if (this.ammoType) {
+            const ammoText = this.graphicsText.children[2] as PIXI.Text;
+            if (ammoText) {
+                const totalAmmo = this.getTotalAmmo();
+                ammoText.text = `${totalAmmo}/${this.capacity || 0}`;
             }
         }
     }
@@ -555,6 +607,7 @@ export class Item {
 
         // 获取重叠的物品
         const overlappingItems = grid.getOverlappingItems(this, clampedCol, clampedRow);
+        // console.log(overlappingItems)
         const overlappingItemsRotated = grid.getOverlappingItems(this, clampedCol, clampedRow, true);
         
         // 判断是否可以放置
@@ -671,6 +724,9 @@ export class Item {
                 ret += item.getValue();
             }
         }
+        for (const [ammoType, ammoCount] of Object.entries(this.ammo)) {
+            ret += ammoCount * this.game.BLOCK_TYPES.find(info => info.name ===ammoType).value;
+        }
         return ret;
     }
 
@@ -688,7 +744,26 @@ export class Item {
                 info.title
             );
             this.subgrids[info.title] = subgrid;
-            subgrid.onBlockMoved = (_item, _col, _row) => {
+            subgrid.onBlockMoved = (item, _col, _row, previousGrid) => {
+                // 先检测是否有冲突
+                let bHasConflict = false;
+                if (this.conflicts[info.type]) {
+                    for (const conflictedTypes of this.conflicts[info.type]) {
+                        for (const conflictSubgrid of Object.values(this.subgrids)) {
+                            if (conflictSubgrid.acceptedTypes.includes(conflictedTypes) && conflictSubgrid.blocks.length > 0) {
+                                bHasConflict = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (bHasConflict) {
+                    subgrid.removeBlock(item);
+                    if (previousGrid) {
+                        previousGrid.addItem(item);
+                    }
+                    return false;
+                }
                 this.refreshUI();
                 if (this.game.activeItemInfoPanel) {
                     const pos = this.game.activeItemInfoPanel.getPosition();
@@ -714,13 +789,124 @@ export class Item {
         }
     }
 
+    getTotalAmmo(): number {
+        let totalAmmoCount = 0;
+        for (const ammoCount of Object.values(this.ammo)) {
+            totalAmmoCount += ammoCount;
+        }
+        return totalAmmoCount;
+    }
+
+    unloadAmmo() {
+        // console.log(this.ammo)
+        for (const [ammoType, ammoCount] of Object.entries(this.ammo)) {
+            if (ammoCount > 0) {
+                // 创建新的弹药物品
+                const ammoInfo = this.game.BLOCK_TYPES.find(info => info.name ===ammoType);
+                const ammoItem = new Item(this.game, null, ammoInfo.type, ammoInfo);
+                ammoItem.currentStactCount = ammoCount;
+                
+                // 将弹药添加到父网格
+                if (this.parentGrid) {
+                    this.parentGrid.addItem(ammoItem);
+                    ammoItem.refreshUI();
+                }
+                
+                // 清空当前弹药
+                this.ammo[ammoType] = 0;
+            }
+        }
+        this.refreshUI();
+        // console.log(this.ammo)
+    }
+
     /** 
      * 交互回调。当把一个item挪到自己身上时，会触发自己的回调。
      * @returns {boolean} 返回 true 表示已处理交互，false 表示未处理
      */
     onItemInteract(draggingItem: Item, pos: {col: number, row: number}, interacting: Item[]) {
-        if (draggingItem.type in this.accessories) {
-            // 可放入subgrid
+        const accessoryTypes = this.accessories.map(accessory => accessory.type);
+        if (this.ammoType === draggingItem.type) {
+            // let 
+            const draggingItemOriginalParentGrid = draggingItem.parentGrid;
+            // 获取当前子弹总数
+            let totalAmmoCount = this.getTotalAmmo();
+            if ((!this.capacity) || totalAmmoCount === this.capacity) {
+                if(draggingItemOriginalParentGrid) {
+                    draggingItemOriginalParentGrid.removeBlock(draggingItem);
+                    draggingItemOriginalParentGrid.addItem(draggingItem);
+                }
+            } else {
+                if (draggingItem.currentStactCount <= this.capacity - totalAmmoCount) {
+                    if (!this.ammo[draggingItem.name]) {
+                        this.ammo[draggingItem.name] = draggingItem.currentStactCount;
+                    } else {
+                        this.ammo[draggingItem.name] += draggingItem.currentStactCount;
+                    }
+                    draggingItem.currentStactCount = 0;
+                    draggingItem.parentGrid?.removeBlock(draggingItem, true);
+                    // console.log('test', draggingItem, this)
+                } else {
+                    if (!this.ammo[draggingItem.name]) {
+                        this.ammo[draggingItem.name] = this.capacity - totalAmmoCount;
+                    } else {
+                        this.ammo[draggingItem.name] += this.capacity - totalAmmoCount;
+                    }
+                    draggingItem.currentStactCount -= this.capacity - totalAmmoCount;
+                    if(draggingItemOriginalParentGrid) {
+                        draggingItemOriginalParentGrid.removeBlock(draggingItem);
+                        draggingItemOriginalParentGrid.addItem(draggingItem);
+                    }
+                }
+            }
+            this.refreshUI();
+            // console.log('ui refreshed!', this)
+        } else if (accessoryTypes.includes(draggingItem.type)) {
+            // 先检测是否有冲突
+            let bHasConflict = false;
+            if (this.conflicts[draggingItem.type]) {
+            for (const conflictedTypes of this.conflicts[draggingItem.type]) {
+                for (const subgrid of Object.values(this.subgrids)) {
+                    if (subgrid.acceptedTypes.includes(conflictedTypes) && subgrid.blocks.length > 0) {
+                        bHasConflict = true;
+                        break;
+                    }
+                    }
+                }
+                console.log(this.conflicts[draggingItem.type], draggingItem.type, bHasConflict)
+            }
+            if (bHasConflict) {
+                if (draggingItem.parentGrid) {
+                    draggingItem.parentGrid.removeBlock(draggingItem);
+                    draggingItem.parentGrid.addItem(draggingItem, draggingItem.col, draggingItem.row);
+                }
+                return false;
+            }
+            // 找到对应的subgrid
+            const accessoryInfo = this.accessories.find(acc => acc.type === draggingItem.type);
+            if (accessoryInfo) {
+                const subgrid = this.subgrids[accessoryInfo.title];
+                if (subgrid) {
+                    // 尝试将物品添加到subgrid中
+                    const draggingItemOriginalParentGrid = draggingItem.parentGrid;
+                    if(draggingItemOriginalParentGrid) {
+                        draggingItemOriginalParentGrid.removeBlock(draggingItem);
+                    }
+                    const added = subgrid.addItem(draggingItem);
+                    if (added) {
+                        return true;
+                    } else {
+                        const originalItem = subgrid.blocks[0];
+                        subgrid.removeBlock(originalItem);
+                        subgrid.addItem(draggingItem)
+                        draggingItemOriginalParentGrid?.addItem(originalItem);
+                    }
+                    // 如果添加失败，将物品返回到原始位置（暂时忽略返回原位置的情况）
+                    // if (draggingItem.parentGrid) {
+                    //     draggingItem.parentGrid.addItem(draggingItem, draggingItem.col, draggingItem.row);
+                    // }
+                }
+            }
         } else if (this.maxStackCount > 1 && this.name == draggingItem.name) {
             if (this.currentStactCount < this.maxStackCount) {
                 const transAmmoCount = Math.min(
@@ -801,11 +987,13 @@ export class Item {
      * @returns {boolean} 返回 true 表示可以交互，false 表示不能交互
      */
     onItemInteractPreview(draggingItem: Item, pos: {col: number, row: number}, _interacting: Item[]): boolean {
-        // if (item.type in this.accessories) {
-        //     // 可放入subgrid
-        //     return true;
-        // } else 
-        if (this.maxStackCount > 1 && this.name == draggingItem.name) {
+        const accessoryTypes = this.accessories.map(accessory => accessory.type);
+        if (this.ammoType === draggingItem.type) {
+            return true;
+        } else if (accessoryTypes.includes(draggingItem.type)) {
+            // 可放入subgrid
+            return true;
+        } else if (this.maxStackCount > 1 && this.name == draggingItem.name) {
             // 可堆叠
             return true;
         } else {
@@ -860,5 +1048,20 @@ export class Item {
                 return false;
             }
         }
+    }
+
+    // 检查是否与其他配件冲突
+    hasConflict(type: string): boolean {
+        if (!this.conflicts[type]) return false;
+        
+        // 检查所有子网格中的物品
+        for (const subgrid of Object.values(this.subgrids)) {
+            for (const item of subgrid.blocks) {
+                if (this.conflicts[type].includes(item.type)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

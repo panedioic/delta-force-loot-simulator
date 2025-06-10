@@ -55,6 +55,15 @@ export class ItemInfoPanel {
             };
             buttonConfigs.push(splitButton);
         }
+
+        // 如果是枪械，应该有卸载子弹功能
+        if (this.item.ammoType) {
+            const unloadButton: ButtonConfig = {
+                text: "卸载子弹",
+                callback: () => this.item.unloadAmmo()
+            };
+            buttonConfigs.push(unloadButton);
+        }
         
         // 创建主容器
         this.container = new PIXI.Container();
@@ -342,6 +351,11 @@ export class ItemInfoPanel {
         this.maskGraphics.beginFill(0xffffff);
         this.maskGraphics.drawRect(0, 0, this.WIDTH, this.HEIGHT);
         this.maskGraphics.endFill();
+
+        // 添加内容容器到主容器
+        this.container.addChild(this.contentContainer);
+        
+        // 设置遮罩
         this.container.addChild(this.maskGraphics);
         this.contentContainer.mask = this.maskGraphics;
         
@@ -351,9 +365,6 @@ export class ItemInfoPanel {
         // 添加滚动事件监听
         this.container.eventMode = 'static';
         this.container.on('wheel', this.onWheel.bind(this));
-        
-        // 添加内容容器到主容器
-        this.container.addChild(this.contentContainer);
     }
 
     private onDragStart(event: PIXI.FederatedPointerEvent) {

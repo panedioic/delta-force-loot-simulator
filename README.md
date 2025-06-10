@@ -1,4 +1,3 @@
-
 # 三角洲舔包模拟器 🎮
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
@@ -71,3 +70,55 @@ Created by [Y1yan（依言）](https://github.com/panedioic)
 ## 📄 License
 
 本项目采用 Apache-2.0 许可证开源，详见 LICENSE 文件。
+
+## 配置文件说明
+
+### blocks.json
+
+物品配置文件，定义了游戏中所有可用的物品。每个物品包含以下属性：
+
+```json
+{
+    "name": "物品名称",
+    "type": "物品类型",
+    "color": "808080",     // 物品颜色（稀有度）
+    "search": 1,           // 搜索所需时间
+    "cellWidth": 2,        // 物品宽度（格子数）
+    "cellHeight": 1,       // 物品高度（格子数）
+    "maxStack": 60,        // 最大堆叠数量（一般是子弹使用）
+    "value": 100,          // 物品价值（单个价值）
+    "accessories": [       // 配件槽位（可选）
+        {
+            "type": "配件类型",
+            "title": "槽位名称"
+        }
+    ],
+    "subgridLayout": [     // 子网格布局（可选，用于背包、胸挂等）
+        [2, 3, 0, 0],      // [宽度, 高度, x偏移, y偏移]
+        [3, 2, 2, 0]
+    ],
+    "ammo": "Ammo76251",   // 使用子弹类型（枪械）
+    "capacity": 10,        // 弹匣容量（枪械或弹匣）
+    "conflict": [          // 配件间的相互冲突
+      ["Handguard", "HandguardKit"]
+    ]
+}
+```
+
+物品类型包括：
+一般的类型：
+- `primaryWeapon`: 主武器
+- `secondaryWeapon`: 副武器
+- `Helmet`: 头盔
+- `Armor`: 护甲
+- `Backpack`: 背包
+- `ChestRig`: 胸挂
+特殊类型：
+- `Ammo76251`: 弹药
+- `Barrel`: 枪管
+- `Muzzle`: 枪口
+- `Handguard`: 护木
+- `Magazine`: 弹匣
+- `Scope`: 瞄准镜
+- `SideSight`: 侧瞄
+- 等...

@@ -31,8 +31,8 @@ export class Subgrid {
     container: PIXI.Container;
     blocks: Item[];
     title: string;
-    onBlockMoved?: (item: Item, col: number, row: number) => void;
-    onBlockRemoved?: (item: Item) => void;
+    onBlockMoved?: (item: Item, col: number, row: number, grid: Subgrid | null) => void;
+    onBlockRemoved?: (item: Item, grid: Subgrid | null) => void;
 
     // 用于防止出现大小的bug
     additiveSize: { x: number; y: number };
@@ -317,6 +317,7 @@ export class Subgrid {
         if (!bIsAccepted) {
             return false;
         }
+        const objOriginalParentGrid = obj.parentGrid;
         let bFound = col >= 0 && row >= 0;
         // console.log('bFound', bFound, col, row)
         if (!bFound) {
@@ -366,7 +367,7 @@ export class Subgrid {
         }
 
         if (this.onBlockMoved) {
-            this.onBlockMoved(obj, col, row);
+            this.onBlockMoved(obj, col, row, objOriginalParentGrid);
         }
         return true;
     }
@@ -375,14 +376,17 @@ export class Subgrid {
      * Remove a block from the grid.
      * @param {Item} obj - The block to remove
      * */
-    removeBlock(obj: Item) {
+    removeBlock(obj: Item, destroy: boolean=false) {
         const index = this.blocks.indexOf(obj);
         if (index !== -1) {
             this.blocks.splice(index, 1);
             this.container.removeChild(obj.container);
-            // obj.parentGrid = null; // 清除父级网格引用
+            obj.parentGrid = null; // 清除父级网格引用
             if (this.onBlockRemoved) {
-                this.onBlockRemoved(obj);
+                this.onBlockRemoved(obj, this);
+            }
+            if (destroy) {
+                obj.container.destroy();
             }
         }
     }
@@ -458,7 +462,7 @@ export class Subgrid {
         for (const item of this.blocks) {
             this.container.removeChild(item.container);
             if (this.onBlockRemoved) {
-                this.onBlockRemoved(item);
+                this.onBlockRemoved(item, this);
             }
         }
         this.blocks = [];

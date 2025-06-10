@@ -301,7 +301,9 @@
             {"title": "瞄准镜", "type": "Scope"}, 
             {"title": "侧瞄具", "type": "SideSight"}, 
             {"title": "拉机柄", "type": "PullHandle"}
-        ]
+        ],
+        "ammo": "Ammo76239",
+        "capacity": 30
     },
     {
         "cellWidth": 5,
@@ -329,7 +331,9 @@
             {"title": "瞄准镜", "type": "Scope"},
             {"title": "侧瞄具", "type": "SideSight"},
             {"title": "枪托套件", "type": "ButtKit"}
-        ]
+        ],
+        "ammo": "Ammo55645",
+        "capacity": 30
     },
     {
         "cellWidth": 5,
@@ -351,7 +355,9 @@
             {"title": "弹匣", "type": "Magazine"},
             {"title": "瞄准镜", "type": "Scope"},
             {"title": "侧瞄具", "type": "SideSight"}
-        ]
+        ],
+        "ammo": "Ammo55645",
+        "capacity": 30
     },
     {
         "cellWidth": 5,
@@ -371,6 +377,12 @@
             {"title": "瞄准镜", "type": "Scope"},
             {"title": "侧瞄具", "type": "SideSight"},
             {"title": "护木套件", "type": "HandguardKit"}
+        ],
+        "ammo": "Ammo76251",
+        "capacity": 10,
+        "conflict": [
+            ["HandguardKit", "CheekBracket"],
+            ["HandguardKit", "Handguard"]
         ]
     },
     {
@@ -388,7 +400,9 @@
             {"title": "特制部件", "type": "Unique"},
             {"title": "瞄准镜", "type": "Scope"},
             {"title": "侧瞄具", "type": "SideSight"}
-        ]
+        ],
+        "ammo": "Ammo338",
+        "capacity": 5
     },
 
     {
@@ -396,7 +410,7 @@
         "cellHeight": 1,
         "type": "secondaryWeapon",
         "name": "G17",
-        "value": 5000,
+        "value": 4155,
         "color": "808080",
         "accessories": [
             {"title": "9x19mm Ammo", "type": "Ammo919"},
@@ -406,14 +420,16 @@
             {"title": "弹匣", "type": "Magazine"},
             {"title": "瞄准镜", "type": "Scope"},
             {"title": "导轨", "type": "Rail"}
-        ]
+        ],
+        "ammo": "Ammo919",
+        "capacity": 17
     },
     {
         "cellWidth": 2,
         "cellHeight": 1,
         "type": "secondaryWeapon",
         "name": "G18",
-        "value": 6000,
+        "value": 14983,
         "color": "808080",
         "accessories": [
             {"title": "9x19mm Ammo", "type": "Ammo919"},
@@ -423,14 +439,16 @@
             {"title": "弹匣", "type": "Magazine"},
             {"title": "瞄准镜", "type": "Scope"},
             {"title": "导轨", "type": "Rail"}
-        ]
+        ],
+        "ammo": "Ammo919",
+        "capacity": 16
     },
     {
         "cellWidth": 2,
         "cellHeight": 1,
         "type": "secondaryWeapon",
         "name": "93R",
-        "value": 7000,
+        "value": 13225,
         "color": "808080",
         "accessories": [
             {"title": "9x19mm Ammo", "type": "Ammo919"},
@@ -440,7 +458,9 @@
             {"title": "弹匣", "type": "Magazine"},
             {"title": "瞄准镜", "type": "Scope"},
             {"title": "导轨", "type": "Rail"}
-        ]
+        ],
+        "ammo": "Ammo919",
+        "capacity": 12
     },
     {
         "cellWidth": 1,
@@ -509,9 +529,25 @@
     {
         "cellWidth": 1,
         "cellHeight": 1,
+        "type": "CheekBracket",
+        "name": "通用托腮板",
+        "value": 13887,
+        "color": "4b6b87"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
         "type": "Muzzle",
         "name": "堡垒水平补偿器",
-        "value": 60547,
+        "value": 59310,
+        "color": "695687"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "Muzzle",
+        "name": "钛金竞赛制退器",
+        "value": 60204,
         "color": "695687"
     },
     {
@@ -560,7 +596,8 @@
         "type": "Magazine",
         "name": "M14 30发弹匣",
         "value": 26471,
-        "color": "695687"
+        "color": "695687",
+        "capacity": 20
     },
     {
         "cellWidth": 1,

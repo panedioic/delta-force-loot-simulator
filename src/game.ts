@@ -11,7 +11,7 @@ import { SpoilsManager } from "./spoilsManager";
 import { ItemInfoPanel } from "./itemInfoPanel";
 import { Item } from "./item";
 import { DebugTools } from "./debugTools";
-import { Magnify } from "./magnify";
+// import { Magnify } from "./magnify";
 
 declare global {
     interface Window {
@@ -71,6 +71,9 @@ export class Game {
         this.activeItemInfoPanel = null;
         this.debugTools = null;
         this.needSearch = true;
+
+        // debuging
+        this.needSearch = false;
     }
 
     /**
