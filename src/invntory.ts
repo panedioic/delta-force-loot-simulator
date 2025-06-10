@@ -5,6 +5,7 @@ import { Subgrid } from "./subgrid";
 import { GridContainer } from "./gridContainer";
 import { DEFAULT_CELL_SIZE } from "./config";
 import { Item } from "./item";
+import { Magnify } from "./magnify";
 
 /**
  * Inventory, contain multiple gridcontainers.
@@ -27,6 +28,9 @@ export class Inventory {
     baseY: number;
     maxHeight: number;
     enabled: boolean;
+    private currentSearchItem: Item | null = null;
+    private magnify: Magnify | null = null;
+    private searchTimer: number = 0;
 
     constructor(
         game: Game,
@@ -282,5 +286,93 @@ export class Inventory {
             }
             subgrid.clearItem();
         }
+    }
+
+    update() {
+        if (!this.enabled) {
+            this.currentSearchItem = null;
+            if(this.magnify) {
+                this.magnify.hide();
+                this.magnify = null;
+            }
+            this.searchTimer = 0;
+            return;
+        }
+        // 检查是否有需要搜索的物品
+        if (window.game.needSearch && !this.currentSearchItem) {
+            const itemToSearch = this.findNextSearchableItem();
+            if (itemToSearch) {
+                this.startSearchItem(itemToSearch);
+            }
+        }
+
+        // 更新搜索计时
+        if (this.currentSearchItem) {
+            this.searchTimer += window.game.app.ticker.deltaMS / 1000; // 转换为秒
+            if (this.searchTimer >= this.currentSearchItem.searchTime) { // 1秒后完成搜索
+                this.completeSearch();
+            }
+        }
+    }
+
+    private findNextSearchableItem(): Item | null {
+        for (const key in this.contents) {
+            const content = this.contents[key];
+            if (content instanceof Subgrid) {
+                for (const item of content.blocks) {
+                    if (!item.searched) {
+                        return item;
+                    }
+                }
+            } else if (content instanceof GridContainer) {
+                for (const subgrid of content.subgrids) {
+                    for (const item of subgrid.blocks) {
+                        if (!item.searched) {
+                            return item;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private startSearchItem(item: Item) {
+        this.currentSearchItem = item;
+        this.searchTimer = 0;
+
+        // 创建放大镜动画
+        if(!this.currentSearchItem.parentGrid) return;
+        const parentGrid = this.currentSearchItem.parentGrid;
+        const x = parentGrid.container.position.x + 
+            (this.currentSearchItem.col + (this.currentSearchItem.cellWidth-1) / 2) * 
+            parentGrid.cellSize * parentGrid.aspect;
+        const y = parentGrid.container.position.y + 
+            (this.currentSearchItem.row + (this.currentSearchItem.cellHeight-1) / 2) * 
+            parentGrid.cellSize;
+        this.magnify = new Magnify(
+            parentGrid.container,
+            x,
+            y,
+            72,
+            72
+        );
+        this.magnify.show();
+    }
+
+    private completeSearch() {
+        if (this.currentSearchItem) {
+            this.currentSearchItem.searched = true;
+            this.currentSearchItem.searchMask.visible = false;
+        }
+
+        // 移除放大镜
+        if (this.magnify) {
+            this.magnify.hide();
+            this.magnify = null;
+        }
+
+        this.currentSearchItem = null;
+        this.searchTimer = 0;
     }
 }

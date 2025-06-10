@@ -16,14 +16,11 @@ export class InfoDialog {
     
 
     initUI() {
-        const appBoundingClientRect = this.game.app.canvas.getBoundingClientRect();
-        console.log(appBoundingClientRect)
-
         const UIContainer = document.createElement('div');
         UIContainer.style.cssText = `
-            position: absolute;
-            left: ${appBoundingClientRect.x + 42}px;
-            top: ${appBoundingClientRect.y + 386}px;
+            position: fixed;
+            left: 42px;
+            top: 386px;
             width: 200px;
             height: 50px;
             background: white;
@@ -33,7 +30,13 @@ export class InfoDialog {
             padding: 0 10px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             z-index: 1000;
+            transform: translate(${this.game.app.canvas.offsetLeft}px, ${this.game.app.canvas.offsetTop}px);
         `;
+
+        // 监听窗口大小变化，更新位置
+        window.addEventListener('resize', () => {
+            UIContainer.style.transform = `translate(${this.game.app.canvas.offsetLeft}px, ${this.game.app.canvas.offsetTop}px)`;
+        });
 
         const infoText = document.createElement('span');
         infoText.textContent = '游戏说明:';

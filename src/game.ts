@@ -11,6 +11,7 @@ import { SpoilsManager } from "./spoilsManager";
 import { ItemInfoPanel } from "./itemInfoPanel";
 import { Item } from "./item";
 import { DebugTools } from "./debugTools";
+import { Magnify } from "./magnify";
 
 declare global {
     interface Window {
@@ -45,6 +46,9 @@ export class Game {
 
     activeItemInfoPanel: ItemInfoPanel | null;
 
+    /** 搜索模式 */
+    needSearch: boolean;
+
     // debug
     debugTools: DebugTools | null;
 
@@ -66,6 +70,7 @@ export class Game {
         this.instances = [];
         this.activeItemInfoPanel = null;
         this.debugTools = null;
+        this.needSearch = true;
     }
 
     /**
@@ -98,6 +103,13 @@ export class Game {
         } else {
             this.debugTools = null;
         }
+
+        // test magnify
+        // 在需要的地方创建放大镜实例
+        // const magnify = new Magnify(this.app.stage, 0, 0, 72, 72);
+
+        // 控制显示/隐藏
+        // magnify.show();  // 显示
     }
 
     /**
@@ -200,8 +212,53 @@ export class Game {
         if (appElement) {
             appElement.appendChild(this.app.canvas);
             window.app = appElement;
+            
+            // 设置app元素样式
+            appElement.style.cssText = `
+                width: 100vw;
+                height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background: #000;
+                overflow: hidden;
+            `;
+
+            // 自动调整canvas大小保持16:9
+            const resizeCanvas = () => {
+                const windowWidth = window.innerWidth;
+                const windowHeight = window.innerHeight;
+                const aspectRatio = 16 / 9;
+                
+                let width = windowWidth;
+                let height = width / aspectRatio;
+                
+                if (height > windowHeight) {
+                    height = windowHeight;
+                    width = height * aspectRatio;
+                }
+                
+                this.app.renderer.resize(width, height);
+                this.app.canvas.style.width = `${width}px`;
+                this.app.canvas.style.height = `${height}px`;
+            };
+
+            // 初始调整和监听窗口大小变化
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
         }
         window.game = this;
+
+        // 添加更新循环
+        this.app.ticker.add(() => {
+            if(!this.spoilsManager) return;
+            for (const inventory of this.spoilsManager.inventories) {
+                inventory.update();
+            }
+            // if (this.playerInventory) {
+            //     this.playerInventory.update();
+            // }
+        });
     }
 
     /**

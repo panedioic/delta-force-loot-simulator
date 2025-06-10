@@ -52,6 +52,11 @@ export class Item {
     clickTimeout: number | null;
     clickCount: number;
 
+    /** 搜索 */
+    searched: boolean;
+    searchTime: number;
+    searchMask: PIXI.Graphics;
+
     constructor(game: Game, parentGrid: Subgrid | null, type: string, itemType: any) {
         this.game = game;
         this.parentGrid = parentGrid;
@@ -109,6 +114,10 @@ export class Item {
 
         this.clickTimeout = null;
         this.clickCount = 0;
+
+        this.searched = false;
+        this.searchTime = 1;
+        this.searchMask = new PIXI.Graphics();
 
         this.initUI();
     }
@@ -212,6 +221,22 @@ export class Item {
 
         // 添加文字到容器
         this.container.addChild(this.graphicsText);
+
+        // this.searchMask = new PIXI.Graphics();
+        // 绘制边框
+        this.searchMask.rect(
+            -this.pixelWidth / 2 + 2,
+            -this.pixelHeight / 2 + 2,
+            this.pixelWidth,
+            this.pixelHeight,
+        );
+        this.searchMask.fill({ color: 0x040404 });
+        this.searchMask.stroke({ width: 3, color: 0x666666, alpha: 0.8 });
+        this.container.addChild(this.searchMask);
+
+        if (this.searched) {
+            this.searchMask.visible = false;
+        }
     }
 
     refreshUI() {
@@ -235,6 +260,9 @@ export class Item {
         this.container.eventMode = "static";
 
         this.container.on('pointerdown', (event) => {
+            if(!this.searched) {
+                return;
+            }
             if (this.game.isGameStarted) {
                 // 增加点击数量
                 this.clickCount++;
