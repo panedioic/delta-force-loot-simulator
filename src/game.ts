@@ -11,6 +11,7 @@ import { SpoilsManager } from "./spoilsManager";
 import { ItemInfoPanel } from "./itemInfoPanel";
 import { Item } from "./item";
 import { DebugTools } from "./debugTools";
+import { TitleBar } from "./titleBar";
 // import { Magnify } from "./magnify";
 
 declare global {
@@ -32,6 +33,8 @@ export class Game {
     grids: Subgrid[];
     currentRightRegion: number;
     totalRightRegion: number;
+    icon: PIXI.Texture | null;
+    titleBar: TitleBar | null;
 
     // Components
     totalValueDisplay: TotalValueDisplay | null;
@@ -64,6 +67,8 @@ export class Game {
         this.regionSwitchUI = null;
         this.isGameStarted = false; // 是否开始游戏
         this.timer = null; // 计时器实例
+        this.icon = null;
+        this.titleBar = null;
         // this.scrollableContainer = null; // 滚动容器实例
         this.spoilsManager = null;
         this.infoDialog = null;
@@ -84,12 +89,14 @@ export class Game {
         await this.loadItemTypes();
         await this.loadGridInfo();
         await this.loadGridInfoSpoils();
+        await this.loadIcon();
         // Create PIXI application
         await this.createPixiApp();
         this.initGameUI(); // 创建背景
-        this.initGameUI();
         this.initGameComponents();
-        // this.initGrids();
+
+        // 初始化标题栏
+        this.titleBar = new TitleBar();
 
         // 计算初始总价值
         if (this.totalValueDisplay) {
@@ -195,6 +202,19 @@ export class Game {
             if (loadingElement) {
                 loadingElement.textContent = "加载网格数据失败，请刷新重试";
             }
+            throw error;
+        }
+    }
+
+    /**
+     * 加载游戏图标
+     * @returns {Promise<void>} 当图标加载完成时解析的Promise
+     */
+    async loadIcon(): Promise<void> {
+        try {
+            this.icon = await PIXI.Assets.load("/deltaforce.png");
+        } catch (error) {
+            console.error("Failed to load game icon:", error);
             throw error;
         }
     }
