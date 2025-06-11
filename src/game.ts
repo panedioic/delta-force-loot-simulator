@@ -105,13 +105,6 @@ export class Game {
         } else {
             this.debugTools = null;
         }
-
-        // test magnify
-        // 在需要的地方创建放大镜实例
-        // const magnify = new Magnify(this.app.stage, 0, 0, 72, 72);
-
-        // 控制显示/隐藏
-        // magnify.show();  // 显示
     }
 
     /**
@@ -235,74 +228,12 @@ export class Game {
         bg.roundRect(0, 0, GAME_WIDTH, GAME_HEIGHT, 10);
         bg.fill({ color: 0x242f39 });
         this.app.stage.addChild(bg);
-
-        // Info background
-        // const infoBG = new PIXI.Graphics();
-        // infoBG.rect(30, 124, 246, 580);
-        // infoBG.fill({ color: 0xffffff, alpha: 0.1 });
-        // this.app.stage.addChild(infoBG);
-
-        // const infoTitleBG = new PIXI.Graphics();
-        // infoTitleBG.rect(30, 72, 760, 50);
-        // infoTitleBG.fill({ color: 0xffffff, alpha: 0.3 });
-        // this.app.stage.addChild(infoTitleBG);
-
-        // const infoTitleText = new PIXI.Text({
-        //     text: "个人物资",
-        //     style: {
-        //         fontFamily: "Arial",
-        //         fontSize: 24,
-        //         fill: 0xffffff,
-        //         fontWeight: "bold",
-        //         stroke: { color: "black", width: 3 },
-        //     },
-        // });
-        // infoTitleText.anchor.set(0.5);
-        // infoTitleText.position.set(100, 100);
-        // this.app.stage.addChild(infoTitleText);
-
-        // Spoils background
-        // const spoilsTitleBG = new PIXI.Graphics();
-        // spoilsTitleBG.rect(804, 72, 508, 50);
-        // spoilsTitleBG.fill({ color: 0xff0000, alpha: 0.3 });
-        // this.app.stage.addChild(spoilsTitleBG);
-
-        // const infoTitleText2 = new PIXI.Text({
-        //     text: "战利品",
-        //     style: {
-        //         fontFamily: "Arial",
-        //         fontSize: 24,
-        //         fill: 0xffffff,
-        //         fontWeight: "bold",
-        //         stroke: { color: "black", width: 3 },
-        //     },
-        // });
-        // infoTitleText2.anchor.set(0.5);
-        // infoTitleText2.position.set(860, 100);
-        // this.app.stage.addChild(infoTitleText2);
     }
 
     /**
      * Initialize the game components.
      * */
     initGameComponents() {
-        // this.totalValueDisplay = new TotalValueDisplay(this, 42, 186);
-        // this.playerInventory = new Inventory(
-        //     this,
-        //     true,
-        //     true,
-        //     276,
-        //     124
-        // )
-        // this.spoilsManager = new SpoilsManager(
-        //     this,
-        //     806,
-        //     128,
-        //     3,
-        //     3
-        // );
-        // this.regionSwitchUI = new RegionSwitchUI(this, 920, 86, () => {});
-        // this.regionSwitchUI.addToStage();
         this.playerRegion = new Region({x: 30, y: 72}, {
             title: "个人物资",
             width: 760,
@@ -334,23 +265,6 @@ export class Game {
         this.spoilsRegion.addInventory(1, true);
         this.spoilsRegion.switchTo(0);
         this.spoilsRegion.addSwitcherUI();
-
-
-
-        // this.timer = new Timer(
-        //     this,
-        //     42,
-        //     266,
-        //     () => {
-        //         this.isGameStarted = true; // 开始计时时，允许拖动方块
-        //     },
-        //     () => {
-        //         this.isGameStarted = false; // 暂停计时时，禁止拖动方块
-        //     },
-        // );
-        // Initialize info dialog
-        // this.infoDialog = new InfoDialog(this);
-        // this.infoDialog.initUI();
     }
 
     createItemInfoPanel(item: Item) {
