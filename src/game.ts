@@ -9,9 +9,11 @@ import { Timer } from "./components/timer";
 import { Inventory } from "./invntory";
 import { ItemInfoPanel } from "./itemInfoPanel";
 import { Item } from "./item";
-import { DebugTools } from "./debugTools";
 import { TitleBar } from "./titleBar";
 import { Region } from "./region";
+import { SettingsDialog } from "./components/SettingsDialog";
+import { ItemManager } from "./components/ItemManager";
+import { DebugTools } from "./components/DebugTools";
 // import { Magnify } from "./magnify";
 
 declare global {
@@ -94,14 +96,6 @@ export class Game {
 
         // 初始化标题栏
         this.titleBar = new TitleBar();
-
-        // Debug Tools
-        if (import.meta.env.MODE === "development") {
-            this.debugTools = new DebugTools(this);
-            this.debugTools.initItems();
-        } else {
-            this.debugTools = null;
-        }
     }
 
     /**
@@ -245,6 +239,9 @@ export class Game {
         this.playerRegion.addComponent('totalValueDisplay', TotalValueDisplay);
         this.playerRegion.addComponent('timer', Timer);
         this.playerRegion.addComponent('infoDialog', InfoDialog);
+        this.playerRegion.addComponent('settingsDialog', SettingsDialog);
+        this.playerRegion.addComponent('itemManager', ItemManager);
+        this.playerRegion.addComponent('debugTools', DebugTools);
         this.playerRegion.addInventory(1, false);
         this.playerRegion.switchTo(0);
 
@@ -258,8 +255,12 @@ export class Game {
             backgroundColor: 0xffffff,
             backgroundAlpha: 0.1,
         });
-        this.spoilsRegion.addInventory(0, true);
-        this.spoilsRegion.addInventory(1, true);
+        for (let i = 0; i < 3; i += 1) {
+            this.spoilsRegion.addInventory(0, true);
+        }
+        for (let i = 0; i < 3; i += 1) {
+            this.spoilsRegion.addInventory(1, true);
+        }
         this.spoilsRegion.switchTo(0);
         this.spoilsRegion.addSwitcherUI();
     }
