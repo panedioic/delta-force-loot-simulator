@@ -136,20 +136,30 @@ export class InfoDialog {
         content.style.cssText = `
             font-size: 16px;
             line-height: 24px;
+            max-height: calc(100% - 80px);
+            overflow-y: auto;
+            padding-right: 10px;
         `;
         content.innerHTML = `
             游戏介绍：<br>
-            三角洲行动的舔包模拟器。通过拖拽方式管理你的装备和收集品。<br>
+            三角洲行动的舔包模拟器。<br>
+            担心自己打完架后不会舔包痛失百万哈夫币？看见主播清图后的炒菜看的手痒？快来试试这款三角洲舔包模拟器吧！让你不用打开三角洲也可以享受舔包的感觉~<br>
             <br>
             玩法说明：<br>
-            1. 拖动物品到合适的格子中存放<br>
-            2. 按R键可以旋转物品<br>
-            3. 合理安排空间以获得最大收益<br>
+            1. 点击左侧的"开始"按钮开始游戏。<br>
+            2. "战利品"的有房按钮可以切换战利品区域。<br>
+            3. 子弹可以堆叠，点开枪械的详细面板还可以改枪！<br>
+            <br>
+            注意：<br>
+            1. 目前游戏还处于 Demo 阶段，存在着大量的 bug，欢迎及时反馈！<br>
+            2. 目前道具还并不齐全，欢迎有帕鲁帮我补齐（会署名，但是没有其他奖励了，作者也很穷）<br>
+            3. 所有的道具价值都是我从游戏里抄的那个时候的价值，不会更新（懒得更新了，不过或许以后可以和其他数据网站合作一下？）<br>
+            4. 音效估计也不会有了（虽然使用了 Vercel 部署，但流量还是很贵的啊。。）<br>
             <br>
             游戏版本：${version}<br>
             项目作者：依言（Y1yan）<br>
             项目地址：<a href="https://github.com/panedioic/delta-force-loot-simulator" target="_blank" style="color: #66ccff; text-decoration: none;">https://github.com/panedioic/delta-force-loot-simulator</a><br>
-            讨论群：还没有建好（
+            讨论群：并没有建群的想法（
         `;
 
         this.infoDialogContainerDOM.appendChild(closeBtn);

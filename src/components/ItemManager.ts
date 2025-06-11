@@ -443,7 +443,6 @@ export class ItemManager {
                 <div style="margin-bottom: 5px;">类型: ${item.type}</div>
                 <div style="margin-bottom: 5px;">价值: ${item.value}</div>
                 <div style="margin-bottom: 5px;">尺寸: ${item.width}x${item.height}</div>
-                <div style="margin-bottom: 5px;">材质: ${item.texture}</div>
                 ${item.subgridLayout ? '<div style="margin-bottom: 5px;">包含子网格</div>' : ''}
             `;
 
