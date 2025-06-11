@@ -21,7 +21,6 @@ interface RegionOptions {
  */
 export class Region {
     private container: PIXI.Container;
-    private contentArea: PIXI.Container = new PIXI.Container();
     private switcherUI: RegionSwitchUI | null = null;
     private currentComponentPosition: {
         x: number;
@@ -86,12 +85,6 @@ export class Region {
         contentBG.rect(0, this.options.titleHeight!, this.options.width!, this.options.height! - this.options.titleHeight!);
         contentBG.fill({ color: this.options.backgroundColor!, alpha: this.options.backgroundAlpha! });
         this.container.addChild(contentBG);
-    }
-
-    private initContentArea() {
-        this.contentArea = new PIXI.Container();
-        this.contentArea.position.set(0, this.options.titleHeight!);
-        this.container.addChild(this.contentArea);
     }
 
     /**
