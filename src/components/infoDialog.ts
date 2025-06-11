@@ -1,72 +1,84 @@
-import { Game } from "./game";
-import { version } from "../package.json";
+import { version } from "../../package.json";
+import * as PIXI from 'pixi.js';
 
 export class InfoDialog {
-    private game: Game;
-    private container!: HTMLDivElement;
+    private infoDialogContainerDOM!: HTMLDivElement;
     private isDragging: boolean = false;
     private dragStartPos = { x: 0, y: 0 };
     private dialogStartPos = { x: 0, y: 0 };
 
-    constructor(game: Game) {
-        this.game = game;
-        this.initDialog();
+    public container!: PIXI.Container;
+    public additiveSize: {
+        x: number,
+        y: number
+    } = {
+        x: 220,
+        y: 50
     }
 
-    
+    constructor() {
+        this.initDialog();
+        this.initUI();
+    }
 
-    initUI() {
-        const UIContainer = document.createElement('div');
-        UIContainer.style.cssText = `
-            position: fixed;
-            left: 42px;
-            top: 386px;
-            width: 200px;
-            height: 50px;
-            background: white;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            padding: 0 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            z-index: 1000;
-            transform: translate(${this.game.app.canvas.offsetLeft}px, ${this.game.app.canvas.offsetTop}px);
-        `;
+    private initUI() {
+        // 创建主容器
+        this.container = new PIXI.Container();
+        
+        // 创建背景
+        const background = new PIXI.Graphics();
+        background.roundRect(0, 0, 220, 50, 10);
+        background.fill(0xFFFFFF);
+        this.container.addChild(background);
 
-        // 监听窗口大小变化，更新位置
-        window.addEventListener('resize', () => {
-            UIContainer.style.transform = `translate(${this.game.app.canvas.offsetLeft}px, ${this.game.app.canvas.offsetTop}px)`;
+        // 创建文本
+        const infoText = new PIXI.Text({
+            text: "游戏说明:",
+            style: {
+                fontFamily: "Arial",
+                fontSize: 22,
+                fill: 0x333333,
+                fontWeight: "bold",
+            },
+        });
+        infoText.position.set(10, 13);
+        this.container.addChild(infoText);
+
+        // 创建按钮
+        const infoButton = new PIXI.Container();
+        const buttonBg = new PIXI.Graphics();
+        buttonBg.roundRect(0, 0, 80, 30, 5);
+        buttonBg.fill(0x4CAF50);
+        
+        const buttonText = new PIXI.Text({
+            text: "Click me!",
+            style: {
+                fontFamily: "Arial",
+                fontSize: 14,
+                fill: 0xffffff,
+            },
+        });
+        buttonText.position.set(
+            (80 - buttonText.width) / 2,
+            (30 - buttonText.height) / 2
+        );
+
+        infoButton.addChild(buttonBg);
+        infoButton.addChild(buttonText);
+        infoButton.position.set(110, 10);
+        
+        // 添加按钮交互
+        infoButton.eventMode = 'static';
+        infoButton.cursor = 'pointer';
+        infoButton.on('pointerdown', () => this.show());
+        infoButton.on('pointerover', () => {
+            buttonBg.tint = 0x45A049;
+        });
+        infoButton.on('pointerout', () => {
+            buttonBg.tint = 0xFFFFFF;
         });
 
-        const infoText = document.createElement('span');
-        infoText.textContent = '游戏说明:';
-        infoText.style.cssText = `
-            font-family: Arial;
-            font-size: 22px;
-            color: #333;
-            font-weight: bold;
-            margin-right: 10px;
-            user-select: none;
-        `;
-
-        const infoBtn = document.createElement('button');
-        infoBtn.textContent = 'Click me!';
-        infoBtn.style.cssText = `
-            background: #4caf50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 5px 15px;
-            cursor: pointer;
-            font-size: 14px;
-            user-select: none;
-        `;
-        infoBtn.onclick = () => this.show();
-
-        UIContainer.appendChild(infoText);
-        UIContainer.appendChild(infoBtn);
-        // document.body.appendChild(UIContainer);
-        window.app.appendChild(UIContainer);
+        this.container.addChild(infoButton);
     }
 
     private initDialog() {
@@ -76,8 +88,8 @@ export class InfoDialog {
             return;
         }
 
-        this.container = document.createElement('div');
-        this.container.style.cssText = `
+        this.infoDialogContainerDOM = document.createElement('div');
+        this.infoDialogContainerDOM.style.cssText = `
             position: fixed;
             width: 600px;
             height: 400px;
@@ -140,14 +152,13 @@ export class InfoDialog {
             讨论群：还没有建好（
         `;
 
-        this.container.appendChild(closeBtn);
-        this.container.appendChild(title);
-        this.container.appendChild(content);
-        // appElement.appendChild(this.container);
-        window.app.appendChild(this.container)
+        this.infoDialogContainerDOM.appendChild(closeBtn);
+        this.infoDialogContainerDOM.appendChild(title);
+        this.infoDialogContainerDOM.appendChild(content);
+        window.app.appendChild(this.infoDialogContainerDOM);
 
         // 添加拖拽功能
-        this.container.addEventListener('mousedown', this.onDragStart.bind(this));
+        this.infoDialogContainerDOM.addEventListener('mousedown', this.onDragStart.bind(this));
         document.addEventListener('mousemove', this.onDragMove.bind(this));
         document.addEventListener('mouseup', this.onDragEnd.bind(this));
     }
@@ -161,8 +172,8 @@ export class InfoDialog {
             y: event.clientY
         };
         this.dialogStartPos = {
-            x: this.container.offsetLeft,
-            y: this.container.offsetTop
+            x: this.infoDialogContainerDOM.offsetLeft,
+            y: this.infoDialogContainerDOM.offsetTop
         };
     }
 
@@ -172,8 +183,8 @@ export class InfoDialog {
         const dx = event.clientX - this.dragStartPos.x;
         const dy = event.clientY - this.dragStartPos.y;
         
-        this.container.style.left = `${this.dialogStartPos.x + dx}px`;
-        this.container.style.top = `${this.dialogStartPos.y + dy}px`;
+        this.infoDialogContainerDOM.style.left = `${this.dialogStartPos.x + dx}px`;
+        this.infoDialogContainerDOM.style.top = `${this.dialogStartPos.y + dy}px`;
     }
 
     private onDragEnd() {
@@ -181,14 +192,14 @@ export class InfoDialog {
     }
 
     show() {
-        this.container.style.display = 'block';
+        this.infoDialogContainerDOM.style.display = 'block';
         const left = (window.innerWidth - 600) / 2;
         const top = (window.innerHeight - 400) / 2;
-        this.container.style.left = `${left}px`;
-        this.container.style.top = `${top}px`;
+        this.infoDialogContainerDOM.style.left = `${left}px`;
+        this.infoDialogContainerDOM.style.top = `${top}px`;
     }
 
     hide() {
-        this.container.style.display = 'none';
+        this.infoDialogContainerDOM.style.display = 'none';
     }
 }

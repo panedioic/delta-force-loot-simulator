@@ -1,27 +1,22 @@
 import * as PIXI from "pixi.js";
-import { Game } from "./game";
 
 /**
  * 显示玩家目前获得的所有物资的总价值的组件。
- * @param {Game} game - The game instance
- * @param {number} x - The x coordinate of the display
- * @param {number} y - The y coordinate of the display
  * */
 export class TotalValueDisplay {
-    private game: Game;
-    private x: number;
-    private y: number;
-    totalValue: number;
     private container: PIXI.Container;
-
     private valueText: PIXI.Text;
 
-    constructor(game: Game, x: number, y: number) {
-        this.game = game;
-        this.x = x;
-        this.y = y;
-        this.totalValue = 0;
+    public totalValue: number = 0;
+    public additiveSize: {
+        x: number;
+        y: number;
+    } = {
+        x: 220,
+        y: 60,
+    };
 
+    constructor() {
         this.container = new PIXI.Container();
         this.valueText = new PIXI.Text();
 
@@ -61,18 +56,13 @@ export class TotalValueDisplay {
         });
         this.valueText.position.set(100, 13);
         this.container.addChild(this.valueText);
-
-        // 定位在左侧网格上方
-        this.container.position.set(this.x, this.y);
-
-        this.game.app.stage.addChild(this.container);
     }
 
     updateTotalValue() {
         this.totalValue = 0;
 
         // 遍历所有 countable 为 true 的 Grid
-        this.game.grids.forEach((grid) => {
+        window.game.grids.forEach((grid) => {
             if (grid.countable) {
                 grid.blocks.forEach((block) => {
                     this.totalValue += block.getValue();

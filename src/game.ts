@@ -3,15 +3,16 @@ import { GAME_WIDTH, GAME_HEIGHT } from "./config";
 import { RIGHT_REGION_COUNT } from "./config";
 import { Subgrid } from "./subgrid";
 import { TotalValueDisplay } from "./totalValueDisplay";
-import { RegionSwitchUI } from "./regionSwitchUI";
-import { InfoDialog } from "./infoDialog";
-import { Timer } from "./timer";
+import { RegionSwitchUI } from "./components/regionSwitchUI";
+import { InfoDialog } from "./components/infoDialog";
+import { Timer } from "./components/timer";
 import { Inventory } from "./invntory";
 import { SpoilsManager } from "./spoilsManager";
 import { ItemInfoPanel } from "./itemInfoPanel";
 import { Item } from "./item";
 import { DebugTools } from "./debugTools";
 import { TitleBar } from "./titleBar";
+import { Region } from "./region";
 // import { Magnify } from "./magnify";
 
 declare global {
@@ -37,6 +38,8 @@ export class Game {
     titleBar: TitleBar | null;
 
     // Components
+    spoilsRegion: Region | null = null;
+    playerRegion: Region | null = null;
     totalValueDisplay: TotalValueDisplay | null;
     regionSwitchUI: RegionSwitchUI | null;
     isGameStarted: boolean;
@@ -94,14 +97,6 @@ export class Game {
 
         // 初始化标题栏
         this.titleBar = new TitleBar();
-
-        // 计算初始总价值
-        if (this.totalValueDisplay) {
-            this.totalValueDisplay.updateTotalValue();
-            console.log(`初始总价值: ${this.totalValueDisplay.totalValue}`);
-        } else {
-            console.error("TotalValueDisplay is not initialized.");
-        }
 
         // Debug Tools
         if (import.meta.env.MODE === "development") {
@@ -242,86 +237,120 @@ export class Game {
         this.app.stage.addChild(bg);
 
         // Info background
-        const infoBG = new PIXI.Graphics();
-        infoBG.rect(30, 124, 246, 580);
-        infoBG.fill({ color: 0xffffff, alpha: 0.1 });
-        this.app.stage.addChild(infoBG);
+        // const infoBG = new PIXI.Graphics();
+        // infoBG.rect(30, 124, 246, 580);
+        // infoBG.fill({ color: 0xffffff, alpha: 0.1 });
+        // this.app.stage.addChild(infoBG);
 
-        const infoTitleBG = new PIXI.Graphics();
-        infoTitleBG.rect(30, 72, 760, 50);
-        infoTitleBG.fill({ color: 0xffffff, alpha: 0.3 });
-        this.app.stage.addChild(infoTitleBG);
+        // const infoTitleBG = new PIXI.Graphics();
+        // infoTitleBG.rect(30, 72, 760, 50);
+        // infoTitleBG.fill({ color: 0xffffff, alpha: 0.3 });
+        // this.app.stage.addChild(infoTitleBG);
 
-        const infoTitleText = new PIXI.Text({
-            text: "个人物资",
-            style: {
-                fontFamily: "Arial",
-                fontSize: 24,
-                fill: 0xffffff,
-                fontWeight: "bold",
-                stroke: { color: "black", width: 3 },
-            },
-        });
-        infoTitleText.anchor.set(0.5);
-        infoTitleText.position.set(100, 100);
-        this.app.stage.addChild(infoTitleText);
+        // const infoTitleText = new PIXI.Text({
+        //     text: "个人物资",
+        //     style: {
+        //         fontFamily: "Arial",
+        //         fontSize: 24,
+        //         fill: 0xffffff,
+        //         fontWeight: "bold",
+        //         stroke: { color: "black", width: 3 },
+        //     },
+        // });
+        // infoTitleText.anchor.set(0.5);
+        // infoTitleText.position.set(100, 100);
+        // this.app.stage.addChild(infoTitleText);
 
         // Spoils background
-        const spoilsTitleBG = new PIXI.Graphics();
-        spoilsTitleBG.rect(804, 72, 508, 50);
-        spoilsTitleBG.fill({ color: 0xff0000, alpha: 0.3 });
-        this.app.stage.addChild(spoilsTitleBG);
+        // const spoilsTitleBG = new PIXI.Graphics();
+        // spoilsTitleBG.rect(804, 72, 508, 50);
+        // spoilsTitleBG.fill({ color: 0xff0000, alpha: 0.3 });
+        // this.app.stage.addChild(spoilsTitleBG);
 
-        const infoTitleText2 = new PIXI.Text({
-            text: "战利品",
-            style: {
-                fontFamily: "Arial",
-                fontSize: 24,
-                fill: 0xffffff,
-                fontWeight: "bold",
-                stroke: { color: "black", width: 3 },
-            },
-        });
-        infoTitleText2.anchor.set(0.5);
-        infoTitleText2.position.set(860, 100);
-        this.app.stage.addChild(infoTitleText2);
+        // const infoTitleText2 = new PIXI.Text({
+        //     text: "战利品",
+        //     style: {
+        //         fontFamily: "Arial",
+        //         fontSize: 24,
+        //         fill: 0xffffff,
+        //         fontWeight: "bold",
+        //         stroke: { color: "black", width: 3 },
+        //     },
+        // });
+        // infoTitleText2.anchor.set(0.5);
+        // infoTitleText2.position.set(860, 100);
+        // this.app.stage.addChild(infoTitleText2);
     }
 
     /**
      * Initialize the game components.
      * */
     initGameComponents() {
-        this.totalValueDisplay = new TotalValueDisplay(this, 42, 186);
-        this.playerInventory = new Inventory(
-            this,
-            true,
-            true,
-            276,
-            124
-        )
-        this.spoilsManager = new SpoilsManager(
-            this,
-            806,
-            128,
-            3,
-            3
-        );
-        this.regionSwitchUI = new RegionSwitchUI(this, 920, 86, () => {});
-        this.regionSwitchUI.addToStage();
-        this.timer = new Timer(
-            this,
-            42,
-            266,
-            () => {
-                this.isGameStarted = true; // 开始计时时，允许拖动方块
-            },
-            () => {
-                this.isGameStarted = false; // 暂停计时时，禁止拖动方块
-            },
-        );
+        // this.totalValueDisplay = new TotalValueDisplay(this, 42, 186);
+        // this.playerInventory = new Inventory(
+        //     this,
+        //     true,
+        //     true,
+        //     276,
+        //     124
+        // )
+        // this.spoilsManager = new SpoilsManager(
+        //     this,
+        //     806,
+        //     128,
+        //     3,
+        //     3
+        // );
+        // this.regionSwitchUI = new RegionSwitchUI(this, 920, 86, () => {});
+        // this.regionSwitchUI.addToStage();
+        this.playerRegion = new Region({x: 30, y: 72}, {
+            title: "个人物资",
+            width: 760,
+            height: 632,
+            titleColor: 0xffffff,
+            titleAlpha: 0.3,
+            componentWidth: 246,
+            backgroundColor: 0xffffff,
+            backgroundAlpha: 0.1,
+            countable: true
+        });
+        this.playerRegion.addComponent('totalValueDisplay', TotalValueDisplay);
+        this.playerRegion.addComponent('timer', Timer);
+        this.playerRegion.addComponent('infoDialog', InfoDialog);
+        this.playerRegion.addInventory(1, false);
+        this.playerRegion.switchTo(0);
+
+        this.spoilsRegion = new Region({x: 804, y: 72}, {
+            title: "战利品",
+            width: 508,
+            height: 632,
+            titleColor: 0xff0000,
+            titleAlpha: 0.3,
+            componentWidth: 0,
+            backgroundColor: 0xffffff,
+            backgroundAlpha: 0.1,
+        });
+        this.spoilsRegion.addInventory(0, true);
+        this.spoilsRegion.addInventory(1, true);
+        this.spoilsRegion.switchTo(0);
+        this.spoilsRegion.addSwitcherUI();
+
+
+
+        // this.timer = new Timer(
+        //     this,
+        //     42,
+        //     266,
+        //     () => {
+        //         this.isGameStarted = true; // 开始计时时，允许拖动方块
+        //     },
+        //     () => {
+        //         this.isGameStarted = false; // 暂停计时时，禁止拖动方块
+        //     },
+        // );
         // Initialize info dialog
-        this.infoDialog = new InfoDialog(this);
-        this.infoDialog.initUI();
+        // this.infoDialog = new InfoDialog(this);
+        // this.infoDialog.initUI();
     }
 
     createItemInfoPanel(item: Item) {

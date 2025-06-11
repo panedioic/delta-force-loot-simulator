@@ -5,6 +5,7 @@ import { Game } from "./game";
 import { Subgrid } from "./subgrid";
 import { GAME_WIDTH, GAME_HEIGHT } from "./config";
 import { DEFAULT_CELL_SIZE } from "./config";
+import { updateTotalValueDisplay } from "./utils";
 // import type { Grid, Inventory } from "./types";
 
 export class Item {
@@ -523,9 +524,7 @@ export class Item {
         }
 
         // 更新总价值显示
-        if (this.game.totalValueDisplay) {
-            this.game.totalValueDisplay.updateTotalValue();
-        }
+        updateTotalValueDisplay();
         
         this.isDragging = false;
         this.hasMoved = false;

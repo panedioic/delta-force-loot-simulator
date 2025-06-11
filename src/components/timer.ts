@@ -1,33 +1,28 @@
 import * as PIXI from "pixi.js";
-import { Game } from "./game";
 
 export class Timer {
-    private game: Game;
-    private x: number;
-    private y: number;
     private timer: number;
     private isRunning: boolean;
     private timerText: PIXI.Text;
     private ticker: PIXI.Ticker;
-    private onStartCallback: Function;
-    private onPauseCallback: Function;
+
+    public container: PIXI.Container;
+    public additiveSize: {
+        x: number,
+        y: number
+    } = {
+        x: 220,
+        y: 100
+    }
 
     constructor(
-        game: Game,
-        x: number,
-        y: number,
-        onStartCallback: Function,
-        onPauseCallback: Function,
     ) {
-        this.game = game;
-        this.x = x;
-        this.y = y;
         this.timer = 0; // 计时器时间（以毫秒为单位）
         this.isRunning = false;
         this.timerText = new PIXI.Text();
         this.ticker = new PIXI.Ticker(); // 使用 PixiJS 的 Ticker
-        this.onStartCallback = onStartCallback;
-        this.onPauseCallback = onPauseCallback;
+
+        this.container = new PIXI.Container();
 
         this.initUI();
     }
@@ -36,15 +31,11 @@ export class Timer {
      * Initialize the UI components
      * */
     initUI() {
-        // 创建计时器容器
-        const container = new PIXI.Container();
-        container.position.set(this.x, this.y);
-
         // 创建计时器背景
         const bg = new PIXI.Graphics();
         bg.roundRect(0, 0, 220, 100, 10); // 背景大小
         bg.fill({ color: 0xffffff });
-        container.addChild(bg);
+        this.container.addChild(bg);
 
         // 创建计时器文本
         this.timerText = new PIXI.Text({
@@ -57,13 +48,13 @@ export class Timer {
             },
         });
         this.timerText.position.set(20, 15); // 文本位置
-        container.addChild(this.timerText);
+        this.container.addChild(this.timerText);
 
         // 创建开始按钮
         const startButton = this.createButton("开始", 20, 60, () => {
             if (!this.isRunning) {
                 this.start();
-                if (this.onStartCallback) this.onStartCallback();
+                window.game.isGameStarted = true;
             }
         });
 
@@ -71,12 +62,11 @@ export class Timer {
         const pauseButton = this.createButton("暂停", 90, 60, () => {
             if (this.isRunning) {
                 this.pause();
-                if (this.onPauseCallback) this.onPauseCallback();
+                window.game.isGameStarted = false;
             }
         });
 
-        container.addChild(startButton, pauseButton);
-        this.game.app.stage.addChild(container);
+        this.container.addChild(startButton, pauseButton);
     }
 
     /**
