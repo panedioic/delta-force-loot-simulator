@@ -388,11 +388,11 @@ export class Item {
             // let bIsPlayerInventory = false;
             // if (this.parentGrid instanceof Subgrid)
             if (this.parentGrid.countable) {
-                if (!this.game.spoilsManager) {
+                if (!this.game.spoilsRegion) {
                     return;
                 }
-                this.game.spoilsManager.inventories[
-                    this.game.spoilsManager.current
+                this.game.spoilsRegion.inventories[
+                    this.game.spoilsRegion.currentInventoryId
                 ].addItem(this);
             } else {
                 this.game.playerInventory?.addItem(this);

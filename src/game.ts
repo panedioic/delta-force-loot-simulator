@@ -7,7 +7,6 @@ import { RegionSwitchUI } from "./components/regionSwitchUI";
 import { InfoDialog } from "./components/infoDialog";
 import { Timer } from "./components/timer";
 import { Inventory } from "./invntory";
-import { SpoilsManager } from "./spoilsManager";
 import { ItemInfoPanel } from "./itemInfoPanel";
 import { Item } from "./item";
 import { DebugTools } from "./debugTools";
@@ -46,7 +45,6 @@ export class Game {
     timer: Timer | null;
     // scrollableContainer: ScrollableContainer | null;
     playerInventory!: Inventory | null;
-    spoilsManager!: SpoilsManager | null;
     infoDialog: InfoDialog | null;
     instances: Array<any> = [];
 
@@ -73,7 +71,6 @@ export class Game {
         this.icon = null;
         this.titleBar = null;
         // this.scrollableContainer = null; // 滚动容器实例
-        this.spoilsManager = null;
         this.infoDialog = null;
         this.instances = [];
         this.activeItemInfoPanel = null;
@@ -209,8 +206,8 @@ export class Game {
 
         // 添加更新循环
         this.app.ticker.add(() => {
-            if(!this.spoilsManager) return;
-            for (const inventory of this.spoilsManager.inventories) {
+            if(!this.spoilsRegion) return;
+            for (const inventory of this.spoilsRegion.inventories) {
                 inventory.update();
             }
             // if (this.playerInventory) {
