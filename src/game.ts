@@ -86,13 +86,10 @@ export class Game {
      * @returns {Promise<void>} A promise that resolves when the block types are loaded.
      * */
     async init(): Promise<void> {
-        await this.loadItemTypes();
-        await this.loadGridInfo();
-        await this.loadGridInfoSpoils();
-        await this.loadIcon();
+        await this.loadResources();
         // Create PIXI application
         await this.createPixiApp();
-        this.initGameUI(); // 创建背景
+        this.initGameUI();
         this.initGameComponents();
 
         // 初始化标题栏
@@ -123,98 +120,48 @@ export class Game {
     }
 
     /**
-     * Load block types from a JSON file.
-     * @returns {Promise<void>} A promise that resolves when the block types are loaded.
-     * */
-    async loadItemTypes(): Promise<void> {
-        // if (import.meta.env.MODE === "development") {
-        //     this.BLOCK_TYPES = await getMockBlocks();
-        //     const loadingElement = document.querySelector(".loading");
-        //     if (loadingElement) {
-        //         (loadingElement as HTMLElement).style.display = "none";
-        //     }
-        //     return;
-        // }
-        try {
-            const response = await fetch("/blocks.json");
-            this.BLOCK_TYPES = await response.json();
-            const loadingElement = document.querySelector(".loading");
-            if (loadingElement) {
-                (loadingElement as HTMLElement).style.display = "none";
-            }
-        } catch (error) {
-            console.error("Failed to load block data:", error);
-            const loadingElement = document.querySelector(".loading");
-            if (loadingElement) {
-                loadingElement.textContent = "加载方块数据失败，请刷新重试";
-            }
-            throw error;
-        }
-    }
-
-    /**
-     * Load grid info from a JSON file.
-     * @returns {Promise<void>} A promise that resolves when the grid info is loaded.
-     * */
-    async loadGridInfo(): Promise<void> {
-        try {
-            // if (import.meta.env.MODE === "development") {
-            //     const { getMockGridInfo } = await import("./mockData");
-            //     this.GRID_INFO = await getMockGridInfo();
-            //     return;
-            // }
-            const response = await fetch("/gridinfo.json");
-            this.GRID_INFO = await response.json();
-            const loadingElement = document.querySelector(".loading");
-            if (loadingElement) {
-                (loadingElement as HTMLElement).style.display = "none";
-            }
-        } catch (error) {
-            console.error("Failed to load grid data:", error);
-            const loadingElement = document.querySelector(".loading");
-            if (loadingElement) {
-                loadingElement.textContent = "加载网格数据失败，请刷新重试";
-            }
-            throw error;
-        }
-    }
-
-    /**
-     * Load grid info(spoils) from a JSON file.
-     * @returns {Promise<void>} A promise that resolves when the grid info is loaded.
-     * */
-    async loadGridInfoSpoils(): Promise<void> {
-        try {
-            // if (import.meta.env.MODE === "development") {
-            //     const { getMockGridInfo } = await import("./mockData");
-            //     this.GRID_INFO = await getMockGridInfo();
-            //     return;
-            // }
-            const response = await fetch("/gridinfospoils.json");
-            this.GRID_INFO_SPOILS = await response.json();
-            const loadingElement = document.querySelector(".loading");
-            if (loadingElement) {
-                (loadingElement as HTMLElement).style.display = "none";
-            }
-        } catch (error) {
-            console.error("Failed to load grid data:", error);
-            const loadingElement = document.querySelector(".loading");
-            if (loadingElement) {
-                loadingElement.textContent = "加载网格数据失败，请刷新重试";
-            }
-            throw error;
-        }
-    }
-
-    /**
-     * 加载游戏图标
-     * @returns {Promise<void>} 当图标加载完成时解析的Promise
+     * 并行加载所有游戏资源
+     * @returns {Promise<void>} 当所有资源加载完成时解析的Promise
      */
-    async loadIcon(): Promise<void> {
+    private async loadResources(): Promise<void> {
         try {
-            this.icon = await PIXI.Assets.load("/deltaforce.png");
+            const [blocks, gridInfo, gridInfoSpoils, icon] = await Promise.all([
+                // 加载方块数据
+                (async () => {
+                    const response = await fetch("/blocks.json");
+                    return await response.json();
+                })(),
+                // 加载网格数据
+                (async () => {
+                    const response = await fetch("/gridinfo.json");
+                    return await response.json();
+                })(),
+                // 加载战利品网格数据
+                (async () => {
+                    const response = await fetch("/gridinfospoils.json");
+                    return await response.json();
+                })(),
+                // 加载图标
+                PIXI.Assets.load("/deltaforce.png")
+            ]);
+
+            // 保存加载的资源
+            this.BLOCK_TYPES = blocks;
+            this.GRID_INFO = gridInfo;
+            this.GRID_INFO_SPOILS = gridInfoSpoils;
+            this.icon = icon;
+
+            // 隐藏加载提示
+            const loadingElement = document.querySelector(".loading");
+            if (loadingElement) {
+                (loadingElement as HTMLElement).style.display = "none";
+            }
         } catch (error) {
-            console.error("Failed to load game icon:", error);
+            console.error("Failed to load game resources:", error);
+            const loadingElement = document.querySelector(".loading");
+            if (loadingElement) {
+                loadingElement.textContent = "加载游戏资源失败，请刷新重试";
+            }
             throw error;
         }
     }
