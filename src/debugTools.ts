@@ -1,5 +1,5 @@
 import { Game } from "./game";
-import { Item } from "./item";
+// import { Item } from "./item";
 // import { Subgrid } from "./subgrid";
 
 export class DebugTools {
@@ -16,6 +16,7 @@ export class DebugTools {
 
     initItems() {
         // 当前的 Inventory
+        /*
         if(!this.game.spoilsManager || (this.game.spoilsManager.inventories.length === 0)) {
             return;
         }
@@ -57,7 +58,7 @@ export class DebugTools {
                 inventory.addItem(item);
                 // console.log(res, item);
             }
-        }
+        }*/
     }
 
     private async loadItemTypes() {

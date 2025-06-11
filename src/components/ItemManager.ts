@@ -16,7 +16,7 @@ export class ItemManager {
     private isDragging: boolean = false;
     private dragStartPos = { x: 0, y: 0 };
     private dialogStartPos = { x: 0, y: 0 };
-    private currentEditingItem: BlockType | null = null;
+    currentEditingItem: BlockType | null = null;
     private currentFilter: string = 'all';
     private searchTerm: string = '';
 
@@ -628,7 +628,8 @@ export class ItemManager {
         }
 
         // 刷新物品列表
-        const itemListContainer = this.itemManagerContainerDOM.querySelector('div:nth-child(4)') as HTMLDivElement;
+        // const itemListContainer = 
+        this.itemManagerContainerDOM.querySelector('div:nth-child(4)') as HTMLDivElement;
         this.updateItemList();
     }
 
@@ -647,7 +648,8 @@ export class ItemManager {
             if (index !== -1) {
                 window.game.BLOCK_TYPES.splice(index, 1);
                 // 刷新物品列表
-                const itemListContainer = this.itemManagerContainerDOM.querySelector('div:nth-child(4)') as HTMLDivElement;
+                // const itemListContainer = 
+                this.itemManagerContainerDOM.querySelector('div:nth-child(4)') as HTMLDivElement;
                 this.updateItemList();
             }
         }
@@ -679,7 +681,8 @@ export class ItemManager {
                         const json = JSON.parse(e.target?.result as string);
                         window.game.BLOCK_TYPES = json;
                         // 刷新物品列表
-                        const itemListContainer = this.itemManagerContainerDOM.querySelector('div:nth-child(4)') as HTMLDivElement;
+                        // const itemListContainer = 
+                        this.itemManagerContainerDOM.querySelector('div:nth-child(4)') as HTMLDivElement;
                         this.updateItemList();
                         alert('导入成功！');
                     } catch (error) {

@@ -769,7 +769,7 @@ export class DebugTools {
         });
     }
 
-    private showAddItemDialog(container: any, path: string) {
+    private showAddItemDialog(container: any, _path: string) {
         const dialog = document.createElement('div');
         dialog.style.cssText = `
             position: fixed;
