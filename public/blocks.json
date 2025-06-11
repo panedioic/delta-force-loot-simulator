@@ -621,7 +621,16 @@
         "type": "HandguardKit",
         "name": "M14先进枪身系统",
         "value": 127570,
-        "color": "4b6b87"
+        "color": "4b6b87",
+        "accessories": [
+            {"title": "枪托", "type": "Stock"},
+            {"title": "前握把", "type": "Foregrip"},
+            {"title": "导轨脚架", "type": "RailTripod"},
+            {"title": "上导轨", "type": "Rail"},
+            {"title": "左导轨", "type": "Rail"},
+            {"title": "右导轨", "type": "Rail"},
+            {"title": "上贴片", "type": "Patch"}
+        ]
     },
     {
         "cellWidth": 2,

@@ -306,6 +306,16 @@ export class Item {
                 ammoText.text = `${totalAmmo}/${this.capacity || 0}`;
             }
         }
+
+        // refresh active item panel if exists
+        if (this.game.activeItemInfoPanel) {
+            const pos = this.game.activeItemInfoPanel.getPosition();
+            this.game.activeItemInfoPanel.close();
+            this.game.createItemInfoPanel(this);
+            if (this.game.activeItemInfoPanel) {
+                this.game.activeItemInfoPanel.setPosition(pos);
+            }
+        }
     }
 
     addEventListeners() {
@@ -730,6 +740,70 @@ export class Item {
         return ret;
     }
 
+    onAccessoryAdded(item: Item, _col: number, _row: number, previousGrid: Subgrid | null) {
+        // 先检测是否有冲突
+        let bHasConflict = false;
+        if (this.conflicts[item.type]) {
+            for (const conflictedTypes of this.conflicts[item.type]) {
+                for (const conflictSubgrid of Object.values(this.subgrids)) {
+                    if (conflictSubgrid.acceptedTypes.includes(conflictedTypes) && conflictSubgrid.blocks.length > 0) {
+                        bHasConflict = true;
+                        break;
+                    }
+                }
+            }
+        }
+        if (bHasConflict) {
+            item.parentGrid?.removeBlock(item);
+            if (previousGrid) {
+                previousGrid.addItem(item);
+            }
+            return false;
+        }
+        // 新的配件槽位
+        if (item.accessories) {
+            for (const newInfo of item.accessories) {
+                this.accessories.push(newInfo);
+                const newSubgrid = new Subgrid(
+                    this.game,
+                    1,
+                    1,
+                    72,
+                    1,
+                    true,
+                    false,
+                    [newInfo.type],
+                    newInfo.title
+                )
+                this.subgrids[newInfo.title] = newSubgrid;
+                newSubgrid.onBlockMoved = this.onAccessoryAdded.bind(this);
+                newSubgrid.onBlockRemoved = this.onAccessoryRemoved.bind(this);
+                newSubgrid.setEnabled(false);
+            }
+        }
+        if (item.capacity && this.capacity) {
+            this.capacity += item.capacity;
+        }
+        this.refreshUI();
+    }
+
+    onAccessoryRemoved(item: Item, _previousGrid: Subgrid | null) {
+        if (item.accessories) {
+            for (const info of item.accessories) {
+                if (this.subgrids[info.title]) {
+                    delete this.subgrids[info.title];
+                }
+                if (this.accessories.includes(info)) {
+                    this.accessories.splice(this.accessories.indexOf(info), 1);
+                }
+            }
+        }
+        if (item.capacity && this.capacity) {
+            this.capacity -= item.capacity;
+        }
+        this.refreshUI();
+    }
+
     initAccessories() {
         for(const info of this.accessories) {
             const subgrid = new Subgrid(
@@ -744,47 +818,8 @@ export class Item {
                 info.title
             );
             this.subgrids[info.title] = subgrid;
-            subgrid.onBlockMoved = (item, _col, _row, previousGrid) => {
-                // 先检测是否有冲突
-                let bHasConflict = false;
-                if (this.conflicts[info.type]) {
-                    for (const conflictedTypes of this.conflicts[info.type]) {
-                        for (const conflictSubgrid of Object.values(this.subgrids)) {
-                            if (conflictSubgrid.acceptedTypes.includes(conflictedTypes) && conflictSubgrid.blocks.length > 0) {
-                                bHasConflict = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (bHasConflict) {
-                    subgrid.removeBlock(item);
-                    if (previousGrid) {
-                        previousGrid.addItem(item);
-                    }
-                    return false;
-                }
-                this.refreshUI();
-                if (this.game.activeItemInfoPanel) {
-                    const pos = this.game.activeItemInfoPanel.getPosition();
-                    this.game.activeItemInfoPanel.close();
-                    this.game.createItemInfoPanel(this);
-                    if (this.game.activeItemInfoPanel) {
-                        this.game.activeItemInfoPanel.setPosition(pos);
-                    }
-                }
-            }
-            subgrid.onBlockRemoved = (_item) => {
-                this.refreshUI();
-                if (this.game.activeItemInfoPanel) {
-                    const pos = this.game.activeItemInfoPanel.getPosition();
-                    this.game.activeItemInfoPanel.close();
-                    this.game.createItemInfoPanel(this);
-                    if (this.game.activeItemInfoPanel) {
-                        this.game.activeItemInfoPanel.setPosition(pos);
-                    }
-                }
-            }
+            subgrid.onBlockMoved = this.onAccessoryAdded.bind(this);
+            subgrid.onBlockRemoved = this.onAccessoryRemoved.bind(this);
             subgrid.setEnabled(false);
         }
     }
@@ -971,12 +1006,14 @@ export class Item {
                 draggingItem.parentGrid.tryPlaceItem(this, [draggingItem], [])
             if (targetPosition) {
                 // 移动当前物品到新位置
-                this.parentGrid.removeBlock(this);
-                this.parentGrid.addItem(this, targetPosition.col, targetPosition.row);
+                const originalParentGrid = this.parentGrid;
+                originalParentGrid.removeBlock(this);
+                originalParentGrid.addItem(this, targetPosition.col, targetPosition.row);
                 // 如果是最后一个被交互的物品，移动拖动的物品到目标位置
                 if (this === interacting[interacting.length-1]) {
-                    draggingItem.parentGrid.removeBlock(draggingItem);
-                    this.parentGrid.addItem(draggingItem, pos.col, pos.row);
+                    const originalDraggingItemParentGrid = draggingItem.parentGrid;
+                    originalDraggingItemParentGrid.removeBlock(draggingItem);
+                    originalDraggingItemParentGrid.addItem(draggingItem, pos.col, pos.row);
                 }
             }
         }
