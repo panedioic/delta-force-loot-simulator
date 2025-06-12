@@ -3,6 +3,7 @@ import { Item } from "./item";
 import { Game } from "./game";
 import { DEFAULT_CELL_SIZE } from "./config";
 import { Subgrid } from "./subgrid";
+import { Region } from "./region";
 
 /**
  * This class represents a grid in the game.
@@ -25,6 +26,7 @@ export class GridContainer {
     dragable: boolean;
     maxWidth: number;
     backgroundGrid: Subgrid;
+    parentRegion: Region | Item | null = null;
 
     // 用于防止出现大小的bug
     additiveSize: { x: number; y: number };
@@ -91,6 +93,7 @@ export class GridContainer {
                     this.acceptedTypes,
                     ''
                 );
+                subgrid.parentRegion = this.parentRegion;
                 subgrid.container.position.set(x * this.cellSize, y * this.cellSize);
                 this.subgrids.push(subgrid);
                 this.container.addChild(subgrid.container);
@@ -114,12 +117,12 @@ export class GridContainer {
         stage.addChild(this.container);
     }
 
+    
     /**
-     * Add a item to the grid.
-     * @param {Block} obj - The item to add
-     * @param {number} col - The column position of the block
-     * @param {number} row - The row position of the block
-     * */
+     * 添加一个物品（所有的 addItem 都不会从原先所在的 Inventory、Grid 中移除，需要手动实现）
+     * @param item 要添加的物品
+     * @returns 是否添加成功
+     */
     addItem(obj: Item) {
         for (const subgrid of this.subgrids) {
             if (subgrid.addItem(obj)) {

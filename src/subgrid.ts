@@ -3,6 +3,8 @@ import { Item } from "./item";
 import { Game } from "./game";
 import { DEFAULT_CELL_SIZE } from "./config";
 import { ItemType } from "./types";
+import { Region } from "./region";
+import { updateTotalValueDisplay } from "./utils";
 
 interface ItemPlace {
     col: number;
@@ -31,6 +33,7 @@ export class Subgrid {
     container: PIXI.Container;
     blocks: Item[];
     title: string;
+    parentRegion: Region | Item | null = null;
     onBlockMoved?: (item: Item, col: number, row: number, grid: Subgrid | null) => void;
     onBlockRemoved?: (item: Item, grid: Subgrid | null) => void;
 
@@ -366,9 +369,13 @@ export class Subgrid {
             // console.log(obj.col, obj.row);
         }
 
+        obj.parentRegion = this.parentRegion;
+
         if (this.onBlockMoved) {
             this.onBlockMoved(obj, col, row, objOriginalParentGrid);
         }
+
+        updateTotalValueDisplay();
         return true;
     }
 

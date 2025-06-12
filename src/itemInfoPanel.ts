@@ -328,6 +328,7 @@ export class ItemInfoPanel {
             if (accessoryType === this.ammoType) {
                 continue;
             }
+            // console.log(accessoryType, this.item.subgrids)
             const subgrid = this.item.subgrids[accessoryType];
             subgrid.setEnabled(true);
             

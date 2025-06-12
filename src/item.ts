@@ -6,6 +6,8 @@ import { Subgrid } from "./subgrid";
 import { GAME_WIDTH, GAME_HEIGHT } from "./config";
 import { DEFAULT_CELL_SIZE } from "./config";
 import { updateTotalValueDisplay } from "./utils";
+import { Inventory } from "./invntory";
+import { Region } from "./region";
 // import type { Grid, Inventory } from "./types";
 
 export class Item {
@@ -42,6 +44,7 @@ export class Item {
     ammo: { [key: string]: number } = {};
     capacity: number | null;
     conflicts: { [key: string]: string[] } = {};
+    parentRegion: Region | Item | null = null;
 
     /** 拖动相关 */
     dragStartParentContainer: PIXI.Container;
@@ -83,7 +86,7 @@ export class Item {
         this.type = type || "collection";
         this.search = itemType.search || 1.2;
         this.subgridLayout = itemType.subgridLayout;
-        this.accessories = itemType.accessories || [];
+        this.accessories = itemType.accessories ? JSON.parse(JSON.stringify(itemType.accessories)) : [];
         this.maxStackCount = itemType.maxStack || 1;
         this.currentStactCount = itemType.stack || 1;
         this.ammoType = itemType.ammo;
@@ -381,22 +384,20 @@ export class Item {
         if (clickCount === 1) {
             this.game.createItemInfoPanel(this);
         } else if (clickCount === 2) {
-            // this.game.createItemInfoPanel(this);
-            if (!this.parentGrid) {
+            if (!this.parentRegion) {
                 return;
             }
-            // let bIsPlayerInventory = false;
-            // if (this.parentGrid instanceof Subgrid)
-            if (this.parentGrid.countable) {
-                if (!this.game.spoilsRegion) {
-                    return;
-                }
-                this.game.spoilsRegion.inventories[
-                    this.game.spoilsRegion.currentInventoryId
-                ].addItem(this);
-            } else {
-                // this.game.playerInventory?.addItem(this);
+            const realParentRegion = this.parentRegion instanceof Region ? 
+                this.parentRegion : this.parentRegion.parentRegion;
+            if (!realParentRegion) {
+                return;
             }
+            const targetRegion = realParentRegion === window.game.playerRegion ?
+                window.game.spoilsRegion : window.game.playerRegion;
+            if (!targetRegion) {
+                return;
+            }
+            targetRegion.addItem(this);
         }
     }
 
@@ -818,6 +819,7 @@ export class Item {
                 [info.type],
                 info.title
             );
+            subgrid.parentRegion = this;
             this.subgrids[info.title] = subgrid;
             subgrid.onBlockMoved = this.onAccessoryAdded.bind(this);
             subgrid.onBlockRemoved = this.onAccessoryRemoved.bind(this);

@@ -31,8 +31,9 @@ export class Inventory {
     // 是否计算价值（左侧的当前总价值）
     countable: boolean;
 
-    // Inventory 的所在区域。（是在个人物资区域还是战利品区域）
-    parentRegion: Region | null = null;
+    // Inventory 的所在区域。（是在个人物资区域还是战利品区域，如果是枪上的配件需要单独处理）
+    // （虽然 Inventory 不可能是一个枪的配件，但还是这么写了，方便处理）
+    parentRegion: Region | Item | null = null;
 
     // 滚动相关
     scrollable: boolean;
@@ -54,13 +55,15 @@ export class Inventory {
             size: {width: number, height: number},
             countable: boolean,
             scrollable: boolean,
-        },
+            parentRegion: Region | Item | null,
+        }
     ) {
         this.title = title;
         this.countable = options.countable;
         this.scrollable = options.scrollable;
         this.width = options.size.width;
         this.height = options.size.height;
+        this.parentRegion = options.parentRegion;
 
         this.contents = {};
         this.container = new PIXI.Container();
@@ -111,6 +114,7 @@ export class Inventory {
                             info.accept,
                             info.name
                         );
+                        subgrid.parentRegion = this.parentRegion;
                         this.contents[info.name] = subgrid;
                         this.container.addChild(subgrid.container);
                 } else if (info.type === 'GridTitle') {
@@ -135,6 +139,7 @@ export class Inventory {
                         this.countable,
                         []
                     );
+                    gridContainer.parentRegion = this.parentRegion;
                     this.contents[info.name] = gridContainer;
                     this.container.addChild(gridContainer.container);
                 }
@@ -195,6 +200,9 @@ export class Inventory {
                 [],
                 "spoilsBox"
             );
+            spoilsBox.parentRegion = this.parentRegion;
+            console.log(this, spoilsBox)
+            console.log(this.parentRegion, spoilsBox.parentRegion)
             this.contents["spoilsBox"] = spoilsBox;
             this.container.addChild(spoilsBox.container);
         }
@@ -295,7 +303,7 @@ export class Inventory {
     }
 
     /**
-     * 添加一个物品
+     * 添加一个物品（所有的 addItem 都不会从原先所在的 Inventory、Grid 中移除，需要手动实现）
      * @param item 要添加的物品
      * @returns 是否添加成功
      */

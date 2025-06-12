@@ -2,6 +2,7 @@ import * as PIXI from "pixi.js";
 import { Inventory } from "./invntory";
 import { initInventory } from "./utils";
 import { RegionSwitchUI } from "./components/regionSwitchUI";
+import { Item } from "./item";
 
 interface RegionOptions {
     title: string;
@@ -112,8 +113,8 @@ export class Region {
             size: {width: 514, height: 580},
             countable: this.options.countable,
             scrollable: type === 1 ? true : false,
+            parentRegion: this,
         });
-        inventory.parentRegion = this;
 
         this.inventories.push(inventory);
         this.container.addChild(inventory.container);
@@ -122,6 +123,10 @@ export class Region {
             initInventory(inventory, type);
         }
         return inventory;
+    }
+
+    addItem(item: Item) {
+        return this.inventories[this.currentInventoryId].addItem(item);
     }
 
     public addSwitcherUI() {
