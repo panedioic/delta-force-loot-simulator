@@ -14,6 +14,7 @@ import { Region } from "./region";
 import { SettingsDialog } from "./components/SettingsDialog";
 import { ItemManager } from "./components/ItemManager";
 import { DebugTools } from "./components/DebugTools";
+import { PresetManager } from "./components/PresetManager";
 import { initSpoilsRegion } from "./utils";
 // import { Magnify } from "./magnify";
 
@@ -63,6 +64,8 @@ export class Game {
 
     // debug
     debugTools: DebugTools | null;
+
+    presetManager: PresetManager | null = null;
 
     constructor() {
         this.app = new PIXI.Application();
@@ -255,6 +258,7 @@ export class Game {
         this.playerRegion.addComponent('infoDialog', InfoDialog);
         this.playerRegion.addComponent('settingsDialog', SettingsDialog);
         this.playerRegion.addComponent('itemManager', ItemManager);
+        this.playerRegion.addComponent('presetManager', PresetManager);
         this.playerRegion.addComponent('debugTools', DebugTools);
         this.playerRegion.addInventory(1, false);
         this.playerRegion.switchTo(0);
