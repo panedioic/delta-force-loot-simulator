@@ -368,7 +368,7 @@ export class Item {
                     }
                     this.clickCount = 0;
                     this.clickTimeout = null;
-                    this.onClick();
+                    this.onClick(2);
                 }
             }
         });
@@ -395,7 +395,7 @@ export class Item {
                     this.game.spoilsRegion.currentInventoryId
                 ].addItem(this);
             } else {
-                this.game.playerInventory?.addItem(this);
+                // this.game.playerInventory?.addItem(this);
             }
         }
     }

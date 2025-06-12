@@ -6,7 +6,6 @@ import { TotalValueDisplay } from "./totalValueDisplay";
 import { RegionSwitchUI } from "./components/regionSwitchUI";
 import { InfoDialog } from "./components/infoDialog";
 import { Timer } from "./components/timer";
-import { Inventory } from "./invntory";
 import { ItemInfoPanel } from "./itemInfoPanel";
 import { Item } from "./item";
 import { TitleBar } from "./titleBar";
@@ -47,8 +46,6 @@ export class Game {
     regionSwitchUI: RegionSwitchUI | null;
     isGameStarted: boolean;
     timer: Timer | null;
-    // scrollableContainer: ScrollableContainer | null;
-    playerInventory!: Inventory | null;
     infoDialog: InfoDialog | null;
     instances: Array<any> = [];
 
@@ -264,7 +261,6 @@ export class Game {
         this.playerRegion.switchTo(0);
 
         this.spoilsRegion = initSpoilsRegion({x: 804, y: 72}, this.presets[0]);
-
     }
 
     createItemInfoPanel(item: Item) {

@@ -1,14 +1,15 @@
 import * as PIXI from "pixi.js";
-import { Game } from "./game";
 import { GridTitle } from "./gridTitle";
 import { Subgrid } from "./subgrid";
 import { GridContainer } from "./gridContainer";
 import { DEFAULT_CELL_SIZE } from "./config";
 import { Item } from "./item";
 import { Magnify } from "./magnify";
+import { Region } from "./region";
 
 /**
- * Inventory, contain multiple gridcontainers.
+ * Inventory，可以代表一个玩家的盒子或一个地图中的容器（保险、航空箱、鸟窝、井盖等）。
+ * 如果是普通容器，一般只包含一个 Subgrid，若是玩家盒子，则会包含多个 GridContainer、GridTitle 和 Subgrid。
  * @param {Game} game - The game instance
  * @param {number} x - The x coordinate of the container
  * @param {number} y - The y coordinate of the container
@@ -16,55 +17,63 @@ import { Magnify } from "./magnify";
  * @param {number} height - The height of the container
  * */
 export class Inventory {
-    private game: Game;
-    private x: number;
-    private y: number;
+    // Inventory 的标题
+    title: string;
+
+    // UI相关
     private width: number;
     private height: number;
     container: PIXI.Container;
+
+    // 所有包含的子网格
     contents: { [key: string]: GridTitle | Subgrid | GridContainer };
+
+    // 是否计算价值（左侧的当前总价值）
     countable: boolean;
+
+    // Inventory 的所在区域。（是在个人物资区域还是战利品区域）
+    parentRegion: Region | null = null;
+
+    // 滚动相关
     scrollable: boolean;
-    baseY: number;
-    maxHeight: number;
-    enabled: boolean;
+    baseY: number = 0;
+    maxHeight: number = 128;
+
+    // 启用状态（false 将会不可见，此时无法将 Item 拖动到对应的 Inventory 中）
+    enabled: boolean = true;
+
+    // 搜索相关（放大镜转圈）
     private currentSearchItem: Item | null = null;
     private magnify: Magnify | null = null;
     private searchTimer: number = 0;
 
     constructor(
-        game: Game,
-        countable: boolean,
-        scrollable: boolean,
-        x: number,
-        y: number,
+        title: string,
+        options: {
+            position: {x: number, y: number},
+            size: {width: number, height: number},
+            countable: boolean,
+            scrollable: boolean,
+        },
     ) {
-        this.game = game;
-        this.countable = countable;
-        this.scrollable = scrollable;
-        this.x = x;
-        this.y = y;
-        this.width = 514;
-        this.height = 580;
-
-        this.baseY = 0;
-        this.maxHeight = 128;
-        this.enabled = true;
+        this.title = title;
+        this.countable = options.countable;
+        this.scrollable = options.scrollable;
+        this.width = options.size.width;
+        this.height = options.size.height;
 
         this.contents = {};
         this.container = new PIXI.Container();
-        this.container.position.set(this.x, this.y);
+        this.container.position.set(options.position.x, options.position.y);
 
         this.initUI();
         this.initContent();
         this.refreshUI();
-
-        // console.log(this.contents)
-
-        // add to stage
-        this.game.app.stage.addChild(this.container);
     }
-    
+
+    /**
+     * 初始化 UI
+     */
     initUI () {
         // 创建遮罩
         const mask = new PIXI.Graphics();
@@ -83,13 +92,16 @@ export class Inventory {
         this.container.on("wheel", this.onScroll.bind(this));
     }
 
+    /**
+     * 初始化内容。如果是玩家盒子的话就创建需要的头、甲、枪、背包、胸挂等。
+     */
     initContent() {
         if (this.scrollable) {
-            for (const info of this.game.GRID_INFO) {
+            for (const info of window.game.GRID_INFO) {
                 // this.createObject(info);
                 if (info.type === 'Grid') {
                         const subgrid = new Subgrid(
-                            this.game,
+                            window.game,
                             1,
                             1,
                             info.cellsize,
@@ -103,7 +115,7 @@ export class Inventory {
                         this.container.addChild(subgrid.container);
                 } else if (info.type === 'GridTitle') {
                     const gridTitle = new GridTitle(
-                        this.game,
+                        window.game,
                         info.name,
                         36,
                         13.8
@@ -112,7 +124,7 @@ export class Inventory {
                     this.container.addChild(gridTitle.container);
                 } else if (info.type === 'GridContainer') {
                     const gridContainer = new GridContainer(
-                        this.game,
+                        window.game,
                         info.name,
                         [],
                         4,
@@ -173,7 +185,7 @@ export class Inventory {
             }
         } else {
             const spoilsBox = new Subgrid(
-                this.game,
+                window.game,
                 7,
                 8,
                 72,
@@ -188,12 +200,15 @@ export class Inventory {
         }
     }
 
+    /**
+     * 刷新 UI（部分对 UI 的调整需要刷新）
+     */
     refreshUI() {
         let currentY = this.baseY + 8;
         let currentX = 8;
         let maxHeight = 156;
 
-        for (const info of this.game.GRID_INFO) {
+        for (const info of window.game.GRID_INFO) {
             const item = this.contents[info.name];
         //     console.log(item);
         //     if(item instanceof GridContainer && item.subgrids.length > 0) {
@@ -263,6 +278,10 @@ export class Inventory {
         // console.log(this.baseY)
     }
 
+    /**
+     * 设置启用状态
+     * @param enabled 是否启用
+     */
     setEnabled(enabled: boolean) {
         this.enabled = enabled;
         // 遍历所有的subgrid并设置启用状态
@@ -275,6 +294,11 @@ export class Inventory {
         this.container.visible = enabled;
     }
 
+    /**
+     * 添加一个物品
+     * @param item 要添加的物品
+     * @returns 是否添加成功
+     */
     addItem(item: Item) {
         let bAdded = false;
         for (const subgrid of Object.values(this.contents)) {
@@ -289,6 +313,9 @@ export class Inventory {
         return bAdded;
     }
 
+    /**
+     * 清空所有物品
+     */
     clearItem() {
         for (const subgrid of Object.values(this.contents)) {
             if (subgrid instanceof GridTitle) {
@@ -298,6 +325,9 @@ export class Inventory {
         }
     }
 
+    /**
+     * Tick 函数，一般每帧执行一次
+     */
     update() {
         if (!this.enabled) {
             this.currentSearchItem = null;
@@ -325,6 +355,10 @@ export class Inventory {
         }
     }
 
+    /**
+     * 找到下一个需要搜索的物品
+     * @returns 下一个需要搜索的物品，若没有则返回 null
+     */
     private findNextSearchableItem(): Item | null {
         for (const key in this.contents) {
             const content = this.contents[key];
@@ -347,6 +381,10 @@ export class Inventory {
         return null;
     }
 
+    /**
+     * 开始搜索物品
+     * @param item 要搜索的物品
+     */
     private startSearchItem(item: Item) {
         this.currentSearchItem = item;
         this.searchTimer = 0;
@@ -370,6 +408,9 @@ export class Inventory {
         this.magnify.show();
     }
 
+    /**
+     * 完成搜索
+     */
     private completeSearch() {
         if (this.currentSearchItem) {
             this.currentSearchItem.searched = true;

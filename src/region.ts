@@ -4,7 +4,7 @@ import { initInventory } from "./utils";
 import { RegionSwitchUI } from "./components/regionSwitchUI";
 
 interface RegionOptions {
-    title?: string;
+    title: string;
     width?: number;
     height?: number;
     titleColor?: number;
@@ -13,7 +13,7 @@ interface RegionOptions {
     backgroundColor?: number;
     backgroundAlpha?: number;
     componentWidth?: number;
-    countable?: boolean;
+    countable: boolean;
 }
 
 /**
@@ -38,7 +38,6 @@ export class Region {
 
     constructor(pos: {x: number, y: number}, options: RegionOptions) {
         this.options = {
-            title: "未命名区域",
             width: 508,
             height: 632,
             titleColor: 0xff0000,
@@ -46,7 +45,6 @@ export class Region {
             titleHeight: 50,
             backgroundColor: 0xffffff,
             componentWidth: 246,
-            countable: false,
             ...options
         };
 
@@ -104,14 +102,19 @@ export class Region {
      * 添加一个物品栏到内容区
      * @param type 0 为普通容器，1 为玩家盒子
      */
-    public addInventory(type: number, needToInit: boolean=true) {
-        const inventory = new Inventory(
-            window.game,
-            this.options.countable ? this.options.countable : false,
-            type === 1 ? true : false,
-            this.options.componentWidth ? this.options.componentWidth : 0,
-            this.options.titleHeight ? this.options.titleHeight : 50
-        );
+    public addInventory(type: number, needToInit: boolean=true, title: string='') {
+        const inventoryTitle = title ? title : this.options.title + (this.inventories.length + 1);
+        const inventory = new Inventory(inventoryTitle, {
+            position: {
+                x: this.options.componentWidth ? this.options.componentWidth : 0,
+                y: this.options.titleHeight ? this.options.titleHeight : 0,
+            },
+            size: {width: 514, height: 580},
+            countable: this.options.countable,
+            scrollable: type === 1 ? true : false,
+        });
+        inventory.parentRegion = this;
+
         this.inventories.push(inventory);
         this.container.addChild(inventory.container);
         inventory.setEnabled(false);

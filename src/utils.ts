@@ -74,7 +74,7 @@ export const initInventory = (inventory: Inventory, type: number=0, preset_infos
                                     gun_subgrid.addItem(accessory_item, 0, 0);
                                 }
                             }
-                            console.log(item_info, item)
+                            // console.log(item_info, item)
                         }
                         if (item_info.stack) {
                             item.currentStactCount = item_info.stack;
@@ -289,9 +289,10 @@ export const initSpoilsRegion = (position: {x: number, y: number}, presets: any 
         componentWidth: 0,
         backgroundColor: 0xffffff,
         backgroundAlpha: 0.1,
+        countable: false,
     });
     if (presets) {
-        console.log(presets)
+        // console.log(presets)
         for ( const preset of presets.data) {
             const inventory_type = preset.type === 'playerContainer' ? 1 : 0;
             const inventory = region.addInventory(inventory_type, false);
