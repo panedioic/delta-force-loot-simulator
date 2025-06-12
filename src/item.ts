@@ -88,7 +88,7 @@ export class Item {
         this.currentStactCount = itemType.stack || 1;
         this.ammoType = itemType.ammo;
         this.capacity = itemType.capacity;
-        this.conflicts = itemType.conflict;
+        this.conflicts = itemType.conflict || {};
 
         // 只用作检查
         this.cellSize = this.parentGrid ? this.parentGrid.cellSize : DEFAULT_CELL_SIZE;
@@ -734,6 +734,7 @@ export class Item {
             }
         }
         for (const [ammoType, ammoCount] of Object.entries(this.ammo)) {
+            // console.log(this.ammo, ammoType, ammoCount)
             ret += ammoCount * this.game.BLOCK_TYPES.find(info => info.name ===ammoType).value;
         }
         return ret;
@@ -741,6 +742,7 @@ export class Item {
 
     onAccessoryAdded(item: Item, _col: number, _row: number, previousGrid: Subgrid | null) {
         // 先检测是否有冲突
+        // console.log(this, item)
         let bHasConflict = false;
         if (this.conflicts[item.type]) {
             for (const conflictedTypes of this.conflicts[item.type]) {

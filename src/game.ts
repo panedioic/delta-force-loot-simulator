@@ -14,6 +14,7 @@ import { Region } from "./region";
 import { SettingsDialog } from "./components/SettingsDialog";
 import { ItemManager } from "./components/ItemManager";
 import { DebugTools } from "./components/DebugTools";
+import { initSpoilsRegion } from "./utils";
 // import { Magnify } from "./magnify";
 
 declare global {
@@ -54,6 +55,11 @@ export class Game {
 
     /** 搜索模式 */
     needSearch: boolean;
+
+    /** 预设 */
+    defaultSpoilsRegionNumber: number = 3;
+    defaultPlayerRegionNumber: number = 1;
+    presets: any[] = [];
 
     // debug
     debugTools: DebugTools | null;
@@ -96,6 +102,9 @@ export class Game {
 
         // 初始化标题栏
         this.titleBar = new TitleBar();
+
+        /** Debuging */
+        if (import.meta.env.MODE === "development") this.isGameStarted = true;
     }
 
     /**
@@ -104,7 +113,7 @@ export class Game {
      */
     private async loadResources(): Promise<void> {
         try {
-            const [blocks, gridInfo, gridInfoSpoils, icon] = await Promise.all([
+            const [blocks, gridInfo, gridInfoSpoils, preset2, icon] = await Promise.all([
                 // 加载方块数据
                 (async () => {
                     const response = await fetch("/blocks.json");
@@ -120,6 +129,11 @@ export class Game {
                     const response = await fetch("/gridinfospoils.json");
                     return await response.json();
                 })(),
+                // 加载预设
+                (async () => {
+                    const response = await fetch("/preset2.json");
+                    return await response.json();
+                })(),
                 // 加载图标
                 PIXI.Assets.load("/deltaforce.png")
             ]);
@@ -129,7 +143,7 @@ export class Game {
             this.GRID_INFO = gridInfo;
             this.GRID_INFO_SPOILS = gridInfoSpoils;
             this.icon = icon;
-
+            this.presets.push(preset2);
             // 隐藏加载提示
             const loadingElement = document.querySelector(".loading");
             if (loadingElement) {
@@ -245,24 +259,8 @@ export class Game {
         this.playerRegion.addInventory(1, false);
         this.playerRegion.switchTo(0);
 
-        this.spoilsRegion = new Region({x: 804, y: 72}, {
-            title: "战利品",
-            width: 508,
-            height: 632,
-            titleColor: 0xff0000,
-            titleAlpha: 0.3,
-            componentWidth: 0,
-            backgroundColor: 0xffffff,
-            backgroundAlpha: 0.1,
-        });
-        for (let i = 0; i < 3; i += 1) {
-            this.spoilsRegion.addInventory(0, true);
-        }
-        for (let i = 0; i < 3; i += 1) {
-            this.spoilsRegion.addInventory(1, true);
-        }
-        this.spoilsRegion.switchTo(0);
-        this.spoilsRegion.addSwitcherUI();
+        this.spoilsRegion = initSpoilsRegion({x: 804, y: 72}, this.presets[0]);
+
     }
 
     createItemInfoPanel(item: Item) {

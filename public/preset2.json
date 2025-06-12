@@ -1,12 +1,14 @@
 {
     "description": "05310022",
     "data": [
-        {"type": "spoilsBox", "content": [
-            {
-                "name": "K437突击步枪",
-                "ammo": [],
-                "accessories": []
-            }
+        {"type": "spoilsContainer", "content": [
+            {"title": "spoilsBox", "content": [
+                {
+                    "name": "K437突击步枪",
+                    "ammo": [],
+                    "accessories": []
+                }
+            ]}
         ]},
         {"type": "playerContainer",
         "content": [

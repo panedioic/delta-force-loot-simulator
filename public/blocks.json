@@ -980,6 +980,15 @@
     {
         "cellWidth": 1,
         "cellHeight": 1,
+        "type": "Ammo55645",
+        "name": "5.56x45mm FMJ",
+        "value": 71,
+        "color": "4b6b87",
+        "maxStack": 60
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
         "type": "Ammo76251",
         "name": "7.62x51mm M62",
         "value": 4267,
@@ -1019,7 +1028,7 @@
         "type": "ammo",
         "name": "9x19mm PBP",
         "value": 1508,
-        "color": "800080",
+        "color": "695687",
         "maxStack": 60
     },
     {
@@ -1028,32 +1037,8 @@
         "type": "ammo",
         "name": ".45 ACP RIP",
         "value": 579,
-        "color": "0000FF",
+        "color": "4b6b87",
         "maxStack": 60
-    },
-    {
-        "cellWidth": 1,
-        "cellHeight": 1,
-        "type": "ammo",
-        "name": ".300 BLK",
-        "value": 3819,
-        "color": "FFD700"
-    },
-    {
-        "cellWidth": 1,
-        "cellHeight": 1,
-        "type": "ammo",
-        "name": "9x19mm PBP",
-        "value": 1508,
-        "color": "800080"
-    },
-    {
-        "cellWidth": 1,
-        "cellHeight": 1,
-        "type": "ammo",
-        "name": ".45 ACP RIP",
-        "value": 579,
-        "color": "0000FF"
     },
 
     {
@@ -1071,6 +1056,14 @@
         "name": "堡垒水平补偿器",
         "value": 59310,
         "color": "695687"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "Muzzle",
+        "name": "钢制膛口制退器",
+        "value": 14097,
+        "color": "4b6b87"
     },
     {
         "cellWidth": 1,
@@ -1094,6 +1087,14 @@
         "type": "Rail",
         "name": "PEQ-2红色激光镭指",
         "value": 322654,
+        "color": "695687"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "Rail",
+        "name": "耀斑战术手电",
+        "value": 35412,
         "color": "695687"
     },
     {
@@ -1123,11 +1124,37 @@
     {
         "cellWidth": 1,
         "cellHeight": 1,
+        "type": "Foregrip",
+        "name": "X25U斜侧战斗握把",
+        "value": 35030,
+        "color": "695687"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
         "type": "Magazine",
         "name": "M14 30发弹匣",
         "value": 26471,
         "color": "695687",
         "capacity": 20
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 2,
+        "type": "Magazine",
+        "name": "Vector扩容CMAG70发",
+        "value": 26471,
+        "color": "4b6b87",
+        "capacity": 56
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 2,
+        "type": "Magazine",
+        "name": "Vector扩容40发弹匣",
+        "value": 35641,
+        "color": "695687",
+        "capacity": 26
     },
     {
         "cellWidth": 1,
@@ -1171,12 +1198,28 @@
         "color": "4b6b87"
     },
     {
+        "cellWidth": 2,
+        "cellHeight": 1,
+        "type": "Stock",
+        "name": "AK聚合物枪托",
+        "value": 3231,
+        "color": "367e68"
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 1,
+        "type": "ButtPad",
+        "name": "AK枪托缓冲垫",
+        "value": 2079,
+        "color": "367e68"
+    },
+    {
         "cellWidth": 1,
         "cellHeight": 1,
-        "type": "medical",
-        "name": "瓶装抗生素",
-        "value": 6677,
-        "color": "008000"
+        "type": "ButtPad",
+        "name": "Vector枪托尾盖",
+        "value": 7177,
+        "color": "367e68"
     },
     {
         "cellWidth": 1,
@@ -1187,12 +1230,62 @@
         "type": "RearGrip"
     },
     {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "name": "射手AK后握把",
+        "value": 18013,
+        "color": "800080",
+        "type": "RearGrip"
+    },
+    {
         "cellWidth": 2,
         "cellHeight": 1,
         "name": "K437断刃短枪管组合",
         "value": 64006,
-        "color": "800080",
+        "color": "4b6b87",
         "type": "Barrel"
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 1,
+        "name": "勇士海狸枪管",
+        "value": 37442,
+        "color": "4b6b87",
+        "type": "Barrel",
+        "accessories": [
+            {"title": "上导轨", "type": "Rail"},
+            {"title": "左导轨", "type": "Rail"},
+            {"title": "左贴片", "type": "Rail"},
+            {"title": "右贴片", "type": "Patch"}
+        ]
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 1,
+        "name": "Vector堡垒重枪管组合",
+        "value": 32594,
+        "color": "4b6b87",
+        "type": "Barrel",
+        "accessories": [
+            {"title": "导轨脚架", "type": "RailTripod"},
+            {"title": "上导轨", "type": "Rail"},
+            {"title": "左导轨", "type": "Rail"},
+            {"title": "右导轨", "type": "Patch"}
+        ]
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 1,
+        "name": "Vector导轨枪管组合",
+        "value": 32594,
+        "color": "4b6b87",
+        "type": "Barrel",
+        "accessories": [
+            {"title": "导轨脚架", "type": "RailTripod"},
+            {"title": "上导轨", "type": "Rail"},
+            {"title": "左导轨", "type": "Rail"},
+            {"title": "右导轨", "type": "Patch"}
+        ]
     },
     {
         "cellWidth": 1,
@@ -1203,11 +1296,19 @@
         "type": "Muzzle"
     },
     {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "name": "实用消音器",
+        "value": 12139,
+        "color": "4b6b87",
+        "type": "Muzzle"
+    },
+    {
         "cellWidth": 2,
         "cellHeight": 1,
         "name": "精英轻型枪托",
         "value": 18628,
-        "color": "0000FF",
+        "color": "4b6b87",
         "type": "Stock"
     },
     {
@@ -1223,23 +1324,47 @@
         "cellHeight": 1,
         "name": "KC猎犬护木片",
         "value": 5138,
-        "color": "008000",
+        "color": "367e68",
         "type": "Rail"
     },
     {
         "cellWidth": 1,
         "cellHeight": 1,
-        "name": "蜜獾小口径快拔套",
+        "name": "狂蜂护木片",
+        "value": 5139,
+        "color": "367e68",
+        "type": "Rail"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "name": "蜜獾小口径快拔套（沙）",
         "value": 5142,
-        "color": "008000",
+        "color": "367e68",
         "type": "MagazineMount"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "name": "野蜂冲锋枪快拔套（沙）",
+        "value": 5142,
+        "color": "367e68",
+        "type": "MagazineMount"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "name": "泽宁特拉机柄帽",
+        "value": 1610,
+        "color": "367e68",
+        "type": "PullHandle"
     },
     {
         "cellWidth": 1,
         "cellHeight": 1,
         "name": "微型瞄具增高架",
         "value": 18158,
-        "color": "0000FF",
+        "color": "4b6b87",
         "type": "Scope",
         "accessories": [
             {"title": "增高架瞄具", "type": "Scope"}
@@ -1248,9 +1373,17 @@
     {
         "cellWidth": 1,
         "cellHeight": 1,
+        "name": "微型红点瞄准镜",
+        "value": 21567,
+        "color": "4b6b87",
+        "type": "Scope"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
         "name": "PEQ-2红色激光镭指",
         "value": 31621,
-        "color": "800080",
+        "color": "a16e50",
         "type": "Rail"
     },
     {
@@ -1258,7 +1391,7 @@
         "cellHeight": 1,
         "name": "Osight微型瞄准镜",
         "value": 25843,
-        "color": "0000FF",
+        "color": "4b6b87",
         "type": "Scope"
     },
 
@@ -1298,10 +1431,10 @@
     {
         "cellWidth": 2,
         "cellHeight": 2,
-        "type": "backpack",
+        "type": "chestRigs",
         "name": "DRC先进侦察胸挂",
         "value": 85000,
-        "color": "800080",
+        "color": "695687",
         "subgridLayout": [
             [2, 2, 0.07, 0],
             [2, 2, 2.17, 0],
@@ -1313,10 +1446,10 @@
     {
         "cellWidth": 2,
         "cellHeight": 2,
-        "type": "backpack",
+        "type": "chestRigs",
         "name": "突击者战术背心",
         "value": 85000,
-        "color": "800080",
+        "color": "695687",
         "subgridLayout": [
             [1, 3, 0, 0],
             [1, 2, 1.05, 0],
@@ -1400,7 +1533,7 @@
         "type": "backpack",
         "name": "D3战术背包",
         "value": 150000,
-        "color": "FFD700",
+        "color": "a16e50",
         "subgridLayout": [
             [4, 7, 0, 0]
         ]
@@ -1422,7 +1555,7 @@
         "type": "backpack",
         "name": "GA野战背包",
         "value": 45000,
-        "color": "0000FF",
+        "color": "4b6b87",
         "subgridLayout": [
             [5, 6, 0, 0]
         ]
@@ -1446,7 +1579,7 @@
         "type": "backpack",
         "name": "大型登山包",
         "value": 65000,
-        "color": "0000FF",
+        "color": "4b6b87",
         "subgridLayout": [
             [2, 1, 0, 0],
             [2, 1, 2.06, 0],

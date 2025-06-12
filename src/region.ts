@@ -118,6 +118,7 @@ export class Region {
         if (needToInit) {
             initInventory(inventory, type);
         }
+        return inventory;
     }
 
     public addSwitcherUI() {

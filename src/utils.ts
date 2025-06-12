@@ -5,6 +5,7 @@
 import { GridContainer } from "./gridContainer";
 import { Inventory } from "./invntory";
 import { Item } from "./item";
+import { Region } from "./region";
 import { Subgrid } from "./subgrid";
 import { TotalValueDisplay } from "./totalValueDisplay";
 
@@ -24,8 +25,110 @@ export const getRandomInt = (min: number, max: number): number => {
  * @param type 0 为普通容器，1 为玩家盒子
  * @returns 
  */
-export const initInventory = (inventory: Inventory, type: number=0) => {
+export const initInventory = (inventory: Inventory, type: number=0, preset_infos: any | null = null) => {
     const item_infos = window.game.BLOCK_TYPES;
+    if (preset_infos) {
+        for (const preset of preset_infos.content) {
+            const grid = inventory.contents[preset.title];
+            // console.log(grid)
+            for (const item_info of preset.content) {
+                const item_name = item_info.name;
+                const item_type = item_infos.find(item => item.name === item_name);
+                if (item_type) {
+                    if (grid instanceof Subgrid) {
+                        const item = new Item(
+                            window.game,
+                            grid,
+                            item_type.type,
+                            item_type,
+                        );
+                        if(item_type.subgridLayout) {
+                            item.subgridLayout = item_type.subgridLayout;
+                        }
+                        grid.addItem(item, 0, 0);
+                        if (item_info.ammo) {
+                            for (const ammoObject of item_info.ammo) {
+                                item.ammo[ammoObject.name] = ammoObject.stack
+                            }
+                        }
+                        if (item_info.accessories) {
+                            for (const accessory of item_info.accessories) {
+                                const accessory_type = item_infos.find(i => i.name === accessory.name);
+                                console.log('bbb\n', accessory, accessory_type)
+                                const gun_subgrid_name = Object.keys(item.subgrids).find(
+                                    key => item.subgrids[key].acceptedTypes.includes(accessory_type.type) &&
+                                    item.subgrids[key].blocks.length === 0
+                                );
+                                if (!gun_subgrid_name) {
+                                    continue;
+                                }
+                                const gun_subgrid = item.subgrids[gun_subgrid_name];
+                                // console.log('aaa\n', gun_subgrid, accessory_type)
+                                if (gun_subgrid) {
+                                    const accessory_item = new Item(
+                                        window.game,
+                                        gun_subgrid,
+                                        accessory_type.type,
+                                        accessory_type
+                                    );
+                                    gun_subgrid.addItem(accessory_item, 0, 0);
+                                }
+                            }
+                            console.log(item_info, item)
+                        }
+                        if (item_info.stack) {
+                            item.currentStactCount = item_info.stack;
+                        }
+                        item.refreshUI();
+                    } else if (grid instanceof GridContainer) {
+                        const item_position = item_info.position;
+                        const subgrid = grid.subgrids[item_position[0]];
+                        const item = new Item(
+                            window.game,
+                            subgrid,
+                            item_type.type,
+                            item_type
+                        );
+                        if(item_type.subgridLayout) {
+                            item.subgridLayout = item_type.subgridLayout;
+                        }
+                        const pos_x = item_position[1];
+                        const pos_y = item_position[2];
+                        if (item_position[3] === 1) {
+                            const tmp = item.cellWidth;
+                            item.cellWidth = item.cellHeight;
+                            item.cellHeight = tmp;
+                        }
+                        subgrid.addItem(item, pos_x, pos_y);
+                        if (item_info.ammo) {
+                            for (const ammoObject of item_info.ammo) {
+                                item.ammo[ammoObject.name] = ammoObject.stack
+                            }
+                        }
+                        if (item_info.accessories) {
+                            for (const accessory of item_info.accessories) {
+                                const accessory_type = item_infos.find(i => i.name === accessory.name);
+                                const gun_subgrid = item.subgrids['accessory_type.type'];
+                                if (gun_subgrid) {
+                                    const accessory_item = new Item(
+                                        window.game,
+                                        gun_subgrid,
+                                        accessory_type.type,
+                                        accessory_type
+                                    );
+                                    gun_subgrid.addItem(accessory_item, 0, 0);
+                                }
+                            }
+                        }
+                        if (item_info.stack) {
+                            item.currentStactCount = item_info.stack;
+                        }
+                    }
+                }
+            }
+        }
+        return;
+    }
 
     if (type === 0) {
         // Spoils box
@@ -174,4 +277,36 @@ export const updateTotalValueDisplay = () => {
     if(!window.game.playerRegion.components['totalValueDisplay']) return;
     const totalValueDisplay = window.game.playerRegion.components['totalValueDisplay'] as TotalValueDisplay;
     totalValueDisplay.updateTotalValue();
+}
+
+export const initSpoilsRegion = (position: {x: number, y: number}, presets: any | null = null) => {
+    const region = new Region(position, {
+        title: "战利品",
+        width: 508,
+        height: 632,
+        titleColor: 0xff0000,
+        titleAlpha: 0.3,
+        componentWidth: 0,
+        backgroundColor: 0xffffff,
+        backgroundAlpha: 0.1,
+    });
+    if (presets) {
+        console.log(presets)
+        for ( const preset of presets.data) {
+            const inventory_type = preset.type === 'playerContainer' ? 1 : 0;
+            const inventory = region.addInventory(inventory_type, false);
+            initInventory(inventory, inventory_type, preset);
+        }
+    } else {
+        for (let i = 0; i < window.game.defaultSpoilsRegionNumber; i += 1) {
+            region.addInventory(0, true);
+        }
+        for (let i = 0; i < window.game.defaultPlayerRegionNumber; i += 1) {
+            region.addInventory(1, true);
+        }
+    }
+    region.switchTo(0);
+    region.addSwitcherUI();
+
+    return region;
 }
