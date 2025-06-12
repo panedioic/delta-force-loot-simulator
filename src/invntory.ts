@@ -137,29 +137,39 @@ export class Inventory {
                 [3, 3, 0, 0]
             ];
             (this.contents['ContainerSecure'] as GridContainer).initSubgrids();
-            // 胸挂回调函数
-            (this.contents['Chest rig'] as Subgrid).onBlockMoved = (item, _col, _row) => {
-                // console.log('there', item.subgridLayout);
-                (this.contents['ContainerChestRigs'] as GridContainer).layout = item.subgridLayout;
-                (this.contents['ContainerChestRigs'] as GridContainer).initSubgrids();
-                this.refreshUI();
+            try {
+                // 胸挂回调函数
+                (this.contents['ChestRig'] as Subgrid).onBlockMoved = (item, _col, _row) => {
+                    // console.log('there', item.subgridLayout);
+                    (this.contents['ContainerChestRigs'] as GridContainer).layout = item.subgridLayout;
+                    (this.contents['ContainerChestRigs'] as GridContainer).initSubgrids();
+                    this.refreshUI();
+                }
+                (this.contents['ChestRig'] as Subgrid).onBlockRemoved = (_) => {
+                    (this.contents['ContainerChestRigs'] as GridContainer).layout = [];
+                    (this.contents['ContainerChestRigs'] as GridContainer).initSubgrids();
+                    this.refreshUI();
+                }
+            } catch(error) {
+                console.error('添加胸挂道具时出现错误：', this.contents['ChestRig'])
+                console.error(error)
             }
-            (this.contents['Chest rig'] as Subgrid).onBlockRemoved = (_) => {
-                (this.contents['ContainerChestRigs'] as GridContainer).layout = [];
-                (this.contents['ContainerChestRigs'] as GridContainer).initSubgrids();
-                this.refreshUI();
-            }
-            // 背包回调函数
-            (this.contents['Backpack'] as Subgrid).onBlockMoved = (item, _col, _row) => {
-                // console.log('there');
-                (this.contents['ContainerBackpack'] as GridContainer).layout = item.subgridLayout;
-                (this.contents['ContainerBackpack'] as GridContainer).initSubgrids();
-                this.refreshUI();
-            }
-            (this.contents['Backpack'] as Subgrid).onBlockRemoved = (_) => {
-                (this.contents['ContainerBackpack'] as GridContainer).layout = [];
-                (this.contents['ContainerBackpack'] as GridContainer).initSubgrids();
-                this.refreshUI();
+            try{
+                // 背包回调函数
+                (this.contents['Backpack'] as Subgrid).onBlockMoved = (item, _col, _row) => {
+                    // console.log('there');
+                    (this.contents['ContainerBackpack'] as GridContainer).layout = item.subgridLayout;
+                    (this.contents['ContainerBackpack'] as GridContainer).initSubgrids();
+                    this.refreshUI();
+                }
+                (this.contents['Backpack'] as Subgrid).onBlockRemoved = (_) => {
+                    (this.contents['ContainerBackpack'] as GridContainer).layout = [];
+                    (this.contents['ContainerBackpack'] as GridContainer).initSubgrids();
+                    this.refreshUI();
+                }
+            } catch(error) {
+                console.error('添加背包道具时出现错误：', this.contents['Backpack'])
+                console.error(error)
             }
         } else {
             const spoilsBox = new Subgrid(
@@ -199,7 +209,7 @@ export class Inventory {
                 // 特殊物品的位置处理
                 if (item.acceptedTypes.includes("primaryWeapon")) {
                     item.container.position.set(8, currentY);
-                } else if (item.acceptedTypes.includes("secondaryWeapon")) {
+                } else if (item.acceptedTypes.includes("SecondaryWeapon")) {
                     item.container.position.set(348, currentY);
                     currentY += 136;
                 } else if (item.acceptedTypes.includes("knife")) {

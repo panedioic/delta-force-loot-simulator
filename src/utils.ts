@@ -74,7 +74,7 @@ export const initInventory = (inventory: Inventory, type: number=0) => {
         const tasks1 = [
             {
                 type: 'primaryWeapon',
-                subgrid: 'Primary weapon 1',
+                subgrid: 'PrimaryWeapon1',
                 probability: 0.9,
             },
             {
@@ -84,7 +84,7 @@ export const initInventory = (inventory: Inventory, type: number=0) => {
             },
             {
                 type: 'primaryWeapon',
-                subgrid: 'Primary weapon 2',
+                subgrid: 'PrimaryWeapon2',
                 probability: 0.6,
             },
             {
@@ -99,7 +99,7 @@ export const initInventory = (inventory: Inventory, type: number=0) => {
             },
             {
                 type: 'chestRigs',
-                subgrid: 'Chest rig',
+                subgrid: 'ChestRig',
                 probability: 1,
             },
             {
@@ -119,6 +119,8 @@ export const initInventory = (inventory: Inventory, type: number=0) => {
                     info.type,
                     info,
                 );
+                // console.log(subgrid)
+                // console.log(task)
                 subgrid.addItem(item);
             }
         }

@@ -214,6 +214,302 @@
         "value": 370066,
         "color": "695687"
     },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "misc",
+        "name": "播放器",
+        "value": 9338,
+        "color": "0000FF"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "food",
+        "name": "糖三角",
+        "value": 10875,
+        "color": "0000FF"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 2,
+        "type": "medical",
+        "name": "战术手术包",
+        "value": 7999,
+        "color": "008000"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "medical",
+        "name": "额温枪",
+        "value": 10071,
+        "color": "0000FF"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "medical",
+        "name": "医用酒精",
+        "value": 9002,
+        "color": "0000FF"
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 1,
+        "type": "misc",
+        "name": "阿萨拉酒壶",
+        "value": 26753,
+        "color": "800080"
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 1,
+        "type": "misc",
+        "name": "HIFI声卡",
+        "value": 27163,
+        "color": "800080"
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 2,
+        "type": "medical",
+        "name": "血压仪",
+        "value": 39252,
+        "color": "800080"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "food",
+        "name": "柠檬茶",
+        "value": 16178,
+        "color": "800080"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "misc",
+        "name": "海盗铜币",
+        "value": 2569,
+        "color": "008000"
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 2,
+        "type": "medical",
+        "name": "战地医疗箱",
+        "value": 132598,
+        "color": "FFD700"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "medical",
+        "name": "瓶装抗生素",
+        "value": 6677,
+        "color": "008000"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "medical",
+        "name": "DVE止疼片",
+        "value": 19919,
+        "color": "800080"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 2,
+        "type": "repair",
+        "name": "标准头盔维修包",
+        "value": 34504,
+        "color": "800080"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "medical",
+        "name": "强效注射器",
+        "value": 6881,
+        "color": "008000"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 3,
+        "type": "medical",
+        "name": "DEK野战手术包",
+        "value": 22238,
+        "color": "800080"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 3,
+        "type": "repair",
+        "name": "标准护甲维修包",
+        "value": 66508,
+        "color": "800080"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 3,
+        "type": "medical",
+        "name": "户外医疗箱",
+        "value": 40931,
+        "color": "800080"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "medical",
+        "name": "m1肌肉强化",
+        "value": 10697,
+        "color": "008000"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "misc",
+        "name": "播放器",
+        "value": 9338,
+        "color": "0000FF"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "food",
+        "name": "糖三角",
+        "value": 10875,
+        "color": "0000FF"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 2,
+        "type": "medical",
+        "name": "战术手术包",
+        "value": 7999,
+        "color": "008000"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "medical",
+        "name": "额温枪",
+        "value": 10071,
+        "color": "0000FF"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "medical",
+        "name": "医用酒精",
+        "value": 9002,
+        "color": "0000FF"
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 1,
+        "type": "misc",
+        "name": "阿萨拉酒壶",
+        "value": 26753,
+        "color": "800080"
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 1,
+        "type": "misc",
+        "name": "HIFI声卡",
+        "value": 27163,
+        "color": "800080"
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 2,
+        "type": "medical",
+        "name": "血压仪",
+        "value": 39252,
+        "color": "800080"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "food",
+        "name": "柠檬茶",
+        "value": 16178,
+        "color": "800080"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "misc",
+        "name": "海盗铜币",
+        "value": 2569,
+        "color": "008000"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "medical",
+        "name": "强效注射器",
+        "value": 6881,
+        "color": "008000"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 3,
+        "type": "medical",
+        "name": "DEK野战手术包",
+        "value": 22238,
+        "color": "800080"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 3,
+        "type": "repair",
+        "name": "标准护甲维修包",
+        "value": 66508,
+        "color": "800080"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 3,
+        "type": "medical",
+        "name": "户外医疗箱",
+        "value": 40931,
+        "color": "800080"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "medical",
+        "name": "m1肌肉强化",
+        "value": 10697,
+        "color": "008000"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "medical",
+        "name": "DVE止疼片",
+        "value": 19919,
+        "color": "800080"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 2,
+        "type": "repair",
+        "name": "标准头盔维修包",
+        "value": 34504,
+        "color": "800080"
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 2,
+        "type": "medical",
+        "name": "战地医疗箱",
+        "value": 132598,
+        "color": "FFD700"
+    },
 
     {
         "cellWidth": 2,
@@ -247,6 +543,70 @@
         "value": 256984,
         "color": "a16e50"
     },
+    {
+        "cellWidth": 2,
+        "cellHeight": 2,
+        "type": "helmet",
+        "name": "户外棒球帽",
+        "value": 9206,
+        "color": "FFFFFF"
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 2,
+        "type": "helmet",
+        "name": "GT1 战术头盔",
+        "value": 137202,
+        "color": "800080"
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 2,
+        "type": "helmet",
+        "name": "MHS 战术头盔",
+        "value": 97548,
+        "color": "800080"
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 2,
+        "type": "helmet",
+        "name": "MC201 防弹头盔",
+        "value": 40876,
+        "color": "800080"
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 2,
+        "type": "helmet",
+        "name": "户外棒球帽",
+        "value": 9206,
+        "color": "FFFFFF"
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 2,
+        "type": "helmet",
+        "name": "MC201 防弹头盔",
+        "value": 40876,
+        "color": "800080"
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 2,
+        "type": "helmet",
+        "name": "GT1 战术头盔",
+        "value": 137202,
+        "color": "800080"
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 2,
+        "type": "helmet",
+        "name": "MHS 战术头盔",
+        "value": 97548,
+        "color": "800080"
+    },
 
     {
         "cellWidth": 3,
@@ -279,6 +639,14 @@
         "name": "重型突击背心",
         "value": 378747,
         "color": "a16e50"
+    },
+    {
+        "cellWidth": 3,
+        "cellHeight": 4,
+        "type": "armor",
+        "name": "突击手防弹背心",
+        "value": 139977,
+        "color": "800080"
     },
 
     {
@@ -404,6 +772,117 @@
         "ammo": "Ammo338",
         "capacity": 5
     },
+    {
+        "cellWidth": 5,
+        "cellHeight": 2,
+        "type": "primaryWeapon",
+        "name": "K437突击步枪",
+        "value": 142353,
+        "color": "808080",
+        "accessories": [
+            {"title": ".300 Ammo", "type": "Ammo300"},
+            {"title": "后握把", "type": "RearGrip"},
+            {"title": "枪管", "type": "Barrel"},
+            {"title": "枪口", "type": "Muzzle"},
+            {"title": "枪托", "type": "Stock"},
+            {"title": "前握把", "type": "Foregrip"},
+            {"title": "左导轨", "type": "Rail"},
+            {"title": "右导轨", "type": "Rail"},
+            {"title": "弹匣", "type": "Magazine"},
+            {"title": "弹匣座", "type": "MagazineMount"},
+            {"title": "瞄准镜", "type": "Scope"},
+            {"title": "上导轨", "type": "Rail"},
+            {"title": "侧瞄具", "type": "SideSight"}
+        ]
+    },
+    {
+        "cellWidth": 4,
+        "cellHeight": 2,
+        "type": "primaryWeapon",
+        "name": "勇士冲锋枪",
+        "value": 44082,
+        "color": "808080",
+        "accessories": [
+            {"title": "9x19mm Ammo", "type": "Ammo919"},
+            {"title": "后握把", "type": "RearGrip"},
+            {"title": "枪管", "type": "Barrel"},
+            {"title": "枪口", "type": "Muzzle"},
+            {"title": "枪托", "type": "Stock"},
+            {"title": "枪托垫", "type": "ButtPad"},
+            {"title": "前握把", "type": "Foregrip"},
+            {"title": "右导轨", "type": "Rail"},
+            {"title": "弹匣", "type": "Magazine"},
+            {"title": "弹匣座", "type": "MagazineMount"},
+            {"title": "瞄准镜", "type": "Scope"},
+            {"title": "侧瞄具", "type": "SideSight"},
+            {"title": "拉机柄", "type": "PullHandle"}
+        ]
+    },
+    {
+        "cellWidth": 4,
+        "cellHeight": 2,
+        "type": "primaryWeapon",
+        "name": "Vector冲锋枪",
+        "value": 122010,
+        "color": "808080",
+        "accessories": [
+            {"title": ".45 Ammo", "type": "Ammo45"},
+            {"title": "后握把", "type": "RearGrip"},
+            {"title": "枪管", "type": "Barrel"},
+            {"title": "枪口", "type": "Muzzle"},
+            {"title": "枪托", "type": "Stock"},
+            {"title": "下导轨", "type": "Rail"},
+            {"title": "弹匣", "type": "Magazine"},
+            {"title": "弹匣座", "type": "MagazineMount"},
+            {"title": "瞄准镜", "type": "Scope"},
+            {"title": "侧瞄具", "type": "SideSight"},
+            {"title": "枪托套件", "type": "ButtKit"}
+        ]
+    },
+    {
+        "cellWidth": 4,
+        "cellHeight": 2,
+        "type": "primaryWeapon",
+        "name": "M16A4突击步枪",
+        "value": 11056,
+        "color": "808080",
+        "accessories": [
+            {"title": "5.56x45mm Ammo", "type": "Ammo55645"},
+            {"title": "枪管", "type": "Barrel"},
+            {"title": "枪口", "type": "Muzzle"},
+            {"title": "枪托", "type": "Stock"},
+            {"title": "弹匣", "type": "Magazine"},
+            {"title": "弹匣座", "type": "MagazineMount"},
+            {"title": "前握把", "type": "Foregrip"},
+            {"title": "瞄准镜", "type": "Scope"},
+            {"title": "上导轨", "type": "Rail"},
+            {"title": "侧瞄具", "type": "SideSight"}
+        ]
+    },
+    {
+        "cellWidth": 4,
+        "cellHeight": 2,
+        "type": "primaryWeapon",
+        "name": "AK-12突击步枪",
+        "value": 96135,
+        "color": "808080",
+        "accessories": [
+            {"title": "5.45x39mm Ammo", "type": "Ammo54539"},
+            {"title": "后握把", "type": "RearGrip"},
+            {"title": "枪管", "type": "Barrel"},
+            {"title": "枪口", "type": "Muzzle"},
+            {"title": "枪托", "type": "Stock"},
+            {"title": "前握把", "type": "Foregrip"},
+            {"title": "上导轨", "type": "Rail"},
+            {"title": "右导轨", "type": "Rail"},
+            {"title": "弹匣", "type": "Magazine"},
+            {"title": "弹匣座", "type": "MagazineMount"},
+            {"title": "前握把", "type": "Foregrip"},
+            {"title": "瞄准镜", "type": "Scope"},
+            {"title": "侧瞄具", "type": "SideSight"},
+            {"title": "拉机柄", "type": "PullHandle"}
+        ]
+    },
 
     {
         "cellWidth": 2,
@@ -525,6 +1004,57 @@
         "color": "a14a4c",
         "maxStack": 20
     },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "ammo",
+        "name": ".300 BLK",
+        "value": 3819,
+        "color": "FFD700",
+        "maxStack": 60
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "ammo",
+        "name": "9x19mm PBP",
+        "value": 1508,
+        "color": "800080",
+        "maxStack": 60
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "ammo",
+        "name": ".45 ACP RIP",
+        "value": 579,
+        "color": "0000FF",
+        "maxStack": 60
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "ammo",
+        "name": ".300 BLK",
+        "value": 3819,
+        "color": "FFD700"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "ammo",
+        "name": "9x19mm PBP",
+        "value": 1508,
+        "color": "800080"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "ammo",
+        "name": ".45 ACP RIP",
+        "value": 579,
+        "color": "0000FF"
+    },
 
     {
         "cellWidth": 1,
@@ -640,97 +1170,113 @@
         "value": 68357,
         "color": "4b6b87"
     },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "medical",
+        "name": "瓶装抗生素",
+        "value": 6677,
+        "color": "008000"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "name": "侵袭后握把",
+        "value": 22851,
+        "color": "800080",
+        "type": "RearGrip"
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 1,
+        "name": "K437断刃短枪管组合",
+        "value": 64006,
+        "color": "800080",
+        "type": "Barrel"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "name": "沙暴垂直补偿器",
+        "value": 55495,
+        "color": "800080",
+        "type": "Muzzle"
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 1,
+        "name": "精英轻型枪托",
+        "value": 18628,
+        "color": "0000FF",
+        "type": "Stock"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "name": "折叠握把",
+        "value": 12016,
+        "color": "0000FF",
+        "type": "Foregrip"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "name": "KC猎犬护木片",
+        "value": 5138,
+        "color": "008000",
+        "type": "Rail"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "name": "蜜獾小口径快拔套",
+        "value": 5142,
+        "color": "008000",
+        "type": "MagazineMount"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "name": "微型瞄具增高架",
+        "value": 18158,
+        "color": "0000FF",
+        "type": "Scope",
+        "accessories": [
+            {"title": "增高架瞄具", "type": "Scope"}
+        ]
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "name": "PEQ-2红色激光镭指",
+        "value": 31621,
+        "color": "800080",
+        "type": "Rail"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "name": "Osight微型瞄准镜",
+        "value": 25843,
+        "color": "0000FF",
+        "type": "Scope"
+    },
 
     {
         "cellWidth": 2,
         "cellHeight": 2,
-        "type": "backpack",
-        "name": "战术快拆背包",
-        "value": 9012,
-        "color": "367e68",
-        "subgridLayout": [
-            [3, 5, 0, 0]
-        ]
-    },
-    {
-        "cellWidth": 2,
-        "cellHeight": 2,
-        "type": "backpack",
-        "name": "DASH战术背包",
-        "value": 16562,
-        "color": "4b6b87",
-        "subgridLayout": [
-            [2, 2, 0, 0],
-            [2, 2, 2.06, 0],
-            [4, 3, 0.03, 2.06]
-        ]
-    },
-    {
-        "cellWidth": 2,
-        "cellHeight": 2,
-        "type": "backpack",
-        "name": "GT1户外登山包",
-        "value": 57282,
-        "color": "695687",
-        "subgridLayout": [
-            [5, 5, 0, 0]
-        ]
-    },
-    {
-        "cellWidth": 3,
-        "cellHeight": 3,
-        "type": "backpack",
-        "name": "GT5野战背包",
-        "value": 148176,
+        "type": "chestRigs",
+        "name": "DAR突击手胸挂",
+        "value": 233260,
         "color": "a16e50",
         "subgridLayout": [
-            [5, 6, 0, 0]
-        ]
-    },
-    {
-        "cellWidth": 3,
-        "cellHeight": 3,
-        "type": "backpack",
-        "name": "重型登山包",
-        "value": 412622,
-        "color": "a14a4c",
-        "subgridLayout": [
-            [1, 2, 0, 0],
-            [3, 2, 1.05, 0],
-            [1, 2, 4.1, 0],
-            [5, 6, 0.05, 2.06]
-        ]
-    },
-
-    {
-        "cellWidth": 1,
-        "cellHeight": 2,
-        "type": "chestRigs",
-        "name": "通用战术胸挂",
-        "value": 3940,
-        "color": "367e68",
-        "subgridLayout": [
-            [1, 2, 0, 0],
-            [1, 2, 1.05, 0],
-            [1, 2, 2.1, 0],
-            [1, 1, 0, 2.06],
-            [2, 1, 1.07, 2.06]
-        ]
-    },
-    {
-        "cellWidth": 1,
-        "cellHeight": 2,
-        "type": "chestRigs",
-        "name": "G01战术胸挂",
-        "value": 9914,
-        "color": "4b6b87",
-        "subgridLayout": [
-            [1, 2, 0, 0],
-            [3, 1, 1.1, 0],
-            [1, 2, 4.2, 0],
-            [1, 2, 1.05, 1.05],
-            [1, 2, 2.1, 1.05],
-            [1, 2, 3.15, 1.05]
+            [2, 1, 0.03, 0],
+            [2, 1, 2.08, 0],
+            [2, 2, 0.03, 1.05],
+            [2, 2, 2.08, 1.05],
+            [1, 3, 0, 3.1],
+            [1, 3, 1.05, 3.1],
+            [2, 3, 2.1, 3.1]
         ]
     },
     {
@@ -752,18 +1298,170 @@
     {
         "cellWidth": 2,
         "cellHeight": 2,
+        "type": "backpack",
+        "name": "DRC先进侦察胸挂",
+        "value": 85000,
+        "color": "800080",
+        "subgridLayout": [
+            [2, 2, 0.07, 0],
+            [2, 2, 2.17, 0],
+            [1, 3, 0.5, 2.05],
+            [1, 3, 1.55, 2.05],
+            [1, 3, 2.51, 2.05]
+        ]
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 2,
+        "type": "backpack",
+        "name": "突击者战术背心",
+        "value": 85000,
+        "color": "800080",
+        "subgridLayout": [
+            [1, 3, 0, 0],
+            [1, 2, 1.05, 0],
+            [1, 2, 2.1, 0],
+            [1, 3, 3.15, 0],
+            [2, 1, 1.07, 2.05],
+            [2, 2, 1.07, 3.15]
+        ]
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 2,
         "type": "chestRigs",
-        "name": "DAR突击手胸挂",
-        "value": 233260,
+        "name": "G01战术胸挂",
+        "value": 9914,
+        "color": "4b6b87",
+        "subgridLayout": [
+            [1, 2, 0, 0],
+            [3, 1, 1.1, 0],
+            [1, 2, 4.2, 0],
+            [1, 2, 1.05, 1.05],
+            [1, 2, 2.1, 1.05],
+            [1, 2, 3.15, 1.05]
+        ]
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 2,
+        "type": "chestRigs",
+        "name": "通用战术胸挂",
+        "value": 3940,
+        "color": "367e68",
+        "subgridLayout": [
+            [1, 2, 0, 0],
+            [1, 2, 1.05, 0],
+            [1, 2, 2.1, 0],
+            [1, 1, 0, 2.06],
+            [2, 1, 1.07, 2.06]
+        ]
+    },
+
+    {
+        "cellWidth": 3,
+        "cellHeight": 3,
+        "type": "backpack",
+        "name": "GTO重型战术包",
+        "value": 412622,
+        "color": "a14a4c",
+        "subgridLayout": [
+            [5, 9, 0, 0]
+        ]
+    },
+    {
+        "cellWidth": 3,
+        "cellHeight": 3,
+        "type": "backpack",
+        "name": "重型登山包",
+        "value": 412622,
+        "color": "a14a4c",
+        "subgridLayout": [
+            [1, 2, 0, 0],
+            [3, 2, 1.05, 0],
+            [1, 2, 4.1, 0],
+            [5, 6, 0.05, 2.06]
+        ]
+    },
+    {
+        "cellWidth": 3,
+        "cellHeight": 3,
+        "type": "backpack",
+        "name": "GT5野战背包",
+        "value": 148176,
         "color": "a16e50",
         "subgridLayout": [
-            [2, 1, 0.03, 0],
-            [2, 1, 2.08, 0],
-            [2, 2, 0.03, 1.05],
-            [2, 2, 2.08, 1.05],
-            [1, 3, 0, 3.1],
-            [1, 3, 1.05, 3.1],
-            [2, 3, 2.1, 3.1]
+            [5, 6, 0, 0]
+        ]
+    },
+    {
+        "cellWidth": 3,
+        "cellHeight": 3,
+        "type": "backpack",
+        "name": "D3战术背包",
+        "value": 150000,
+        "color": "FFD700",
+        "subgridLayout": [
+            [4, 7, 0, 0]
+        ]
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 2,
+        "type": "backpack",
+        "name": "GT1户外登山包",
+        "value": 57282,
+        "color": "695687",
+        "subgridLayout": [
+            [5, 5, 0, 0]
+        ]
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 2,
+        "type": "backpack",
+        "name": "GA野战背包",
+        "value": 45000,
+        "color": "0000FF",
+        "subgridLayout": [
+            [5, 6, 0, 0]
+        ]
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 2,
+        "type": "backpack",
+        "name": "DASH战术背包",
+        "value": 16562,
+        "color": "4b6b87",
+        "subgridLayout": [
+            [2, 2, 0, 0],
+            [2, 2, 2.06, 0],
+            [4, 3, 0.03, 2.06]
+        ]
+    },
+    {
+        "cellWidth": 3,
+        "cellHeight": 3,
+        "type": "backpack",
+        "name": "大型登山包",
+        "value": 65000,
+        "color": "0000FF",
+        "subgridLayout": [
+            [2, 1, 0, 0],
+            [2, 1, 2.06, 0],
+            [4, 3, 0.03, 1.06]
+        ]
+    },
+    {
+        "cellWidth": 2,
+        "cellHeight": 2,
+        "type": "backpack",
+        "name": "战术快拆背包",
+        "value": 9012,
+        "color": "367e68",
+        "subgridLayout": [
+            [3, 5, 0, 0]
         ]
     }
 ]

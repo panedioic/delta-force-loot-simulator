@@ -77,28 +77,32 @@ export class GridContainer {
         }
         this.subgrids = [];
         this.additiveSize = { x: 0, y: 0}
-
-        for (const element of this.layout) {
-            const [width, height, x, y] = element;
-            const subgrid = new Subgrid(
-                this.game,
-                width,
-                height,
-                this.cellSize,
-                this.aspect,
-                this.fullfill,
-                this.countable,
-                this.acceptedTypes,
-                ''
-            );
-            subgrid.container.position.set(x * this.cellSize, y * this.cellSize);
-            this.subgrids.push(subgrid);
-            this.container.addChild(subgrid.container);
-            const oldAdditiveSize = this.additiveSize;
-            this.additiveSize = {
-                x: Math.max(oldAdditiveSize.x, (x + width) * this.cellSize),
-                y: Math.max(oldAdditiveSize.y, (y + height) * this.cellSize)
+        try {
+            for (const element of this.layout) {
+                const [width, height, x, y] = element;
+                const subgrid = new Subgrid(
+                    this.game,
+                    width,
+                    height,
+                    this.cellSize,
+                    this.aspect,
+                    this.fullfill,
+                    this.countable,
+                    this.acceptedTypes,
+                    ''
+                );
+                subgrid.container.position.set(x * this.cellSize, y * this.cellSize);
+                this.subgrids.push(subgrid);
+                this.container.addChild(subgrid.container);
+                const oldAdditiveSize = this.additiveSize;
+                this.additiveSize = {
+                    x: Math.max(oldAdditiveSize.x, (x + width) * this.cellSize),
+                    y: Math.max(oldAdditiveSize.y, (y + height) * this.cellSize)
+                }
             }
+        } catch ( error ) {
+            console.log('GridContainer 初始化 Subgrid 时出现错误！错误对象：', this);
+            console.error(error);
         }
     }
 

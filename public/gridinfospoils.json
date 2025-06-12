@@ -1,7 +1,7 @@
 [
     {
         "type": "Grid",
-        "name": "Primary weapon 1",
+        "name": "PrimaryWeapon1",
         "accept": ["primaryWeapon"],
         "cellsize": 128,
         "aspect": 2.6,
@@ -11,7 +11,7 @@
     },
     {
         "type": "Grid",
-        "accept": ["secondaryWeapon"],
+        "accept": ["SecondaryWeapon"],
         "name": "Secondary",
         "cellsize": 128,
         "aspect": 1.2,
@@ -22,7 +22,7 @@
     {
         "type": "Grid",
         "accept": ["primaryWeapon"],
-        "name": "Primary weapon 2",
+        "name": "PrimaryWeapon2",
         "cellsize": 128,
         "aspect": 2.6,
         "scrollable": true,
@@ -67,7 +67,7 @@
     },
     {
         "type": "Grid",
-        "name": "Chest rig",
+        "name": "ChestRig",
         "accept": ["chestRigs"],
         "width": 1,
         "height": 1,

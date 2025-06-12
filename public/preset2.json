@@ -1,0 +1,224 @@
+{
+    "description": "05310022",
+    "data": [
+        {"type": "spoilsBox", "content": [
+            {
+                "name": "K437突击步枪",
+                "ammo": [],
+                "accessories": []
+            }
+        ]},
+        {"type": "playerContainer",
+        "content": [
+            {"title": "PrimaryWeapon1", "content": [
+                {
+                    "name": "K437突击步枪",
+                    "ammo": [
+                        {"name": ".300 BLK", "stack": 30}
+                    ],
+                    "accessories": [
+                        {"name": "侵袭后握把"},
+                        {"name": "K437断刃短枪管组合"},
+                        {"name": "沙暴垂直补偿器"},
+                        {"name": "精英轻型枪托"},
+                        {"name": "折叠握把"},
+                        {"name": "KC猎犬护木片"},
+                        {"name": "KC猎犬护木片"},
+                        {"name": "蜜獾小口径快拔套（沙）"},
+                        {"name": "微型瞄具增高架"},
+                        {"name": "PEQ-2红色激光镭指"},
+                        {"name": "Osight微型瞄准镜"}
+                    ]
+                }
+            ]},
+            {"title": "Helmet", "content": [
+                {"name": "DICH训练头盔", "duration": {"current": 0, "max": 22}}
+            ]},
+            {"title": "Armor", "content": [
+                {"name": "突击手防弹背心", "duration": {"current": 52, "max": 54}}
+            ]},
+            {"title": "ChestRig", "content": [
+                {"name": "DRC先进侦察胸挂"}
+            ]},
+            {"title": "ContainerChestRigs", "content": [
+                {"name": "强效注射器", "position": [0, 0, 0, 0], "duration": {"current": 60}},
+                {"name": "DEK野战手术包", "position": [2, 0, 0, 1], "duration": {"current": 5}},
+                {"name": "标准护甲", "position": [3, 0, 0, 1], "duration": {"current": 58}},
+                {"name": "户外医疗箱", "position": [4, 0, 0, 1], "duration": {"current": 205}}
+            ]},
+            {"title": "Pocket", "content": [
+                {"name": ".300 BLK", "stack": 26, "position": [0, 0, 0, 0]},
+                {"name": "m1肌肉强化", "position": [3, 0, 0, 0]}
+            ]},
+            {"title": "Backpack", "content": [
+                {"name": "GA野战背包"}
+            ]},
+            {"title": "ContainerBackpack", "content": [
+                {"name": "身份牌", "position": [0, 0, 3, 0]}
+            ]}
+        ]},
+        {"type": "playerContainer",
+        "content": [
+            {"title": "PrimaryWeapon1", "content": [
+                {
+                    "name": "勇士冲锋枪",
+                    "ammo": [
+                        {"name": "9x19mm PBP", "stack": 30}
+                    ],
+                    "accessories": [
+                        {"name": "射手AK后握把"},
+                        {"name": "勇士海狸枪管"},
+                        {"name": "实用消音器"},
+                        {"name": "AK聚合物枪托"},
+                        {"name": "AK枪托缓冲垫"},
+                        {"name": "X25U斜侧战斗握把"},
+                        {"name": "狂蜂护木片"},
+                        {"name": "狂蜂护木片"},
+                        {"name": "狂蜂护木片"},
+                        {"name": "PEQ-2红色激光镭指"},
+                        {"name": "野蜂冲锋枪快拔套（沙）"},
+                        {"name": "泽宁特拉机柄帽"},
+                        {"name": "微型红点瞄准镜"}
+                    ]
+                }
+            ]},
+            {"title": "Helmet", "content": [
+                {"name": "MC201 防弹头盔", "duration": {"current": 0, "max": 34}}
+            ]},
+            {"title": "Armor", "content": [
+                {"name": "MK-2战术背心", "duration": {"current": 0, "max": 99}}
+            ]},
+            {"title": "ChestRig", "content": [
+                {"name": "DRC先进侦察胸挂"}
+            ]},
+            {"title": "ContainerChestRigs", "content": [
+                {"name": "DVE止疼片", "position": [0, 0, 0, 0], "duration": {"current": 4}},
+                {"name": "标准头盔维修包", "position": [0, 0, 1, 1], "duration": {"current": 50}},
+                {"name": "GT1 战术头盔", "position": [1, 0, 0, 0], "duration": {"current": 0, "max": 36}},
+                {"name": "DEK野战手术包", "position": [2, 0, 0, 1], "duration": {"current": 5}},
+                {"name": "标准护甲维修包", "position": [3, 0, 0, 1], "duration": {"current": 267}},
+                {"name": "户外医疗箱", "position": [4, 0, 0, 1], "duration": {"current": 75}}
+            ]},
+            {"title": "Pocket", "content": [
+                {"name": "9x19mm PBP", "stack": 23, "position": [0, 0, 0, 0]}
+            ]},
+            {"title": "Backpack", "content": [
+                {"name": "D3战术背包"}
+            ]}
+        ]},
+        {"type": "playerContainer",
+        "content": [
+            {"title": "PrimaryWeapon1", "content": [
+                {
+                    "name": "Vector冲锋枪",
+                    "ammo": [
+                        {"name": ".45 ACP RIP", "stack": 70}
+                    ],
+                    "accessories": [
+                        {"name": "Vector堡垒重枪管组合"},
+                        {"name": "钢制膛口制退器"},
+                        {"name": "Vector扩容CMAG70发"},
+                        {"name": "Vector枪托尾盖"},
+                        {"name": "狂蜂护木片"},
+                        {"name": "狂蜂护木片"}
+                    ]
+                }
+            ]},
+            {"title": "PrimaryWeapon2", "content": [
+                {
+                    "name": "M16A4突击步枪",
+                    "ammo": [
+                        {"name": "5.56x45mm FMJ", "stack": 20}
+                    ]
+                }
+            ]},
+            {"title": "Helmet", "content": [
+                {"name": "MHS 战术头盔", "duration": {"current": 7, "max": 18}}
+            ]},
+            {"title": "Armor", "content": [
+                {"name": "MK-2战术背心", "duration": {"current": 64, "max": 64}}
+            ]}, 
+            {"title": "ChestRig", "content": [
+                {"name": "DRC先进侦察胸挂"}
+            ]},
+            {"title": "ContainerChestRigs", "content": [
+                {"name": "战地医疗箱", "position": [0, 0, 0, 0], "duration": {"current": 531}},
+                {"name": "标准头盔维修包", "position": [2, 0, 0, 1], "duration": {"current": 24}},
+                {"name": "瓶装抗生素", "position": [2, 1, 0, 0], "duration": {"current": 3}},
+                {"name": ".45 ACP RIP", "stack": 60, "position": [3, 0, 0, 0]},
+                {"name": ".45 ACP RIP", "stack": 10, "position": [3, 1, 0, 0]},
+                {"name": "DEK野战手术包", "position": [4, 0, 0, 1], "duration": {"current": 7}}
+            ]},
+            {"title": "Pocket", "content": [
+                {"name": ".45 ACP RIP", "stack": 4, "position": [0, 0, 0, 0]},
+                {"name": ".45 ACP RIP", "stack": 60, "position": [1, 0, 0, 0]},
+                {"name": ".45 ACP RIP", "stack": 60, "position": [2, 0, 0, 0]}
+            ]},
+            {"title": "Backpack", "content": [
+                {"name": "战术快拆背包"}
+            ]}
+        ]},
+        {"type": "playerContainer",
+        "content": [
+            {"title": "PrimaryWeapon1", "content": [
+                {
+                    "name": "Vector冲锋枪",
+                    "accessories": [
+                        {"name": "Vector枪托尾盖"},
+                        {"name": "狂蜂护木片"},
+                        {"name": "狂蜂护木片"},
+                        {"name": "狂蜂护木片"},
+                        {"name": "Vector导轨枪管组合"},
+                        {"name": "Vector扩容40发弹匣"},
+                        {"name": "X25U斜侧战斗握把"},
+                        {"name": "耀斑战术手电"}
+                    ],
+                    "ammo": [
+                        {"name": ".45 ACP RIP", "stack": 40}
+                    ]
+                }
+            ]},
+            {"title": "PrimaryWeapon2", "content": [
+                {"name": "AK-12突击步枪"}
+            ]},
+            {"title": "Helmet", "content": [
+                {"name": "户外棒球帽", "duration": {"current": 7, "max": 12}}
+            ]},
+            {"title": "Armor", "content": [
+                {"name": "突击手防弹背心", "duration": {"current": 0, "max": 52}}
+            ]},
+            {"title": "ChestRig", "content": [
+                {"name": "DRC先进侦察胸挂"}
+            ]},
+            {"title": "ContainerChestRigs", "content": [
+                {"name": "强效注射器", "position": [0, 0, 0, 0], "duration": {"current": 60}},
+                {"name": "强效注射器", "position": [0, 0, 1, 0], "duration": {"current": 60}},
+                {"name": "瓶装抗生素", "position": [0, 1, 0, 0], "duration": {"current": 3}},
+                {"name": "U盘", "position": [0, 1, 1, 0]},
+                {"name": "播放器", "position": [1, 0, 0, 0]},
+                {"name": "糖三角", "position": [1, 0, 0, 0]},
+                {"name": "强效注射器", "position": [1, 0, 0, 0], "duration": {"current": 60}},
+                {"name": "DEK野战手术包", "position": [2, 0, 0, 1], "duration": {"current": 7}},
+                {"name": "户外医疗箱", "position": [3, 0, 0, 1], "duration": {"current": 350}},
+                {"name": "战术手术包", "position": [4, 0, 0, 1], "duration": {"current": 2}},
+                {"name": "瓶装抗生素", "position": [4, 2, 0, 0], "duration": {"current": 1}}
+            ]},
+            {"title": "Pocket", "content": [
+                {"name": ".45 ACP RIP", "stack": 49, "position": [0, 0, 0, 0]},
+                {"name": ".45 ACP RIP", "stack": 43, "position": [1, 0, 0, 0]}
+            ]},
+            {"title": "Backpack", "content": [
+                {"name": "大型登山包"}
+            ]},
+            {"title": "ContainerBackpack", "content": [
+                {"name": "额温枪", "position": [0, 0, 0, 0]},
+                {"name": "医用酒精", "position": [0, 0, 1, 0]},
+                {"name": "阿萨拉酒壶", "position": [1, 0, 0, 1]},
+                {"name": "HIFI声卡", "position": [2, 0, 0, 0]},
+                {"name": "血压仪", "position": [2, 0, 2, 0]},
+                {"name": "柠檬茶", "position": [2, 1, 0, 0]},
+                {"name": "海盗铜币", "position": [2, 2, 0, 0]}
+            ]}
+        ]}
+    ]
+}
