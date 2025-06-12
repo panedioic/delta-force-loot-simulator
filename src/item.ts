@@ -6,7 +6,6 @@ import { Subgrid } from "./subgrid";
 import { GAME_WIDTH, GAME_HEIGHT } from "./config";
 import { DEFAULT_CELL_SIZE } from "./config";
 import { updateTotalValueDisplay } from "./utils";
-import { Inventory } from "./invntory";
 import { Region } from "./region";
 // import type { Grid, Inventory } from "./types";
 
