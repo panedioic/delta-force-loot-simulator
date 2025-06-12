@@ -220,7 +220,7 @@
         "type": "misc",
         "name": "播放器",
         "value": 9338,
-        "color": "0000FF"
+        "color": "4b6b87"
     },
     {
         "cellWidth": 1,
@@ -228,7 +228,7 @@
         "type": "food",
         "name": "糖三角",
         "value": 10875,
-        "color": "0000FF"
+        "color": "4b6b87"
     },
     {
         "cellWidth": 1,
@@ -236,7 +236,7 @@
         "type": "medical",
         "name": "额温枪",
         "value": 10071,
-        "color": "0000FF"
+        "color": "4b6b87"
     },
     {
         "cellWidth": 1,
@@ -244,7 +244,7 @@
         "type": "medical",
         "name": "医用酒精",
         "value": 9002,
-        "color": "0000FF"
+        "color": "4b6b87"
     },
     {
         "cellWidth": 2,
@@ -252,7 +252,7 @@
         "type": "medical",
         "name": "血压仪",
         "value": 39252,
-        "color": "800080"
+        "color": "695687"
     },
     {
         "cellWidth": 1,
@@ -260,7 +260,7 @@
         "type": "food",
         "name": "柠檬茶",
         "value": 16178,
-        "color": "800080"
+        "color": "695687"
     },
     {
         "cellWidth": 1,
@@ -268,7 +268,7 @@
         "type": "misc",
         "name": "海盗铜币",
         "value": 2569,
-        "color": "008000"
+        "color": "367e68"
     },
     {
         "cellWidth": 2,
@@ -276,7 +276,7 @@
         "type": "medical",
         "name": "战地医疗箱",
         "value": 132598,
-        "color": "FFD700"
+        "color": "a16e50"
     },
     {
         "cellWidth": 1,
@@ -284,7 +284,7 @@
         "type": "medical",
         "name": "瓶装抗生素",
         "value": 6677,
-        "color": "008000"
+        "color": "367e68"
     },
     {
         "cellWidth": 1,
@@ -292,7 +292,7 @@
         "type": "medical",
         "name": "DVE止疼片",
         "value": 19919,
-        "color": "800080"
+        "color": "695687"
     },
     {
         "cellWidth": 2,
@@ -300,7 +300,7 @@
         "type": "repair",
         "name": "标准头盔维修包",
         "value": 34504,
-        "color": "800080"
+        "color": "695687"
     },
     {
         "cellWidth": 1,
@@ -308,7 +308,7 @@
         "type": "medical",
         "name": "强效注射器",
         "value": 6881,
-        "color": "008000"
+        "color": "367e68"
     },
     {
         "cellWidth": 3,
@@ -316,7 +316,7 @@
         "type": "medical",
         "name": "DEK野战手术包",
         "value": 22238,
-        "color": "800080"
+        "color": "695687"
     },
     {
         "cellWidth": 3,
@@ -324,7 +324,7 @@
         "type": "repair",
         "name": "标准护甲维修包",
         "value": 66508,
-        "color": "800080"
+        "color": "695687"
     },
     {
         "cellWidth": 3,
@@ -332,7 +332,7 @@
         "type": "medical",
         "name": "户外医疗箱",
         "value": 40931,
-        "color": "800080"
+        "color": "695687"
     },
     {
         "cellWidth": 1,
@@ -340,7 +340,7 @@
         "type": "medical",
         "name": "m1肌肉强化",
         "value": 10697,
-        "color": "008000"
+        "color": "367e68"
     },
     {
         "cellWidth": 1,
@@ -348,7 +348,7 @@
         "type": "misc",
         "name": "播放器",
         "value": 9338,
-        "color": "0000FF"
+        "color": "4b6b87"
     },
     {
         "cellWidth": 1,
@@ -356,7 +356,7 @@
         "type": "food",
         "name": "糖三角",
         "value": 10875,
-        "color": "0000FF"
+        "color": "4b6b87"
     },
     {
         "cellWidth": 2,
@@ -364,7 +364,7 @@
         "type": "medical",
         "name": "战术手术包",
         "value": 7999,
-        "color": "008000"
+        "color": "367e68"
     },
     {
         "cellWidth": 1,
@@ -372,7 +372,7 @@
         "type": "medical",
         "name": "额温枪",
         "value": 10071,
-        "color": "0000FF"
+        "color": "4b6b87"
     },
     {
         "cellWidth": 1,
@@ -380,7 +380,7 @@
         "type": "medical",
         "name": "医用酒精",
         "value": 9002,
-        "color": "0000FF"
+        "color": "4b6b87"
     },
     {
         "cellWidth": 1,
@@ -388,7 +388,7 @@
         "type": "misc",
         "name": "阿萨拉酒壶",
         "value": 26753,
-        "color": "800080"
+        "color": "695687"
     },
     {
         "cellWidth": 2,
@@ -396,7 +396,7 @@
         "type": "misc",
         "name": "HIFI声卡",
         "value": 27163,
-        "color": "800080"
+        "color": "695687"
     },
     {
         "cellWidth": 2,
@@ -404,7 +404,7 @@
         "type": "medical",
         "name": "血压仪",
         "value": 39252,
-        "color": "800080"
+        "color": "695687"
     },
     {
         "cellWidth": 1,
@@ -412,7 +412,7 @@
         "type": "food",
         "name": "柠檬茶",
         "value": 16178,
-        "color": "800080"
+        "color": "695687"
     },
     {
         "cellWidth": 1,
@@ -420,7 +420,7 @@
         "type": "misc",
         "name": "海盗铜币",
         "value": 2569,
-        "color": "008000"
+        "color": "367e68"
     },
     {
         "cellWidth": 1,
@@ -428,7 +428,7 @@
         "type": "medical",
         "name": "强效注射器",
         "value": 6881,
-        "color": "008000"
+        "color": "367e68"
     },
     {
         "cellWidth": 3,
@@ -436,7 +436,7 @@
         "type": "medical",
         "name": "DEK野战手术包",
         "value": 22238,
-        "color": "800080"
+        "color": "695687"
     },
     {
         "cellWidth": 1,
@@ -444,7 +444,7 @@
         "type": "medical",
         "name": "户外医疗箱",
         "value": 40931,
-        "color": "800080"
+        "color": "695687"
     },
     {
         "cellWidth": 1,
@@ -452,7 +452,7 @@
         "type": "medical",
         "name": "m1肌肉强化",
         "value": 10697,
-        "color": "008000"
+        "color": "4b6b87"
     },
     {
         "cellWidth": 1,
@@ -460,7 +460,7 @@
         "type": "medical",
         "name": "DVE止疼片",
         "value": 19919,
-        "color": "800080"
+        "color": "695687"
     },
     {
         "cellWidth": 2,
@@ -468,7 +468,7 @@
         "type": "medical",
         "name": "战地医疗箱",
         "value": 132598,
-        "color": "FFD700"
+        "color": "a16e50"
     },
 
     {
@@ -507,17 +507,9 @@
         "cellWidth": 2,
         "cellHeight": 2,
         "type": "helmet",
-        "name": "户外棒球帽",
-        "value": 9206,
-        "color": "FFFFFF"
-    },
-    {
-        "cellWidth": 2,
-        "cellHeight": 2,
-        "type": "helmet",
         "name": "GT1 战术头盔",
         "value": 137202,
-        "color": "800080"
+        "color": "695687"
     },
     {
         "cellWidth": 2,
@@ -525,7 +517,7 @@
         "type": "helmet",
         "name": "MHS 战术头盔",
         "value": 97548,
-        "color": "800080"
+        "color": "695687"
     },
     {
         "cellWidth": 2,
@@ -533,7 +525,7 @@
         "type": "helmet",
         "name": "MC201 防弹头盔",
         "value": 40876,
-        "color": "800080"
+        "color": "695687"
     },
     {
         "cellWidth": 2,
@@ -541,7 +533,7 @@
         "type": "helmet",
         "name": "户外棒球帽",
         "value": 9206,
-        "color": "FFFFFF"
+        "color": "080808"
     },
     {
         "cellWidth": 2,
@@ -549,7 +541,7 @@
         "type": "helmet",
         "name": "MC201 防弹头盔",
         "value": 40876,
-        "color": "800080"
+        "color": "695687"
     },
     {
         "cellWidth": 2,
@@ -557,7 +549,7 @@
         "type": "helmet",
         "name": "GT1 战术头盔",
         "value": 137202,
-        "color": "800080"
+        "color": "695687"
     },
     {
         "cellWidth": 2,
@@ -565,7 +557,7 @@
         "type": "helmet",
         "name": "MHS 战术头盔",
         "value": 97548,
-        "color": "800080"
+        "color": "695687"
     },
 
     {
@@ -606,7 +598,7 @@
         "type": "armor",
         "name": "突击手防弹背心",
         "value": 139977,
-        "color": "800080"
+        "color": "695687"
     },
 
     {
@@ -979,7 +971,7 @@
         "type": "ammo",
         "name": ".300 BLK",
         "value": 3819,
-        "color": "FFD700",
+        "color": "a16e50",
         "maxStack": 60
     },
     {
@@ -1186,7 +1178,7 @@
         "cellHeight": 1,
         "name": "侵袭后握把",
         "value": 22851,
-        "color": "800080",
+        "color": "695687",
         "type": "RearGrip"
     },
     {
@@ -1194,7 +1186,7 @@
         "cellHeight": 1,
         "name": "射手AK后握把",
         "value": 18013,
-        "color": "800080",
+        "color": "695687",
         "type": "RearGrip"
     },
     {
@@ -1252,7 +1244,7 @@
         "cellHeight": 1,
         "name": "沙暴垂直补偿器",
         "value": 55495,
-        "color": "800080",
+        "color": "695687",
         "type": "Muzzle"
     },
     {
@@ -1276,7 +1268,7 @@
         "cellHeight": 1,
         "name": "折叠握把",
         "value": 12016,
-        "color": "0000FF",
+        "color": "4b6b87",
         "type": "Foregrip"
     },
     {
