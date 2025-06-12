@@ -146,7 +146,7 @@
             {"title": "ContainerChestRigs", "content": [
                 {"name": "战地医疗箱", "position": [0, 0, 0, 0], "duration": {"current": 531}},
                 {"name": "标准头盔维修包", "position": [2, 0, 0, 1], "duration": {"current": 24}},
-                {"name": "瓶装抗生素", "position": [2, 1, 0, 0], "duration": {"current": 3}},
+                {"name": "瓶装抗生素", "position": [2, 2, 0, 0], "duration": {"current": 3}},
                 {"name": ".45 ACP RIP", "stack": 60, "position": [3, 0, 0, 0]},
                 {"name": ".45 ACP RIP", "stack": 10, "position": [3, 1, 0, 0]},
                 {"name": "DEK野战手术包", "position": [4, 0, 0, 1], "duration": {"current": 7}}

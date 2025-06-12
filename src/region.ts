@@ -139,6 +139,10 @@ export class Region {
         if (this.inventories.length === 0 || id >= this.inventories.length) {
             return;
         }
+        if (id < 0) {
+            return;
+        }
+        // console.log(id)
         this.inventories[this.currentInventoryId].setEnabled(false);
         this.currentInventoryId = id;
         this.inventories[this.currentInventoryId].setEnabled(true);

@@ -54,7 +54,7 @@ export const initInventory = (inventory: Inventory, type: number=0, preset_infos
                         if (item_info.accessories) {
                             for (const accessory of item_info.accessories) {
                                 const accessory_type = item_infos.find(i => i.name === accessory.name);
-                                console.log('bbb\n', accessory, accessory_type)
+                                // console.log('bbb\n', accessory, accessory_type)
                                 const gun_subgrid_name = Object.keys(item.subgrids).find(
                                     key => item.subgrids[key].acceptedTypes.includes(accessory_type.type) &&
                                     item.subgrids[key].blocks.length === 0
@@ -99,7 +99,7 @@ export const initInventory = (inventory: Inventory, type: number=0, preset_infos
                             item.cellWidth = item.cellHeight;
                             item.cellHeight = tmp;
                         }
-                        subgrid.addItem(item, pos_x, pos_y);
+                        subgrid.addItem(item, pos_y, pos_x);
                         if (item_info.ammo) {
                             for (const ammoObject of item_info.ammo) {
                                 item.ammo[ammoObject.name] = ammoObject.stack

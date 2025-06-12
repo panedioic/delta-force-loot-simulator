@@ -232,14 +232,6 @@
     },
     {
         "cellWidth": 1,
-        "cellHeight": 2,
-        "type": "medical",
-        "name": "战术手术包",
-        "value": 7999,
-        "color": "008000"
-    },
-    {
-        "cellWidth": 1,
         "cellHeight": 1,
         "type": "medical",
         "name": "额温枪",
@@ -253,22 +245,6 @@
         "name": "医用酒精",
         "value": 9002,
         "color": "0000FF"
-    },
-    {
-        "cellWidth": 2,
-        "cellHeight": 1,
-        "type": "misc",
-        "name": "阿萨拉酒壶",
-        "value": 26753,
-        "color": "800080"
-    },
-    {
-        "cellWidth": 2,
-        "cellHeight": 1,
-        "type": "misc",
-        "name": "HIFI声卡",
-        "value": 27163,
-        "color": "800080"
     },
     {
         "cellWidth": 2,
@@ -319,8 +295,8 @@
         "color": "800080"
     },
     {
-        "cellWidth": 1,
-        "cellHeight": 2,
+        "cellWidth": 2,
+        "cellHeight": 1,
         "type": "repair",
         "name": "标准头盔维修包",
         "value": 34504,
@@ -335,24 +311,24 @@
         "color": "008000"
     },
     {
-        "cellWidth": 1,
-        "cellHeight": 3,
+        "cellWidth": 3,
+        "cellHeight": 1,
         "type": "medical",
         "name": "DEK野战手术包",
         "value": 22238,
         "color": "800080"
     },
     {
-        "cellWidth": 1,
-        "cellHeight": 3,
+        "cellWidth": 3,
+        "cellHeight": 1,
         "type": "repair",
         "name": "标准护甲维修包",
         "value": 66508,
         "color": "800080"
     },
     {
-        "cellWidth": 1,
-        "cellHeight": 3,
+        "cellWidth": 3,
+        "cellHeight": 1,
         "type": "medical",
         "name": "户外医疗箱",
         "value": 40931,
@@ -383,8 +359,8 @@
         "color": "0000FF"
     },
     {
-        "cellWidth": 1,
-        "cellHeight": 2,
+        "cellWidth": 2,
+        "cellHeight": 1,
         "type": "medical",
         "name": "战术手术包",
         "value": 7999,
@@ -407,8 +383,8 @@
         "color": "0000FF"
     },
     {
-        "cellWidth": 2,
-        "cellHeight": 1,
+        "cellWidth": 1,
+        "cellHeight": 2,
         "type": "misc",
         "name": "阿萨拉酒壶",
         "value": 26753,
@@ -455,19 +431,11 @@
         "color": "008000"
     },
     {
-        "cellWidth": 1,
-        "cellHeight": 3,
+        "cellWidth": 3,
+        "cellHeight": 1,
         "type": "medical",
         "name": "DEK野战手术包",
         "value": 22238,
-        "color": "800080"
-    },
-    {
-        "cellWidth": 1,
-        "cellHeight": 3,
-        "type": "repair",
-        "name": "标准护甲维修包",
-        "value": 66508,
         "color": "800080"
     },
     {
@@ -492,14 +460,6 @@
         "type": "medical",
         "name": "DVE止疼片",
         "value": 19919,
-        "color": "800080"
-    },
-    {
-        "cellWidth": 1,
-        "cellHeight": 2,
-        "type": "repair",
-        "name": "标准头盔维修包",
-        "value": 34504,
         "color": "800080"
     },
     {
