@@ -35,8 +35,8 @@ export class Subgrid {
     title: string;
     parentRegion: Region | Item | null = null;
     enabled: boolean = true;
-    onBlockMoved?: (item: Item, col: number, row: number, grid: Subgrid | null) => void;
-    onBlockRemoved?: (item: Item, grid: Subgrid | null) => void;
+    onItemDraggedIn?: (item: Item, col: number, row: number, grid: Subgrid | null) => void;
+    onItemDraggedOut?: (item: Item, grid: Subgrid | null) => void;
 
     // 用于防止出现大小的bug
     additiveSize: { x: number; y: number };
@@ -377,8 +377,8 @@ export class Subgrid {
 
         obj.parentRegion = this.parentRegion;
 
-        if (this.onBlockMoved) {
-            this.onBlockMoved(obj, col, row, objOriginalParentGrid);
+        if (this.onItemDraggedIn) {
+            this.onItemDraggedIn(obj, col, row, objOriginalParentGrid);
         }
 
         updateTotalValueDisplay();
@@ -404,8 +404,8 @@ export class Subgrid {
             this.blocks.splice(index, 1);
             this.container.removeChild(obj.container);
             obj.parentGrid = null; // 清除父级网格引用
-            if (this.onBlockRemoved) {
-                this.onBlockRemoved(obj, this);
+            if (this.onItemDraggedOut) {
+                this.onItemDraggedOut(obj, this);
             }
             if (destroy) {
                 obj.container.destroy();
@@ -483,8 +483,8 @@ export class Subgrid {
     clearItem() {
         for (const item of this.blocks) {
             this.container.removeChild(item.container);
-            if (this.onBlockRemoved) {
-                this.onBlockRemoved(item, this);
+            if (this.onItemDraggedOut) {
+                this.onItemDraggedOut(item, this);
             }
         }
         this.blocks = [];

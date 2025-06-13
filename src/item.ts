@@ -769,8 +769,8 @@ export class Item {
                     newInfo.title
                 )
                 this.subgrids[newInfo.title] = newSubgrid;
-                newSubgrid.onBlockMoved = this.onAccessoryAdded.bind(this);
-                newSubgrid.onBlockRemoved = this.onAccessoryRemoved.bind(this);
+                newSubgrid.onItemDraggedIn = this.onAccessoryAdded.bind(this);
+                newSubgrid.onItemDraggedOut = this.onAccessoryRemoved.bind(this);
                 newSubgrid.setEnabled(false);
             }
         }
@@ -815,8 +815,8 @@ export class Item {
             );
             subgrid.parentRegion = this;
             this.subgrids[info.title] = subgrid;
-            subgrid.onBlockMoved = this.onAccessoryAdded.bind(this);
-            subgrid.onBlockRemoved = this.onAccessoryRemoved.bind(this);
+            subgrid.onItemDraggedIn = this.onAccessoryAdded.bind(this);
+            subgrid.onItemDraggedOut = this.onAccessoryRemoved.bind(this);
             subgrid.setEnabled(false);
         }
     }

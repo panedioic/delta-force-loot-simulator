@@ -156,7 +156,7 @@ export class Inventory {
             (this.contents['ContainerSecure'] as GridContainer).initSubgrids();
             try {
                 // 胸挂回调函数
-                (this.contents['ChestRig'] as Subgrid).onBlockMoved = (item, _col, _row) => {
+                (this.contents['ChestRig'] as Subgrid).onItemDraggedIn = (item, _col, _row) => {
                     // console.log('there', item.subgridLayout);
                     (this.contents['ContainerChestRigs'] as GridContainer).layout = item.subgridLayout;
                     // console.log(item.subgrids);
@@ -171,7 +171,7 @@ export class Inventory {
                     // console.log('Moved in!')
                     this.refreshUI();
                 }
-                (this.contents['ChestRig'] as Subgrid).onBlockRemoved = (item) => {
+                (this.contents['ChestRig'] as Subgrid).onItemDraggedOut = (item) => {
                     // 将当前背包/胸挂的内容备份至 item 内
                     item.subgrids = {};
                     for (const subgrid of Object.values((this.contents['ContainerChestRigs'] as GridContainer).subgrids)) {
@@ -187,7 +187,7 @@ export class Inventory {
             }
             try{
                 // 背包回调函数
-                (this.contents['Backpack'] as Subgrid).onBlockMoved = (item, _col, _row) => {
+                (this.contents['Backpack'] as Subgrid).onItemDraggedIn = (item, _col, _row) => {
                     // console.log('there');
                     (this.contents['ContainerBackpack'] as GridContainer).layout = item.subgridLayout;
                     if (Object.keys(item.subgrids).length > 0) {
@@ -203,7 +203,7 @@ export class Inventory {
                     }
                     this.refreshUI();
                 }
-                (this.contents['Backpack'] as Subgrid).onBlockRemoved = (item) => {
+                (this.contents['Backpack'] as Subgrid).onItemDraggedOut = (item) => {
                     // 将当前背包/胸挂的内容备份至 item 内
                     item.subgrids = {};
                     for (const subgrid of Object.values((this.contents['ContainerBackpack'] as GridContainer).subgrids)) {

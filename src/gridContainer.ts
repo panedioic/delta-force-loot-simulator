@@ -114,15 +114,28 @@ export class GridContainer {
                 x: Math.max(oldAdditiveSize.x, (this.layout[i][0] + this.layout[i][2]) * this.cellSize),
                 y: Math.max(oldAdditiveSize.y, (this.layout[i][1] + this.layout[i][3]) * this.cellSize)
             }
+            this.subgrids[i].onItemDraggedIn = (item: Item, _col: number, _row: number) => {
+                this.onContainerItemDraggedIn(item);
+            }
         }
     }
 
-    /**
-     * Add the grid to the stage.
-     * @param {PIXI.Container} stage - The stage to add the grid to
-     * */
-    addToStage(stage: PIXI.Container) {
-        stage.addChild(this.container);
+    onContainerItemDraggedIn(draggedItem: Item) {
+        const checkTypes = ['backpack', 'chestRigs', 'Backpack', 'ChestRigs'];
+        // console.log('draggedItem', draggedItem);
+        if(checkTypes.includes(draggedItem.type)) {
+            // console.log('onContainerItemDraggedIn', draggedItem);
+            if (Object.keys(draggedItem.subgrids).length === 0) {
+                return;
+            }
+            for (const subgrid of Object.values(draggedItem.subgrids)) {
+                for (const item of Object.values(subgrid.blocks)) {
+                    this.addItem(item);
+                }
+            }
+            draggedItem.subgrids = {};
+            draggedItem.refreshUI();
+        }
     }
 
     
@@ -138,15 +151,6 @@ export class GridContainer {
             }
         }
         return false;
-    }
-
-    /**
-     * Set the visibility of the grid.
-     * @deprecated Use setEnabled instead.
-     * @param {boolean} visible - The visibility of the grid
-     * */
-    setVisible(visible: boolean) {
-        this.container.visible = visible;
     }
 
     setEnabled(enabled: boolean) {
