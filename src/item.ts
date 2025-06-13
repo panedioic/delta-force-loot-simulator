@@ -458,16 +458,9 @@ export class Item {
                         const temp = this.cellWidth;
                         this.cellWidth = this.cellHeight;
                         this.cellHeight = temp;
-                        if (this.parentGrid) {
-                            this.parentGrid.removeBlock(this);
-                        }
                         targetGrid.addItem(this, gridPosition.clampedCol, gridPosition.clampedRow);
                     }
                 } else {
-                    // 可以直接放置
-                    if (this.parentGrid) {
-                        this.parentGrid.removeBlock(this);
-                    }
                     targetGrid.addItem(this, gridPosition.clampedCol, gridPosition.clampedRow);
                 }
             } else {
@@ -531,10 +524,10 @@ export class Item {
     }
 
     onDragMove(event: PIXI.FederatedPointerEvent) {
-        // 检查是否移动超过阈值（5像素）才开始真正的拖动
+        // 检查是否移动超过阈值（3像素）才开始真正的拖动
         const dx = event.global.x - this.dragStartMouseGlobalPoint.x;
         const dy = event.global.y - this.dragStartMouseGlobalPoint.y;
-        if (!this.isDragging && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
+        if (!this.isDragging && (Math.abs(dx) > 3 || Math.abs(dy) > 3)) {
             this.isDragging = true;
             this.container.alpha = 0.7;
 
@@ -755,7 +748,6 @@ export class Item {
             }
         }
         if (bHasConflict) {
-            item.parentGrid?.removeBlock(item);
             if (previousGrid) {
                 previousGrid.addItem(item);
             }
@@ -805,6 +797,9 @@ export class Item {
         this.refreshUI();
     }
 
+    /**
+     * 初始化配件
+     */
     initAccessories() {
         for(const info of this.accessories) {
             const subgrid = new Subgrid(
@@ -826,6 +821,10 @@ export class Item {
         }
     }
 
+    /**
+     * 获取当前枪中的子弹总数
+     * @returns 
+     */
     getTotalAmmo(): number {
         let totalAmmoCount = 0;
         for (const ammoCount of Object.values(this.ammo)) {
@@ -834,6 +833,9 @@ export class Item {
         return totalAmmoCount;
     }
 
+    /**
+     * 卸载子弹，根据枪中的子弹类型创建新的 Item，并添加到父网格中
+     */
     unloadAmmo() {
         // console.log(this.ammo)
         for (const [ammoType, ammoCount] of Object.entries(this.ammo)) {
@@ -870,7 +872,7 @@ export class Item {
             let totalAmmoCount = this.getTotalAmmo();
             if ((!this.capacity) || totalAmmoCount === this.capacity) {
                 if(draggingItemOriginalParentGrid) {
-                    draggingItemOriginalParentGrid.removeBlock(draggingItem);
+                    // back to original position
                     draggingItemOriginalParentGrid.addItem(draggingItem);
                 }
             } else {
@@ -881,7 +883,7 @@ export class Item {
                         this.ammo[draggingItem.name] += draggingItem.currentStactCount;
                     }
                     draggingItem.currentStactCount = 0;
-                    draggingItem.parentGrid?.removeBlock(draggingItem, true);
+                    draggingItem.destroy();
                     // console.log('test', draggingItem, this)
                 } else {
                     if (!this.ammo[draggingItem.name]) {
@@ -891,7 +893,7 @@ export class Item {
                     }
                     draggingItem.currentStactCount -= this.capacity - totalAmmoCount;
                     if(draggingItemOriginalParentGrid) {
-                        draggingItemOriginalParentGrid.removeBlock(draggingItem);
+                        // back to original position
                         draggingItemOriginalParentGrid.addItem(draggingItem);
                     }
                 }
@@ -914,7 +916,7 @@ export class Item {
             }
             if (bHasConflict) {
                 if (draggingItem.parentGrid) {
-                    draggingItem.parentGrid.removeBlock(draggingItem);
+                    // back to original position
                     draggingItem.parentGrid.addItem(draggingItem, draggingItem.col, draggingItem.row);
                 }
                 return false;
@@ -926,15 +928,11 @@ export class Item {
                 if (subgrid) {
                     // 尝试将物品添加到subgrid中
                     const draggingItemOriginalParentGrid = draggingItem.parentGrid;
-                    if(draggingItemOriginalParentGrid) {
-                        draggingItemOriginalParentGrid.removeBlock(draggingItem);
-                    }
                     const added = subgrid.addItem(draggingItem);
                     if (added) {
                         return true;
                     } else {
                         const originalItem = subgrid.blocks[0];
-                        subgrid.removeBlock(originalItem);
                         subgrid.addItem(draggingItem)
                         draggingItemOriginalParentGrid?.addItem(originalItem);
                     }
@@ -958,12 +956,7 @@ export class Item {
                 // 如果拖动的物品数量为0，从网格中移除并销毁它
                 if (draggingItem.currentStactCount === 0) {
                     if (draggingItem.parentGrid) {
-                        draggingItem.parentGrid.removeBlock(draggingItem);
-                        // 确保从舞台中移除
-                        if (draggingItem.container.parent) {
-                            draggingItem.container.parent.removeChild(draggingItem.container);
-                        }
-                        draggingItem.container.destroy();
+                        draggingItem.destroy();
                     }
                 }
             }
@@ -983,10 +976,6 @@ export class Item {
                 const itemGrid = draggingItem.parentGrid;
                 const itemCol = draggingItem.col;
                 const itemRow = draggingItem.row;
-
-                // 从原网格中移除
-                thisGrid.removeBlock(this);
-                itemGrid.removeBlock(draggingItem);
 
                 // 添加到新位置
                 itemGrid.addItem(this, itemCol, itemRow);
@@ -1009,12 +998,10 @@ export class Item {
             if (targetPosition) {
                 // 移动当前物品到新位置
                 const originalParentGrid = this.parentGrid;
-                originalParentGrid.removeBlock(this);
                 originalParentGrid.addItem(this, targetPosition.col, targetPosition.row);
                 // 如果是最后一个被交互的物品，移动拖动的物品到目标位置
                 if (this === interacting[interacting.length-1]) {
                     const originalDraggingItemParentGrid = draggingItem.parentGrid;
-                    originalDraggingItemParentGrid.removeBlock(draggingItem);
                     originalDraggingItemParentGrid.addItem(draggingItem, pos.col, pos.row);
                 }
             }
@@ -1089,7 +1076,11 @@ export class Item {
         }
     }
 
-    // 检查是否与其他配件冲突
+    /**
+     * 
+     * @param type 检查配件之间是否有冲突
+     * @returns 
+     */
     hasConflict(type: string): boolean {
         if (!this.conflicts[type]) return false;
         
@@ -1102,5 +1093,12 @@ export class Item {
             }
         }
         return false;
+    }
+
+    destroy() {
+        if (this.parentGrid) {
+            this.parentGrid.removeItem(this);
+        }
+        this.container.destroy();
     }
 }

@@ -284,10 +284,8 @@ export class Game {
                 {
                     text: "丢弃",
                     callback: () => {
-                        if (item.parentGrid) {
-                            item.parentGrid.removeBlock(item);
-                            this.activeItemInfoPanel?.close();
-                        }
+                        item.destroy();
+                        this.activeItemInfoPanel?.close();
                     }
                 }
             ]

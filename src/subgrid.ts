@@ -314,7 +314,7 @@ export class Subgrid {
      * @param {number} col - The column position of the block
      * @param {number} row - The row position of the block
      * */
-    addItem(obj: Item, col: number = -1, row: number = -1): boolean {
+    addItem(obj: Item, col: number = -1, row: number = -1, removeFromOriginalGrid: boolean=true): boolean {
         // Check accept first
         const bIsAccepted = this.checkAccept(obj);
         if (!bIsAccepted) {
@@ -345,6 +345,11 @@ export class Subgrid {
         // TODO: this.rearrange();
         if (!bFound) {
             return false;
+        }
+
+        const originalParentGrid = obj.parentGrid;
+        if (removeFromOriginalGrid && originalParentGrid) {
+            originalParentGrid.removeItem(obj);
         }
         this.blocks.push(obj);
         this.container.addChild(obj.container);
@@ -381,9 +386,18 @@ export class Subgrid {
 
     /**
      * Remove a block from the grid.
+     * @deprecated 使用 removeItem 代替
      * @param {Item} obj - The block to remove
      * */
     removeBlock(obj: Item, destroy: boolean=false) {
+        this.removeItem(obj, destroy);
+    }
+
+    /**
+     * Remove a block from the grid.
+     * @param {Item} obj - The block to remove
+     * */
+    removeItem(obj: Item, destroy: boolean=false) {
         const index = this.blocks.indexOf(obj);
         if (index !== -1) {
             this.blocks.splice(index, 1);

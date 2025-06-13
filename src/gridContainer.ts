@@ -78,10 +78,9 @@ export class GridContainer {
             this.container.removeChild(subgrid.container);
         }
         this.subgrids = [];
-        this.additiveSize = { x: 0, y: 0}
         try {
             for (const element of this.layout) {
-                const [width, height, x, y] = element;
+                const [width, height, _x, _y] = element;
                 const subgrid = new Subgrid(
                     this.game,
                     width,
@@ -91,21 +90,29 @@ export class GridContainer {
                     this.fullfill,
                     this.countable,
                     this.acceptedTypes,
-                    ''
+                    's-' + this.subgrids.length
                 );
-                subgrid.parentRegion = this.parentRegion;
-                subgrid.container.position.set(x * this.cellSize, y * this.cellSize);
                 this.subgrids.push(subgrid);
-                this.container.addChild(subgrid.container);
-                const oldAdditiveSize = this.additiveSize;
-                this.additiveSize = {
-                    x: Math.max(oldAdditiveSize.x, (x + width) * this.cellSize),
-                    y: Math.max(oldAdditiveSize.y, (y + height) * this.cellSize)
-                }
             }
         } catch ( error ) {
             console.log('GridContainer 初始化 Subgrid 时出现错误！错误对象：', this);
             console.error(error);
+        }
+        this.refreshUI();
+    }
+
+    refreshUI() {
+        this.additiveSize = { x: 0, y: 0}
+        for (let i = 0; i < this.subgrids.length; i++) {
+            // console.log('bbb',this.subgrids[i]);
+            this.subgrids[i].parentRegion = this.parentRegion;
+            this.subgrids[i].container.position.set(this.layout[i][2] * this.cellSize, this.layout[i][3] * this.cellSize);
+            this.container.addChild(this.subgrids[i].container);
+            const oldAdditiveSize = this.additiveSize;
+            this.additiveSize = {
+                x: Math.max(oldAdditiveSize.x, (this.layout[i][0] + this.layout[i][2]) * this.cellSize),
+                y: Math.max(oldAdditiveSize.y, (this.layout[i][1] + this.layout[i][3]) * this.cellSize)
+            }
         }
     }
 

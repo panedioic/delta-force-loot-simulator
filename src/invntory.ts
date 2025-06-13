@@ -159,10 +159,24 @@ export class Inventory {
                 (this.contents['ChestRig'] as Subgrid).onBlockMoved = (item, _col, _row) => {
                     // console.log('there', item.subgridLayout);
                     (this.contents['ContainerChestRigs'] as GridContainer).layout = item.subgridLayout;
-                    (this.contents['ContainerChestRigs'] as GridContainer).initSubgrids();
+                    // console.log(item.subgrids);
+                    if (Object.keys(item.subgrids).length > 0) {
+                        for (const subgrid of Object.values(item.subgrids)) {
+                            (this.contents['ContainerChestRigs'] as GridContainer).subgrids.push(subgrid);
+                        }
+                        (this.contents['ContainerChestRigs'] as GridContainer).refreshUI();
+                    } else {
+                        (this.contents['ContainerChestRigs'] as GridContainer).initSubgrids();
+                    }
+                    // console.log('Moved in!')
                     this.refreshUI();
                 }
-                (this.contents['ChestRig'] as Subgrid).onBlockRemoved = (_) => {
+                (this.contents['ChestRig'] as Subgrid).onBlockRemoved = (item) => {
+                    // 将当前背包/胸挂的内容备份至 item 内
+                    item.subgrids = {};
+                    for (const subgrid of Object.values((this.contents['ContainerChestRigs'] as GridContainer).subgrids)) {
+                        item.subgrids[subgrid.title] = subgrid;
+                    }
                     (this.contents['ContainerChestRigs'] as GridContainer).layout = [];
                     (this.contents['ContainerChestRigs'] as GridContainer).initSubgrids();
                     this.refreshUI();
@@ -176,10 +190,25 @@ export class Inventory {
                 (this.contents['Backpack'] as Subgrid).onBlockMoved = (item, _col, _row) => {
                     // console.log('there');
                     (this.contents['ContainerBackpack'] as GridContainer).layout = item.subgridLayout;
-                    (this.contents['ContainerBackpack'] as GridContainer).initSubgrids();
+                    if (Object.keys(item.subgrids).length > 0) {
+                        for (const subgrid of Object.values(item.subgrids)) {
+                            (this.contents['ContainerBackpack'] as GridContainer).subgrids.push(subgrid);
+                        }
+                        // console.log((this.contents['ContainerBackpack'] as GridContainer).subgrids);
+                        // console.log('ccc');
+                        (this.contents['ContainerBackpack'] as GridContainer).refreshUI();
+                        // console.log('ddd');
+                    } else {
+                        (this.contents['ContainerBackpack'] as GridContainer).initSubgrids();
+                    }
                     this.refreshUI();
                 }
-                (this.contents['Backpack'] as Subgrid).onBlockRemoved = (_) => {
+                (this.contents['Backpack'] as Subgrid).onBlockRemoved = (item) => {
+                    // 将当前背包/胸挂的内容备份至 item 内
+                    item.subgrids = {};
+                    for (const subgrid of Object.values((this.contents['ContainerBackpack'] as GridContainer).subgrids)) {
+                        item.subgrids[subgrid.title] = subgrid;
+                    }
                     (this.contents['ContainerBackpack'] as GridContainer).layout = [];
                     (this.contents['ContainerBackpack'] as GridContainer).initSubgrids();
                     this.refreshUI();
@@ -201,8 +230,8 @@ export class Inventory {
                 "spoilsBox"
             );
             spoilsBox.parentRegion = this.parentRegion;
-            console.log(this, spoilsBox)
-            console.log(this.parentRegion, spoilsBox.parentRegion)
+            // console.log(this, spoilsBox)
+            // console.log(this.parentRegion, spoilsBox.parentRegion)
             this.contents["spoilsBox"] = spoilsBox;
             this.container.addChild(spoilsBox.container);
         }
@@ -303,22 +332,23 @@ export class Inventory {
     }
 
     /**
-     * 添加一个物品（所有的 addItem 都不会从原先所在的 Inventory、Grid 中移除，需要手动实现）
+     * 添加一个物品。
+     * （Inventory 处理：如果是能装备的道具，尽量先尝试装备，无法装备在转移到背包里）
      * @param item 要添加的物品
      * @returns 是否添加成功
      */
     addItem(item: Item) {
-        let bAdded = false;
-        for (const subgrid of Object.values(this.contents)) {
-            if (subgrid instanceof GridTitle) {
-                continue;
-            }
-            bAdded = subgrid.addItem(item);
-            if (bAdded) {
-                break;
+        for (const subgrid of Object.values(this.contents).filter(item => item instanceof Subgrid)) {
+            if (subgrid.addItem(item)) {
+                return true;
             }
         }
-        return bAdded;
+        for (const subgrid of Object.values(this.contents).filter(item => item instanceof GridContainer)) {
+            if (subgrid.addItem(item)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
