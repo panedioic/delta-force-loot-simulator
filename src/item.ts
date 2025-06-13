@@ -655,23 +655,26 @@ export class Item {
 
         // 设置预览颜色
         const previewColor = (canPlace || canPlaceRotated || bCanInteract || bCanInteractRotated) ? 0x88ff88 : 0xff8888; // 浅绿色或浅红色
-
+        
+        const globalSnappedPosition = grid.getGridGlobalPosition({col: clampedCol, row: clampedRow});
         const drawX = grid.fullfill ? baseX :
-            (bCanInteract || bCanInteractRotated) ? baseX +  + snapX - (this.cellWidth * this.cellSize) / 2 : // TODO
-            baseX +  + snapX - (this.cellWidth * this.cellSize) / 2;
+            (bCanInteract || bCanInteractRotated) ? baseX + snapX - (this.cellWidth * this.cellSize) / 2 : // TODO
+            // baseX + snapX + (this.cellWidth * this.cellSize) / 2;
+            globalSnappedPosition.x;
         const drawY = grid.fullfill ? baseY :
-            (bCanInteract || bCanInteractRotated) ? baseY +  + snapY - (this.cellHeight * this.cellSize) / 2 : // TODO
-            baseY +  + snapY - (this.cellHeight * this.cellSize) / 2;
+            (bCanInteract || bCanInteractRotated) ? baseY + snapY - (this.cellHeight * this.cellSize) / 2 : // TODO
+            globalSnappedPosition.y;
+        // console.log(x, baseX, snapX, clampedCol)
         const drawWidth = grid.fullfill ? grid.width * grid.cellSize * grid.aspect :
-            bCanInteract ? this.cellWidth * this.cellSize : // TODO
-            bCanInteractRotated ? this.cellHeight * this.cellSize :
-            canPlaceRotated ? this.cellHeight * this.cellSize :
-            this.cellWidth * this.cellSize;
+            bCanInteract ? this.cellWidth * grid.cellSize : // TODO
+            bCanInteractRotated ? this.cellHeight * grid.cellSize :
+            canPlaceRotated ? this.cellHeight * grid.cellSize :
+            this.cellWidth * grid.cellSize;
         const drawHeight = grid.fullfill ? grid.height * grid.cellSize :
-            bCanInteract ? this.cellHeight * this.cellSize : // TODO
-            bCanInteractRotated ? this.cellWidth * this.cellSize :
-            canPlaceRotated ? this.cellWidth * this.cellSize :
-            this.cellHeight * this.cellSize;
+            bCanInteract ? this.cellHeight * grid.cellSize : // TODO
+            bCanInteractRotated ? this.cellWidth * grid.cellSize :
+            canPlaceRotated ? this.cellWidth * grid.cellSize :
+            this.cellHeight * grid.cellSize;
 
         // Draw Preview
         this.previewIndicator.rect(drawX, drawY, drawWidth, drawHeight);

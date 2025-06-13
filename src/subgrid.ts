@@ -197,7 +197,16 @@ export class Subgrid {
             (clampedCol + cellWidth / 2) * this.cellSize * this.aspect;
         const snapY = (clampedRow + cellHeight / 2) * this.cellSize;
 
+        console.log(globalPosition, clampedCol, clampedRow, snapX, snapY)
         return { clampedCol, clampedRow, snapX, snapY };
+    }
+
+    getGridGlobalPosition(position: {col: number, row: number}) {
+        const globalPosition = this.getGlobalPosition();
+        return {
+            x: globalPosition.x + position.col * this.cellSize * this.aspect,
+            y: globalPosition.y + position.row * this.cellSize
+        }
     }
 
     /**
