@@ -197,7 +197,7 @@ export class Subgrid {
             (clampedCol + cellWidth / 2) * this.cellSize * this.aspect;
         const snapY = (clampedRow + cellHeight / 2) * this.cellSize;
 
-        console.log(globalPosition, clampedCol, clampedRow, snapX, snapY)
+        // console.log(globalPosition, clampedCol, clampedRow, snapX, snapY)
         return { clampedCol, clampedRow, snapX, snapY };
     }
 

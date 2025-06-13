@@ -344,7 +344,35 @@ export class Item {
         
                 // 绑定移动事件
                 this.container.on("pointermove", this.onDragMove.bind(this));
-                this.onDragStart(event);
+                this.container.on("wheel", (event) => {
+                    // console.log(event)
+                    const globalMousePosition = event.global;
+                    if (window.game.playerRegion) {
+                        const playerInventoryBounds = window.game.playerRegion.inventories[0].container.getBounds();
+                        if (globalMousePosition.x > playerInventoryBounds.x &&
+                            globalMousePosition.x < playerInventoryBounds.x + playerInventoryBounds.width &&
+                            globalMousePosition.y > playerInventoryBounds.y &&
+                            globalMousePosition.y < playerInventoryBounds.y + playerInventoryBounds.height) {
+                                window.game.playerRegion.inventories[0].onScroll(event);
+                                return;
+                        }
+                    }
+                    if (window.game.spoilsRegion) {
+                        const currentSpoilsInventoryIndex = window.game.spoilsRegion.currentInventoryId;
+                        if (currentSpoilsInventoryIndex >= window.game.spoilsRegion.inventories.length) {
+                            return;
+                        }
+                        const spoilsInventoryBounds = window.game.spoilsRegion.inventories[currentSpoilsInventoryIndex].container.getBounds();
+                        if (globalMousePosition.x > spoilsInventoryBounds.x &&
+                            globalMousePosition.x < spoilsInventoryBounds.x + spoilsInventoryBounds.width &&
+                            globalMousePosition.y > spoilsInventoryBounds.y &&
+                            globalMousePosition.y < spoilsInventoryBounds.y + spoilsInventoryBounds.height) {
+                                window.game.spoilsRegion.inventories[currentSpoilsInventoryIndex].onScroll(event);
+                                return;
+                        }
+                    }
+                });
+                this.onDragStart(event);   
             }
         });
 
@@ -655,7 +683,7 @@ export class Item {
 
         // 设置预览颜色
         const previewColor = (canPlace || canPlaceRotated || bCanInteract || bCanInteractRotated) ? 0x88ff88 : 0xff8888; // 浅绿色或浅红色
-        
+
         const globalSnappedPosition = grid.getGridGlobalPosition({col: clampedCol, row: clampedRow});
         const drawX = grid.fullfill ? baseX :
             (bCanInteract || bCanInteractRotated) ? baseX + snapX - (this.cellWidth * this.cellSize) / 2 : // TODO
