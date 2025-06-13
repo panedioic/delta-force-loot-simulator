@@ -322,11 +322,8 @@ export class Inventory {
     setEnabled(enabled: boolean) {
         this.enabled = enabled;
         // 遍历所有的subgrid并设置启用状态
-        for (const key in this.contents) {
-            const item = this.contents[key];
-            if (item instanceof Subgrid) {
-                item.setEnabled(enabled);
-            }
+        for (const grid of Object.values(this.contents)) {
+            grid.setEnabled(enabled);
         }
         this.container.visible = enabled;
     }

@@ -297,6 +297,7 @@ export const initSpoilsRegion = (position: {x: number, y: number}, presets: any 
             const inventory_type = preset.type === 'playerContainer' ? 1 : 0;
             const inventory = region.addInventory(inventory_type, false);
             initInventory(inventory, inventory_type, preset);
+            inventory.setEnabled(false);
         }
     } else {
         for (let i = 0; i < window.game.defaultSpoilsRegionNumber; i += 1) {

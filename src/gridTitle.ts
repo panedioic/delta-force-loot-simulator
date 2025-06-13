@@ -84,4 +84,8 @@ export class GridTitle {
     setPosition(x: number, y: number) {
         this.container.position.set(x, y);
     }
+
+    setEnabled(enabled: boolean) {
+        this.container.visible = enabled;
+    }
 }

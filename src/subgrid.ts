@@ -34,6 +34,7 @@ export class Subgrid {
     blocks: Item[];
     title: string;
     parentRegion: Region | Item | null = null;
+    enabled: boolean = true;
     onBlockMoved?: (item: Item, col: number, row: number, grid: Subgrid | null) => void;
     onBlockRemoved?: (item: Item, grid: Subgrid | null) => void;
 

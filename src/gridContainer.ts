@@ -27,6 +27,7 @@ export class GridContainer {
     maxWidth: number;
     backgroundGrid: Subgrid;
     parentRegion: Region | Item | null = null;
+    enabled: boolean = true;
 
     // 用于防止出现大小的bug
     additiveSize: { x: number; y: number };
@@ -141,10 +142,19 @@ export class GridContainer {
 
     /**
      * Set the visibility of the grid.
+     * @deprecated Use setEnabled instead.
      * @param {boolean} visible - The visibility of the grid
      * */
     setVisible(visible: boolean) {
         this.container.visible = visible;
+    }
+
+    setEnabled(enabled: boolean) {
+        this.enabled = enabled;
+        this.container.visible = enabled;
+        for (const subgrid of this.subgrids) {
+            subgrid.setEnabled(enabled);
+        }
     }
 
     clearItem() {

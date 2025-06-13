@@ -324,7 +324,7 @@ export class Game {
             }
         }
         // 不位于 itemInfoPanel，也没有被遮挡
-        for (const subgrid of this.grids) {
+        for (const subgrid of this.grids.filter(grid => grid.enabled)) {
             const bounds = subgrid.container.getBounds();
             // 检查坐标是否在当前网格的范围内
             if (
@@ -333,6 +333,21 @@ export class Game {
                 y >= bounds.y &&
                 y <= bounds.y + bounds.height
             ) {
+                // Debug
+                // const parentInventory = (subgrid.parentRegion as Region).inventories.find((inventory) => {
+                //     for (const grid of Object.values(inventory.contents)) {
+                //         if (grid instanceof Subgrid) {
+                //             if (grid === subgrid) {
+                //             return true;
+                //         } else if (grid instanceof GridContainer) {
+                //             if (grid.subgrids.includes(subgrid)) {
+                //                 return true;
+                //             }
+                //         }
+                //     }
+                //     return false;
+                // });
+                // console.log(subgrid)
                 return subgrid; // 返回找到的 Grid 实例
             }
         }

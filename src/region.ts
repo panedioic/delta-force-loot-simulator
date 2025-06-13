@@ -118,10 +118,10 @@ export class Region {
 
         this.inventories.push(inventory);
         this.container.addChild(inventory.container);
-        inventory.setEnabled(false);
         if (needToInit) {
             initInventory(inventory, type);
         }
+        inventory.setEnabled(false);
         return inventory;
     }
 
