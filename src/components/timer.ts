@@ -57,6 +57,8 @@ export class Timer {
                 window.game.isGameStarted = true;
             }
         });
+        startButton.eventMode = 'static';
+        startButton.cursor = 'pointer';
 
         // 创建暂停按钮
         const pauseButton = this.createButton("暂停", 90, 60, () => {
@@ -65,6 +67,8 @@ export class Timer {
                 window.game.isGameStarted = false;
             }
         });
+        pauseButton.eventMode = 'static';
+        pauseButton.cursor = 'pointer';
 
         this.container.addChild(startButton, pauseButton);
     }
@@ -83,22 +87,15 @@ export class Timer {
         // 按钮背景
         const bg = new PIXI.Graphics();
         bg.roundRect(0, 0, 60, 30, 5);
-        bg.fill({ color: 0xcccccc });
-        bg.interactive = true;
-        // bg.buttonMode = true;
-        // Inside the createButton function
-        bg.on("pointerdown", () => {
-            onClick(); // Call the provided onClick function
-        });
-
+        bg.fill(0x4CAF50);
+        
         // 按钮文本
         const text = new PIXI.Text({
             text: label,
             style: {
                 fontFamily: "Arial",
                 fontSize: 14,
-                fill: 0x333333,
-                fontWeight: "bold",
+                fill: 0xffffff,
             },
         });
         text.anchor.set(0.5);
@@ -106,6 +103,17 @@ export class Timer {
 
         button.addChild(bg, text);
         button.position.set(x, y);
+
+        // 添加按钮交互
+        button.eventMode = 'static';
+        button.cursor = 'pointer';
+        button.on('pointerdown', () => onClick());
+        button.on('pointerover', () => {
+            bg.tint = 0x45A049;
+        });
+        button.on('pointerout', () => {
+            bg.tint = 0xFFFFFF;
+        });
 
         return button;
     }

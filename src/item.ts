@@ -1079,7 +1079,7 @@ export class Item {
                 }
                 return true;
             } else {
-                console.log(4444)
+                // console.log(4444)
                 if (thisItemOriginalParentGrid) {
                     thisItemOriginalParentGrid.removeItem(this)
                 }
