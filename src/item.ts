@@ -506,7 +506,7 @@ export class Item {
                         targetGrid.addItem(this, gridPosition.clampedCol, gridPosition.clampedRow);
                     }
                 } else {
-                    console.log(gridPosition)
+                    // console.log(gridPosition)
                     targetGrid.addItem(this, gridPosition.clampedCol, gridPosition.clampedRow);
                 }
             } else {

@@ -1,8 +1,7 @@
 import * as PIXI from 'pixi.js';
-import { initSpoilsRegion } from '../utils';
 
 export interface Preset {
-    id: string;
+    id: number;
     name: string;
     description: string;
     config: any; // 预设配置数据
@@ -25,14 +24,23 @@ export class PresetManager {
 
     private presets: Preset[] = [
         {
-            id: 'default',
+            id: 0,
             name: '默认预设',
-            description: '默认游戏配置',
+            description: '根据设置随机生成内容',
             config: {}
         }
     ];
 
     constructor() {
+        // 将 game.presets 添加进 UI
+        window.game.presets.forEach((val) => {
+            this.presets.push({
+                id: this.presets.length,
+                name: val.title,
+                description: val.description,
+                config: val
+            });
+        });
         this.initDialog();
         this.initUI();
     }
@@ -224,7 +232,10 @@ export class PresetManager {
             border-radius: 4px;
             cursor: pointer;
         `;
-        applyBtn.onclick = () => this.applyPreset(preset);
+        applyBtn.onclick = (() => {
+            window.game.startGameWithPreset(preset.id);
+            this.hide();
+        });
 
         const editBtn = document.createElement('button');
         editBtn.textContent = '编辑';
@@ -251,7 +262,7 @@ export class PresetManager {
         deleteBtn.onclick = () => this.deletePreset(preset);
 
         // 默认预设不能删除
-        if (preset.id === 'default') {
+        if (preset.id === 0) {
             deleteBtn.disabled = true;
             deleteBtn.style.opacity = '0.5';
             deleteBtn.style.cursor = 'not-allowed';
@@ -312,7 +323,7 @@ export class PresetManager {
         if (!description) return;
 
         const preset: Preset = {
-            id: Date.now().toString(),
+            id: this.presets.length,
             name,
             description,
             config: this.getCurrentConfig()
@@ -323,14 +334,13 @@ export class PresetManager {
     }
 
     private getCurrentConfig(): any {
-        const game = window.game;
+        // const game = window.game;
         return {
-            rightRegionCount: game.totalRightRegion,
-            needSearch: game.needSearch,
-            // 可以根据需要添加更多配置项
+            // 暂时什么都没有
         };
     }
 
+    /*
     private applyPreset(preset: Preset) {
         const game = window.game;
         const config = preset.config;
@@ -355,6 +365,7 @@ export class PresetManager {
         alert(`预设 "${preset.name}" 已应用`);
         this.hide();
     }
+        */
 
     private editPreset(preset: Preset) {
         const name = prompt('请输入新的预设名称：', preset.name);
@@ -375,7 +386,7 @@ export class PresetManager {
     }
 
     private deletePreset(preset: Preset) {
-        if (preset.id === 'default') return;
+        if (preset.id === 0) return;
 
         if (confirm(`确定要删除预设 "${preset.name}" 吗？`)) {
             this.presets = this.presets.filter(p => p.id !== preset.id);

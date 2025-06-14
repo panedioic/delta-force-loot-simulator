@@ -5,6 +5,9 @@ export class SettingsDialog {
     private isDragging: boolean = false;
     private dragStartPos = { x: 0, y: 0 };
     private dialogStartPos = { x: 0, y: 0 };
+    private regionDialog!: HTMLDivElement;
+    private regionList!: HTMLDivElement;
+    private currentEditingIndex: number = -1;
 
     public container!: PIXI.Container;
     public additiveSize: {
@@ -18,6 +21,8 @@ export class SettingsDialog {
     constructor() {
         this.initDialog();
         this.initUI();
+        this.loadRegionsFromStorage();
+        this.setupRegionEventListeners();
     }
 
     private initUI() {
@@ -139,10 +144,6 @@ export class SettingsDialog {
         basicSettings.innerHTML = `
             <h2 style="margin-bottom: 15px;">基础设置</h2>
             <div style="margin-bottom: 15px;">
-                <label style="display: block; margin-bottom: 5px;">右边区域数量：</label>
-                <input type="number" min="1" max="10" value="3" style="width: 100px; padding: 5px; border-radius: 4px; border: 1px solid #666;">
-            </div>
-            <div style="margin-bottom: 15px;">
                 <label style="display: block; margin-bottom: 5px;">
                     <input type="checkbox" checked> 启用搜索功能
                 </label>
@@ -162,36 +163,61 @@ export class SettingsDialog {
         // 右侧 - 区域管理
         const regionSettings = document.createElement('div');
         regionSettings.innerHTML = `
-            <h2 style="margin-bottom: 15px;">区域管理</h2>
+            <h2 style="margin-bottom: 15px;">默认战利品区域管理</h2>
             <div style="margin-bottom: 10px;">
-                <button style="padding: 5px 15px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                <button id="addRegionBtn" style="padding: 5px 15px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">
                     添加新区域
                 </button>
             </div>
             <div id="regionList" style="max-height: 400px; overflow-y: auto;">
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(255,255,255,0.1); margin-bottom: 5px; border-radius: 4px;">
-                    <span>区域 1</span>
-                    <div>
-                        <button style="padding: 3px 10px; background: #2196F3; color: white; border: none; border-radius: 3px; margin-right: 5px;">编辑</button>
-                        <button style="padding: 3px 10px; background: #f44336; color: white; border: none; border-radius: 3px;">删除</button>
-                    </div>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(255,255,255,0.1); margin-bottom: 5px; border-radius: 4px;">
-                    <span>区域 2</span>
-                    <div>
-                        <button style="padding: 3px 10px; background: #2196F3; color: white; border: none; border-radius: 3px; margin-right: 5px;">编辑</button>
-                        <button style="padding: 3px 10px; background: #f44336; color: white; border: none; border-radius: 3px;">删除</button>
-                    </div>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(255,255,255,0.1); margin-bottom: 5px; border-radius: 4px;">
-                    <span>区域 3</span>
-                    <div>
-                        <button style="padding: 3px 10px; background: #2196F3; color: white; border: none; border-radius: 3px; margin-right: 5px;">编辑</button>
-                        <button style="padding: 3px 10px; background: #f44336; color: white; border: none; border-radius: 3px;">删除</button>
-                    </div>
-                </div>
+                ${this.generateRegionListHTML()}
             </div>
         `;
+
+        // 创建添加/编辑区域的弹窗
+        const regionDialog = document.createElement('div');
+        regionDialog.id = 'regionDialog';
+        regionDialog.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            background: rgba(36, 47, 57, 0.98);
+            border: 2px solid #666;
+            padding: 20px;
+            display: none;
+            z-index: 1002;
+            border-radius: 8px;
+        `;
+
+        regionDialog.innerHTML = `
+            <h3 style="margin: 0 0 20px 0; color: white;">添加新区域</h3>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; color: white;">类型：</label>
+                <select id="regionType" style="width: 100%; padding: 8px; background: #333; color: white; border: 1px solid #666; border-radius: 4px;">
+                    <option value="spoilsBox">战利品箱</option>
+                    <option value="playerContainer">玩家盒子</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; color: white;">标题：</label>
+                <input type="text" id="regionTitle" style="width: 100%; padding: 8px; background: #333; color: white; border: 1px solid #666; border-radius: 4px;">
+            </div>
+            <div class="size-inputs" style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; color: white;">尺寸：</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="number" id="regionWidth" placeholder="宽度" style="width: 50%; padding: 8px; background: #333; color: white; border: 1px solid #666; border-radius: 4px;">
+                    <input type="number" id="regionHeight" placeholder="高度" style="width: 50%; padding: 8px; background: #333; color: white; border: 1px solid #666; border-radius: 4px;">
+                </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                <button id="cancelRegionBtn" style="padding: 8px 20px; background: #666; color: white; border: none; border-radius: 4px; cursor: pointer;">取消</button>
+                <button id="confirmRegionBtn" style="padding: 8px 20px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">确认</button>
+            </div>
+        `;
+
+        document.body.appendChild(regionDialog);
 
         // 底部按钮
         const buttonContainer = document.createElement('div');
@@ -277,8 +303,143 @@ export class SettingsDialog {
         this.isDragging = false;
     }
 
+    private loadRegionsFromStorage() {
+        const storedRegions = localStorage.getItem('defaultSpoilsRegionConfig');
+        if (storedRegions) {
+            window.game.defaultSpoilsRegionConfig = JSON.parse(storedRegions);
+        }
+        this.updateRegionList();
+    }
+
+    private setupRegionEventListeners() {
+        const addRegionBtn = document.getElementById('addRegionBtn');
+        const cancelRegionBtn = document.getElementById('cancelRegionBtn');
+        const confirmRegionBtn = document.getElementById('confirmRegionBtn');
+        const regionType = document.getElementById('regionType') as HTMLSelectElement;
+        this.regionDialog = document.getElementById('regionDialog') as HTMLDivElement;
+        this.regionList = document.getElementById('regionList') as HTMLDivElement;
+
+        if (!addRegionBtn || !cancelRegionBtn || !confirmRegionBtn || !regionType || !this.regionDialog || !this.regionList) {
+            console.error('Some required elements are missing');
+            return;
+        }
+
+        addRegionBtn.addEventListener('click', () => this.showRegionDialog());
+        cancelRegionBtn.addEventListener('click', () => this.hideRegionDialog());
+        confirmRegionBtn.addEventListener('click', () => this.saveRegion());
+
+        regionType.addEventListener('change', (e) => {
+            const sizeInputs = document.querySelector('.size-inputs') as HTMLDivElement;
+            if (sizeInputs) {
+                sizeInputs.style.display = (e.target as HTMLSelectElement).value === 'spoilsBox' ? 'block' : 'none';
+            }
+        });
+    }
+
+    private showRegionDialog(editIndex: number = -1) {
+        this.currentEditingIndex = editIndex;
+        const dialog = document.getElementById('regionDialog') as HTMLDivElement;
+        const titleInput = document.getElementById('regionTitle') as HTMLInputElement;
+        const typeSelect = document.getElementById('regionType') as HTMLSelectElement;
+        const widthInput = document.getElementById('regionWidth') as HTMLInputElement;
+        const heightInput = document.getElementById('regionHeight') as HTMLInputElement;
+        const sizeInputs = document.querySelector('.size-inputs') as HTMLDivElement;
+
+        if (editIndex >= 0) {
+            const region = window.game.defaultSpoilsRegionConfig[editIndex];
+            titleInput.value = region.title;
+            typeSelect.value = region.type;
+            if (region.type === 'spoilsBox') {
+                widthInput.value = region.width.toString();
+                heightInput.value = region.height.toString();
+                sizeInputs.style.display = 'block';
+            } else {
+                sizeInputs.style.display = 'none';
+            }
+        } else {
+            titleInput.value = '';
+            typeSelect.value = 'spoilsBox';
+            widthInput.value = '7';
+            heightInput.value = '8';
+            sizeInputs.style.display = 'block';
+        }
+
+        dialog.style.display = 'block';
+    }
+
+    private hideRegionDialog() {
+        const dialog = document.getElementById('regionDialog') as HTMLDivElement;
+        dialog.style.display = 'none';
+        this.currentEditingIndex = -1;
+    }
+
+    private saveRegion() {
+        const titleInput = document.getElementById('regionTitle') as HTMLInputElement;
+        const typeSelect = document.getElementById('regionType') as HTMLSelectElement;
+        const widthInput = document.getElementById('regionWidth') as HTMLInputElement;
+        const heightInput = document.getElementById('regionHeight') as HTMLInputElement;
+
+        const newRegion: any = {
+            type: typeSelect.value,
+            title: titleInput.value
+        };
+
+        if (typeSelect.value === 'spoilsBox') {
+            newRegion.width = parseInt(widthInput.value);
+            newRegion.height = parseInt(heightInput.value);
+        }
+
+        if (this.currentEditingIndex >= 0) {
+            window.game.defaultSpoilsRegionConfig[this.currentEditingIndex] = newRegion;
+        } else {
+            window.game.defaultSpoilsRegionConfig.push(newRegion);
+        }
+
+        this.saveToLocalStorage();
+        this.updateRegionList();
+        this.hideRegionDialog();
+    }
+
+    private generateRegionListHTML() {
+        return (window.game.defaultSpoilsRegionConfig || []).map((region: any, index: number) => `
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(255,255,255,0.1); margin-bottom: 5px; border-radius: 4px;">
+                <span>${region.title} (${region.type === 'spoilsBox' ? `${region.width}x${region.height}` : '个人物资'})</span>
+                <div>
+                    <button onclick="window.game.playerRegion?.components.settingsDialog.editRegion(${index})" 
+                            style="padding: 3px 10px; background: #2196F3; color: white; border: none; border-radius: 3px; margin-right: 5px;">编辑</button>
+                    <button onclick="window.game.playerRegion?.components.settingsDialog.deleteRegion(${index})" 
+                            style="padding: 3px 10px; background: #f44336; color: white; border: none; border-radius: 3px;">删除</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    private updateRegionList() {
+        const regionList = document.getElementById('regionList');
+        if (!regionList) return;
+        
+        regionList.innerHTML = this.generateRegionListHTML();
+    }
+
+    private saveToLocalStorage() {
+        localStorage.setItem('defaultSpoilsRegionConfig', JSON.stringify(window.game.defaultSpoilsRegionConfig));
+    }
+
+    editRegion(index: number) {
+        this.showRegionDialog(index);
+    }
+
+    deleteRegion(index: number) {
+        if (confirm('确定要删除这个区域吗？')) {
+            window.game.defaultSpoilsRegionConfig.splice(index, 1);
+            this.saveToLocalStorage();
+            this.updateRegionList();
+        }
+    }
+
     private saveSettings() {
-        // TODO: 实现保存设置的逻辑
+        // 保存设置时也保存区域配置
+        this.saveToLocalStorage();
         console.log('保存设置');
         this.hide();
     }
@@ -296,6 +457,7 @@ export class SettingsDialog {
         const top = (window.innerHeight - 600) / 2;
         this.settingsDialogContainerDOM.style.left = `${left}px`;
         this.settingsDialogContainerDOM.style.top = `${top}px`;
+        this.updateRegionList();
     }
 
     hide() {

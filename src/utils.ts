@@ -131,6 +131,7 @@ export const initInventory = (inventory: Inventory, type: number=0, preset_infos
         return;
     }
 
+    // console.log('1111', type)
     if (type === 0) {
         // Spoils box
         const subgrid = inventory.contents['spoilsBox'] as Subgrid;

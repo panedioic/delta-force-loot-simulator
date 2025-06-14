@@ -1,6 +1,5 @@
 import * as PIXI from "pixi.js";
 import { GAME_WIDTH, GAME_HEIGHT } from "./config";
-import { RIGHT_REGION_COUNT } from "./config";
 import { Subgrid } from "./subgrid";
 import { TotalValueDisplay } from "./totalValueDisplay";
 import { RegionSwitchUI } from "./components/regionSwitchUI";
@@ -14,7 +13,7 @@ import { SettingsDialog } from "./components/SettingsDialog";
 import { ItemManager } from "./components/ItemManager";
 import { DebugTools } from "./components/DebugTools";
 import { PresetManager } from "./components/PresetManager";
-import { initSpoilsRegion, updateTotalValueDisplay } from "./utils";
+import { initInventory, updateTotalValueDisplay } from "./utils";
 // import { Magnify } from "./magnify";
 
 declare global {
@@ -34,13 +33,12 @@ export class Game {
     GRID_INFO: any[];
     GRID_INFO_SPOILS: any[];
     grids: Subgrid[];
-    currentRightRegion: number;
-    totalRightRegion: number;
     icon: PIXI.Texture | null;
     titleBar: TitleBar | null;
+    defaultSpoilsRegionConfig: any[] = [];
+    spoilsRegion: Region | null = null;
 
     // Components
-    spoilsRegion: Region | null = null;
     playerRegion: Region | null = null;
     totalValueDisplay: TotalValueDisplay | null;
     regionSwitchUI: RegionSwitchUI | null;
@@ -70,8 +68,6 @@ export class Game {
         this.GRID_INFO = [];
         this.GRID_INFO_SPOILS = [];
         this.grids = [];
-        this.currentRightRegion = 0;
-        this.totalRightRegion = RIGHT_REGION_COUNT;
         this.totalValueDisplay = null;
         this.regionSwitchUI = null;
         this.isGameStarted = false; // 是否开始游戏
@@ -87,6 +83,30 @@ export class Game {
 
         // debuging
         this.needSearch = false;
+
+        // default spoils region
+        const storedRegions = localStorage.getItem('defaultSpoilsRegionConfig');
+        if (storedRegions) {
+            try {
+                this.defaultSpoilsRegionConfig = JSON.parse(storedRegions);
+            } catch (e) {
+                console.error('Failed to parse stored regions, using default config:', e);
+                this.initDefaultSpoilsRegionConfig();
+            }
+        } else {
+            this.initDefaultSpoilsRegionConfig();
+        }
+    }
+
+    private initDefaultSpoilsRegionConfig() {
+        this.defaultSpoilsRegionConfig = [
+            {type: "spoilsBox", title: "战利品1", width: 7, height: 8},
+            {type: "spoilsBox", title: "战利品2", width: 7, height: 8},
+            {type: "spoilsBox", title: "战利品3", width: 7, height: 8},
+            {type: "playerContainer", title: "玩家盒子1"},
+            {type: "playerContainer", title: "玩家盒子2"},
+            {type: "playerContainer", title: "玩家盒子3"}
+        ];
     }
 
     /**
@@ -105,6 +125,8 @@ export class Game {
 
         /** Debuging */
         if (import.meta.env.MODE === "development") this.isGameStarted = true;
+
+        this.startGameWithPreset(0);
     }
 
     /**
@@ -259,8 +281,6 @@ export class Game {
         this.playerRegion.addComponent('debugTools', DebugTools);
         this.playerRegion.addInventory(1, false);
         this.playerRegion.switchTo(0);
-
-        this.spoilsRegion = initSpoilsRegion({x: 804, y: 72}, this.presets[0]);
     }
 
     createItemInfoPanel(item: Item) {
@@ -353,5 +373,53 @@ export class Game {
             }
         }
         return null; // 如果没有找到对应的 Grid，则返回 null
+    }
+
+    startGameWithPreset(idx: number) {
+        if (idx < 0 || idx > this.presets.length) {
+            return;
+        }
+
+        if (this.spoilsRegion) {
+            this.spoilsRegion.destroy();
+        }
+
+        // find timer and clear
+
+        
+        const region = new Region({x: 804, y: 72}, {
+            title: "战利品",
+            width: 508,
+            height: 632,
+            titleColor: 0xff0000,
+            titleAlpha: 0.3,
+            componentWidth: 0,
+            backgroundColor: 0xffffff,
+            backgroundAlpha: 0.1,
+            countable: false,
+        });
+
+        if (idx === 0) {
+            console.log('2333')
+            this.defaultSpoilsRegionConfig.forEach((val) => {
+                if (val.type === "spoilsBox") {
+                    region.addInventory(0, true, val.title);
+                } else if (val.type === "playerContainer") {
+                    region.addInventory(1, true, val.title);
+                }
+            });
+        } else {
+            const preset_data = this.presets[idx - 1];
+            for ( const preset of preset_data.data) {
+                const inventory_type = preset.type === 'playerContainer' ? 1 : 0;
+                const inventory = region.addInventory(inventory_type, false);
+                initInventory(inventory, inventory_type, preset);
+                inventory.setEnabled(false);
+            }
+        }
+        console.log('23334')
+        region.switchTo(0);
+        region.addSwitcherUI();
+        this.spoilsRegion = region;
     }
 }
