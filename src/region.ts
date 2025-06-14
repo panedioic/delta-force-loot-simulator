@@ -171,9 +171,9 @@ export class Region {
      */
     public destroy() {
         for (const inventory of this.inventories) {
-            inventory.container.destroy(true);
+            inventory.destroy();
         }
-        this.container.destroy(true);
+        this.container.destroy();
     }
 
     /**

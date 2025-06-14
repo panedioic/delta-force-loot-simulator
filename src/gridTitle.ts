@@ -88,4 +88,8 @@ export class GridTitle {
     setEnabled(enabled: boolean) {
         this.container.visible = enabled;
     }
+
+    destroy() {
+        this.container.destroy();
+    }
 }

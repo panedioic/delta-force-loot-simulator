@@ -166,4 +166,12 @@ export class GridContainer {
             subgrid.clearItem();
         }
     }
+
+    destroy() {
+        for (const subgrid of this.subgrids) {
+            subgrid.destroy();
+        }
+        this.clearItem();
+        this.container.destroy();
+    }
 }

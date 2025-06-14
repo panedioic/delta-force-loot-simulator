@@ -581,4 +581,17 @@ export class Subgrid {
             y: row * this.cellSize
         };
     }
+
+    destroy() {
+        for (const item of this.blocks) {
+            item.destroy();
+        }
+        
+        if (window.game.grids.includes(this)) {
+            window.game.grids.splice(window.game.grids.indexOf(this), 1);
+        }
+
+        this.clearItem();
+        this.container.destroy();
+    }
 }

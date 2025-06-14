@@ -253,6 +253,9 @@ export class Inventory {
         //     console.log(item.container.position)
         // }
         // console.log('now pos:', currentX, currentY, info.name)
+            if (!item || !item.container || !item.container.position) {
+                return;
+            }
             if (item instanceof GridTitle) {
                 // 标题位置设置
                 item.container.position.set(8, currentY);
@@ -260,6 +263,7 @@ export class Inventory {
             } else if (item instanceof Subgrid) {
                 // 特殊物品的位置处理
                 if (item.acceptedTypes.includes("primaryWeapon")) {
+                    // console.log(item)
                     item.container.position.set(8, currentY);
                 } else if (item.acceptedTypes.includes("SecondaryWeapon")) {
                     item.container.position.set(348, currentY);
@@ -460,5 +464,12 @@ export class Inventory {
 
         this.currentSearchItem = null;
         this.searchTimer = 0;
+    }
+    
+    destroy() {
+        Object.values(this.contents).forEach((content: GridTitle | Subgrid | GridContainer) => {
+            content.destroy();
+        });
+        this.container.destroy();
     }
 }

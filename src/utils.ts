@@ -135,7 +135,7 @@ export const initInventory = (inventory: Inventory, type: number=0, preset_infos
     if (type === 0) {
         // Spoils box
         const subgrid = inventory.contents['spoilsBox'] as Subgrid;
-        const blocksNum = Math.floor(Math.random() * 10); // 随机生成0到9个方块
+        const blocksNum = Math.floor(Math.random() * 10) + 1; // 随机生成0到9个方块
         let items = [];
         for (let i = 0; i < blocksNum; i++) {
             const info = item_infos[Math.floor(Math.random() * item_infos.length)];

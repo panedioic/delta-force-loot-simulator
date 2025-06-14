@@ -346,6 +346,7 @@ export class Game {
         }
         // 不位于 itemInfoPanel，也没有被遮挡
         for (const subgrid of this.grids.filter(grid => grid.enabled)) {
+            // console.log(subgrid)
             const bounds = subgrid.container.getBounds();
             // 检查坐标是否在当前网格的范围内
             if (
@@ -400,7 +401,7 @@ export class Game {
         });
 
         if (idx === 0) {
-            console.log('2333')
+            // console.log('2333')
             this.defaultSpoilsRegionConfig.forEach((val) => {
                 if (val.type === "spoilsBox") {
                     region.addInventory(0, true, val.title);
@@ -417,7 +418,7 @@ export class Game {
                 inventory.setEnabled(false);
             }
         }
-        console.log('23334')
+        // console.log('23334')
         region.switchTo(0);
         region.addSwitcherUI();
         this.spoilsRegion = region;
