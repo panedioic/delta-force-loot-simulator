@@ -375,10 +375,11 @@ export class Subgrid {
         }
 
         if (this.fullfill) {
-            obj.setGridPosition(
-                -(obj.cellWidth - 1) / 2,
-                -(obj.cellHeight - 1) / 2,
-            ); // 设置网格位置
+            // obj.setGridPosition(
+            //     -(obj.cellWidth - 1) / 2,
+            //     -(obj.cellHeight - 1) / 2,
+            // ); // 设置网格位置
+            obj.setGridPosition(0, 0)
         } else {
             obj.setGridPosition(col, row); // 设置网格位置
             // console.log(obj.col, obj.row);
@@ -390,6 +391,7 @@ export class Subgrid {
             this.onItemDraggedIn(obj, col, row, objOriginalParentGrid);
         }
 
+        obj.refreshUI();
         updateTotalValueDisplay();
         return true;
     }
@@ -547,6 +549,7 @@ export class Subgrid {
                     if (ignores.includes(originalItem)) {
                         continue;
                     }
+                    // console.log(333, ignores)
                     const blockRight = originalItem.col + originalItem.cellWidth;
                     const blockBottom = originalItem.row + originalItem.cellHeight;
                     const itemRight = col + item.cellWidth;

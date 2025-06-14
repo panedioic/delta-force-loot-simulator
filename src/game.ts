@@ -14,7 +14,7 @@ import { SettingsDialog } from "./components/SettingsDialog";
 import { ItemManager } from "./components/ItemManager";
 import { DebugTools } from "./components/DebugTools";
 import { PresetManager } from "./components/PresetManager";
-import { initSpoilsRegion } from "./utils";
+import { initSpoilsRegion, updateTotalValueDisplay } from "./utils";
 // import { Magnify } from "./magnify";
 
 declare global {
@@ -286,6 +286,7 @@ export class Game {
                     callback: () => {
                         item.destroy();
                         this.activeItemInfoPanel?.close();
+                        updateTotalValueDisplay();
                     }
                 }
             ]

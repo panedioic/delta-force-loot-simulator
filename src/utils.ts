@@ -123,6 +123,7 @@ export const initInventory = (inventory: Inventory, type: number=0, preset_infos
                         if (item_info.stack) {
                             item.currentStactCount = item_info.stack;
                         }
+                        item.refreshUI();
                     }
                 }
             }

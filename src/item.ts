@@ -7,6 +7,7 @@ import { GAME_WIDTH, GAME_HEIGHT } from "./config";
 import { DEFAULT_CELL_SIZE } from "./config";
 import { updateTotalValueDisplay } from "./utils";
 import { Region } from "./region";
+import { RARITY_COLORS } from "./config";
 // import type { Grid, Inventory } from "./types";
 
 export class Item {
@@ -44,6 +45,7 @@ export class Item {
     capacity: number | null;
     conflicts: { [key: string]: string[] } = {};
     parentRegion: Region | Item | null = null;
+    rarity: number | null;
 
     /** 拖动相关 */
     dragStartParentContainer: PIXI.Container;
@@ -91,6 +93,7 @@ export class Item {
         this.ammoType = itemType.ammo;
         this.capacity = itemType.capacity;
         this.conflicts = itemType.conflict || {};
+        this.rarity = itemType.rarity || null;
 
         // 只用作检查
         this.cellSize = this.parentGrid ? this.parentGrid.cellSize : DEFAULT_CELL_SIZE;
@@ -161,24 +164,25 @@ export class Item {
         this.graphicsBg = new PIXI.Graphics();
 
         // 确保颜色是有效的十六进制值
-        const color = parseInt(this.color, 16) || 0x000000;
+        const color = this.rarity ? RARITY_COLORS[this.rarity] : parseInt(this.color, 16);
 
-        // 绘制方块主体
+        const pixelWidth = this.parentGrid ? 
+            this.parentGrid.fullfill ? 
+                this.parentGrid.cellSize * this.parentGrid.aspect : 
+                this.cellWidth * this.parentGrid.cellSize * this.parentGrid.aspect : 
+                this.cellWidth * 72;
+        const pixelHeight = this.parentGrid ? 
+            this.parentGrid.fullfill ? 
+                this.parentGrid.cellSize : 
+                this.cellHeight * this.parentGrid.cellSize : 
+                this.cellHeight * 72;
         this.graphicsBg.rect(
-            -this.pixelWidth / 2 + 2,
-            -this.pixelHeight / 2 + 2,
-            this.pixelWidth - 4, // 减去边框宽度
-            this.pixelHeight - 4,
+            2,
+            2,
+            pixelWidth - 4, // 减去边框宽度
+            pixelHeight - 4,
         );
         this.graphicsBg.fill({ color: color });
-
-        // 绘制边框
-        this.graphicsBg.rect(
-            -this.pixelWidth / 2 + 2,
-            -this.pixelHeight / 2 + 2,
-            this.pixelWidth,
-            this.pixelHeight,
-        );
         this.graphicsBg.stroke({ width: 3, color: 0x666666, alpha: 0.8 });
 
         // 添加背景到容器
@@ -199,7 +203,7 @@ export class Item {
             },
         });
         nameText.anchor.set(0.5);
-        nameText.position.set(0, -10); // 名称显示在方块中心上方
+        nameText.position.set(pixelWidth / 2, pixelHeight / 2 - 10); // 名称显示在方块中心上方
         this.graphicsText.addChild(nameText);
 
         // 添加方块价值
@@ -216,11 +220,8 @@ export class Item {
             },
         });
         valueText.anchor.set(0.5);
-        valueText.position.set(0, 10); // 价值显示在方块中心下方
+        valueText.position.set(pixelWidth / 2, pixelHeight / 2 + 10); // 价值显示在方块中心下方
         this.graphicsText.addChild(valueText);
-        // console.log('asasasasaassaasas')
-        // console.log(this.currentStactCount)
-        // console.log(this.getValue())
 
         // 如果物品可堆叠，添加堆叠数量显示
         if (this.maxStackCount > 1) {
@@ -271,10 +272,10 @@ export class Item {
         // this.searchMask = new PIXI.Graphics();
         // 绘制边框
         this.searchMask.rect(
-            -this.pixelWidth / 2 + 2,
-            -this.pixelHeight / 2 + 2,
-            this.pixelWidth,
-            this.pixelHeight,
+            2,
+            2,
+            pixelWidth - 4, // 减去边框宽度
+            pixelHeight - 4,
         );
         this.searchMask.fill({ color: 0x040404 });
         this.searchMask.stroke({ width: 3, color: 0x666666, alpha: 0.8 });
@@ -287,6 +288,22 @@ export class Item {
 
     refreshUI() {
         if (!this.graphicsText) return;
+
+        // 更新名称、价值位置
+        const pixelWidth = this.parentGrid ? 
+            this.parentGrid.fullfill ? 
+                this.parentGrid.cellSize * this.parentGrid.aspect : 
+                this.cellWidth * this.parentGrid.cellSize * this.parentGrid.aspect : 
+                this.cellWidth * 72;
+        const pixelHeight = this.parentGrid ? 
+            this.parentGrid.fullfill ? 
+                this.parentGrid.cellSize : 
+                this.cellHeight * this.parentGrid.cellSize : 
+                this.cellHeight * 72;
+        const nameGraph = this.graphicsText.children[0] as PIXI.Graphics;
+        const valueGraph = this.graphicsText.children[1] as PIXI.Graphics;
+        nameGraph.position.set(pixelWidth / 2, pixelHeight / 2 - 10);
+        valueGraph.position.set(pixelWidth / 2, pixelHeight / 2 + 10);
         
         // 更新价值显示
         const valueText = this.graphicsText.children[1] as PIXI.Text;
@@ -489,6 +506,7 @@ export class Item {
                         targetGrid.addItem(this, gridPosition.clampedCol, gridPosition.clampedRow);
                     }
                 } else {
+                    console.log(gridPosition)
                     targetGrid.addItem(this, gridPosition.clampedCol, gridPosition.clampedRow);
                 }
             } else {
@@ -507,6 +525,7 @@ export class Item {
                 // 可以交互，进行交互
                 if (bCanInteract) {
                     for (const overlappingItem of overlappingItems) {
+                        // console.log(333, overlappingItem.name)
                         overlappingItem.onItemInteract(this, {
                             col: gridPosition.clampedCol,
                             row: gridPosition.clampedRow
@@ -741,12 +760,18 @@ export class Item {
         }
         this.col = col;
         this.row = row;
-        this.x =
-            (col + 0.5 * this.cellWidth) *
-            this.parentGrid.cellSize *
-            this.parentGrid.aspect;
-        this.y = (row + 0.5 * this.cellHeight) * this.parentGrid.cellSize;
-        this.container.position.set(this.x, this.y);
+        // this.x =
+        //     (col + 0.5 * this.cellWidth) *
+        //     this.parentGrid.cellSize *
+        //     this.parentGrid.aspect;
+        // this.y = (row + 0.5 * this.cellHeight) * this.parentGrid.cellSize;
+        this.x = col * this.cellWidth * this.parentGrid.cellSize * this.parentGrid.aspect;
+        this.y = row * this.cellHeight * this.parentGrid.cellSize;
+        this.container.position.set(
+            col * this.parentGrid.cellSize * this.parentGrid.aspect, 
+            row * this.parentGrid.cellSize
+        );
+        // console.log(col, row, this.cellHeight, this.parentGrid.cellSize)
     }
 
     getValue() {
@@ -897,7 +922,7 @@ export class Item {
     onItemInteract(draggingItem: Item, pos: {col: number, row: number}, interacting: Item[]) {
         const accessoryTypes = this.accessories.map(accessory => accessory.type);
         if (this.ammoType === draggingItem.type) {
-            // let 
+            // 添加子弹
             const draggingItemOriginalParentGrid = draggingItem.parentGrid;
             // 获取当前子弹总数
             let totalAmmoCount = this.getTotalAmmo();
@@ -932,6 +957,7 @@ export class Item {
             this.refreshUI();
             // console.log('ui refreshed!', this)
         } else if (accessoryTypes.includes(draggingItem.type)) {
+            // 添加配件
             // 先检测是否有冲突
             let bHasConflict = false;
             if (this.conflicts[draggingItem.type]) {
@@ -974,6 +1000,7 @@ export class Item {
                 }
             }
         } else if (this.maxStackCount > 1 && this.name == draggingItem.name) {
+            // 堆叠子弹
             if (this.currentStactCount < this.maxStackCount) {
                 const transAmmoCount = Math.min(
                     this.maxStackCount - this.currentStactCount, draggingItem.currentStactCount);
@@ -998,43 +1025,74 @@ export class Item {
                 return false;
             }
 
-            // 特殊情况：二者长宽完全相同，直接交换位置
-            if (this.cellWidth === draggingItem.cellWidth && this.cellHeight === draggingItem.cellHeight) {
-                // 保存原始位置
-                const thisGrid = this.parentGrid;
-                // const thisCol = this.col;
-                // const thisRow = this.row;
-                const itemGrid = draggingItem.parentGrid;
-                const itemCol = draggingItem.col;
-                const itemRow = draggingItem.row;
-
-                // 添加到新位置
-                itemGrid.addItem(this, itemCol, itemRow);
-                thisGrid.addItem(draggingItem, pos.col, pos.row);
-
-                return true;
-            }
-
-            // 找到自己的新位置
-            const draggingItemPlace = {
-                col: pos.col,
-                row: pos.row,
-                cellWidth: draggingItem.cellWidth,
-                cellHeight: draggingItem.cellHeight
-            }
-            const targetPosition = 
-                this.parentGrid === draggingItem.parentGrid ?
-                this.parentGrid.tryPlaceItem(this, [this, draggingItem], [draggingItemPlace]) :
-                draggingItem.parentGrid.tryPlaceItem(this, [draggingItem], [])
-            if (targetPosition) {
-                // 移动当前物品到新位置
-                const originalParentGrid = this.parentGrid;
-                originalParentGrid.addItem(this, targetPosition.col, targetPosition.row);
-                // 如果是最后一个被交互的物品，移动拖动的物品到目标位置
-                if (this === interacting[interacting.length-1]) {
-                    const originalDraggingItemParentGrid = draggingItem.parentGrid;
-                    originalDraggingItemParentGrid.addItem(draggingItem, pos.col, pos.row);
+            const draggingItemOriginalParentGrid = draggingItem.parentGrid;
+            const thisItemOriginalParentGrid = this.parentGrid;
+            // console.log(111, pos.col, this.col, pos.row, this.row)
+            if (
+                pos.col <= this.col &&
+                pos.col + draggingItem.cellWidth >= this.col + this.cellWidth &&
+                pos.row <= this.row &&
+                pos.row + draggingItem.cellHeight >= this.row + this.cellHeight
+            ) {
+                // 如果 this 完全被拖动的 item 覆盖，位置就很好确定了
+                let newPos = {
+                    col: draggingItem.col + this.col - pos.col,
+                    row: draggingItem.row + this.row - pos.row
                 }
+                // console.log(222, this.name, newPos.col, draggingItem.col, this.col, pos.col)
+                if (this.parentGrid === draggingItem.parentGrid) {
+                    if (pos.col + draggingItem.cellWidth > draggingItem.col &&
+                        pos.col < draggingItem.col
+                    ) {
+                        newPos.col += draggingItem.col - pos.col;
+                    }
+                    if (pos.col < draggingItem.col + draggingItem.cellWidth &&
+                        pos.col > draggingItem.col
+                    ) {
+                        newPos.col -= pos.col - draggingItem.col;
+                    }
+                    if (pos.row + draggingItem.cellHeight > draggingItem.row &&
+                        pos.row < draggingItem.row
+                    ) {
+                        newPos.row += draggingItem.row - pos.row;
+                    }
+                    if (pos.row < draggingItem.row + draggingItem.cellHeight &&
+                        pos.row > draggingItem.row
+                    ) {
+                        newPos.row -= pos.row - draggingItem.row;
+                    }
+                }
+                // console.log(555, this.name, newPos.col)
+                if (draggingItemOriginalParentGrid && this === interacting[0]) {
+                    draggingItemOriginalParentGrid.removeItem(draggingItem);
+                    // remove item 是为了给 this item 腾位置，但为了方便后面的 item 这里还是把 parent grid 给他赋回去
+                    draggingItem.parentGrid = draggingItemOriginalParentGrid;
+                }
+                if (thisItemOriginalParentGrid) {
+                    thisItemOriginalParentGrid.removeItem(this)
+                }
+                if (draggingItemOriginalParentGrid) {
+                    draggingItemOriginalParentGrid.addItem(this, newPos.col, newPos.row);
+                }
+                if (thisItemOriginalParentGrid && this === interacting[interacting.length-1]) {
+                    thisItemOriginalParentGrid.addItem(draggingItem, pos.col, pos.row);
+                }
+                return true;
+            } else {
+                console.log(4444)
+                if (thisItemOriginalParentGrid) {
+                    thisItemOriginalParentGrid.removeItem(this)
+                }
+                if (draggingItemOriginalParentGrid && this === interacting[0]) {
+                    draggingItemOriginalParentGrid.removeItem(draggingItem);
+                }
+                if (thisItemOriginalParentGrid && this === interacting[interacting.length-1]) {
+                    thisItemOriginalParentGrid.addItem(draggingItem, pos.col, pos.row);
+                }
+                if (draggingItemOriginalParentGrid) {
+                    draggingItemOriginalParentGrid.addItem(this);
+                }
+                return true;
             }
         }
     }
@@ -1059,36 +1117,63 @@ export class Item {
                 return false;
             }
 
+            // 双方 grid 必须互相能够接受
+            if (!this.parentGrid.checkAccept(draggingItem) || !draggingItem.parentGrid.checkAccept(this)) {
+                return false;
+            }
+
+            // this 为 fullfill，则必然可以交换位置
+            if (this.parentGrid.fullfill) {
+                return true;
+            }
+
             // 首先判断二者不同 Parent Grid 的情况
-            if (this.parentGrid !== draggingItem.parentGrid) {
-                // 做完了别的再来看这里好像也没什么难的
-                if (this.parentGrid.tryPlaceItem(this, [draggingItem], [])) {
+            // if (this.parentGrid !== draggingItem.parentGrid) {
+            //     // console.log(111)
+            //     // 做完了别的再来看这里好像也没什么难的
+            //     if (this.parentGrid.tryPlaceItem(this, [draggingItem], [])) {
+            //         // console.log('there')
+            //         return true;
+            //     } else {
+            //         return false;
+            //     }
+            // }
+
+            if (
+                pos.col <= this.col &&
+                pos.col + draggingItem.cellWidth >= this.col + this.cellWidth &&
+                pos.row <= this.row &&
+                pos.row + draggingItem.cellHeight >= this.row + this.cellHeight
+            ) {
+                // 如果 this 完全被拖动的 item 覆盖，则必然是可以交换位置的
+                return true;
+            } else if (
+                this.col <= pos.col &&
+                this.col + this.cellWidth >= pos.col + draggingItem.cellWidth &&
+                this.row <= pos.row &&
+                this.row + this.cellHeight >= pos.row + draggingItem.cellHeight
+            ) {
+                // 如果 This Item 比 Dragging Item 大，说明 Dragging Item 必然只覆盖了 This 一个 item，
+                // 那么只要 This Item 有新的位置可以放，那就可以交换
+                const deaggingItemPlace = {
+                    col: pos.col,
+                    row: pos.row,
+                    cellWidth: draggingItem.cellWidth,
+                    cellHeight: draggingItem.cellHeight
+                }
+                if (this.parentGrid.tryPlaceItem(this, [this, draggingItem], [deaggingItemPlace])) {
+                    // console.log(this.parentGrid.tryPlaceItem(this, [this, draggingItem], [deaggingItemPlace]))
                     return true;
                 } else {
                     return false;
                 }
+            } else {
+                // 二者互相不能完全覆盖对方，按现在的三角洲的机制，不能交换位置
+                return false;
             }
 
-            // 先检测是否是一个 item 完全覆盖另一个 item。
-            const bDraggingItemCoverThisItem = 
-                pos.col <= this.col &&
-                pos.col + draggingItem.cellWidth >= this.col + this.cellWidth &&
-                pos.row <= this.row &&
-                pos.row + draggingItem.cellHeight >= this.row + this.cellHeight;
-            // 如果 Dragging Item 比 this 大，只要其他的 Interact 也没有问题
-            // 那么 Dragging Item 被挪开释放的空间一定是足够所有被覆盖的 Item 使用的
-            if (bDraggingItemCoverThisItem) {
-                return true;
-            }
-
-            const bThisItemCoverDraggingItem = 
-                this.col <= pos.col &&
-                this.col + this.cellWidth >= pos.col + draggingItem.cellWidth &&
-                this.row <= pos.row &&
-                this.row + this.cellHeight >= pos.row + draggingItem.cellHeight;
-            // 如果 This Item 比 Dragging Item 大，说明 Dragging Item 必然只覆盖了 This 一个 item，
-            // 那么只要 This Item 有新的位置可以放，那就可以交换
-            if (bThisItemCoverDraggingItem) {
+            /*
+            if (true) {
                 const deaggingItemPlace = {
                     col: pos.col,
                     row: pos.row,
@@ -1103,7 +1188,7 @@ export class Item {
                 }
             } else {
                 return false;
-            }
+            }*/
         }
     }
 
