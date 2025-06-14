@@ -11,7 +11,7 @@ interface ButtonConfig {
 
 export class ItemInfoPanel {
     private game: Game;
-    private item: Item;
+    public item: Item;
     private container: PIXI.Container;
     private background: PIXI.Graphics;
     private contentContainer: PIXI.Container;

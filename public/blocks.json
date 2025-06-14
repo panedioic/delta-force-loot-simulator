@@ -153,15 +153,7 @@
         "type": "collection",
         "name": "骨锯",
         "value": 24000,
-        "color": "20851"
-    },
-    {
-        "cellWidth": 3,
-        "cellHeight": 1,
-        "type": "collection",
-        "name": "户外医疗箱",
-        "value": 44755,
-        "color": "695687"
+        "color": "367e68"
     },
     {
         "cellWidth": 3,
@@ -271,14 +263,6 @@
         "color": "367e68"
     },
     {
-        "cellWidth": 2,
-        "cellHeight": 2,
-        "type": "medical",
-        "name": "战地医疗箱",
-        "value": 132598,
-        "color": "a16e50"
-    },
-    {
         "cellWidth": 1,
         "cellHeight": 1,
         "type": "medical",
@@ -287,35 +271,11 @@
         "color": "367e68"
     },
     {
-        "cellWidth": 1,
-        "cellHeight": 1,
-        "type": "medical",
-        "name": "DVE止疼片",
-        "value": 19919,
-        "color": "695687"
-    },
-    {
         "cellWidth": 2,
         "cellHeight": 1,
         "type": "repair",
         "name": "标准头盔维修包",
         "value": 34504,
-        "color": "695687"
-    },
-    {
-        "cellWidth": 1,
-        "cellHeight": 1,
-        "type": "medical",
-        "name": "强效注射器",
-        "value": 6881,
-        "color": "367e68"
-    },
-    {
-        "cellWidth": 3,
-        "cellHeight": 1,
-        "type": "medical",
-        "name": "DEK野战手术包",
-        "value": 22238,
         "color": "695687"
     },
     {
@@ -327,60 +287,12 @@
         "color": "695687"
     },
     {
-        "cellWidth": 3,
-        "cellHeight": 1,
-        "type": "medical",
-        "name": "户外医疗箱",
-        "value": 40931,
-        "color": "695687"
-    },
-    {
-        "cellWidth": 1,
-        "cellHeight": 1,
-        "type": "medical",
-        "name": "m1肌肉强化",
-        "value": 10697,
-        "color": "367e68"
-    },
-    {
-        "cellWidth": 1,
-        "cellHeight": 1,
-        "type": "misc",
-        "name": "播放器",
-        "value": 9338,
-        "color": "4b6b87"
-    },
-    {
-        "cellWidth": 1,
-        "cellHeight": 1,
-        "type": "food",
-        "name": "糖三角",
-        "value": 10875,
-        "color": "4b6b87"
-    },
-    {
         "cellWidth": 2,
         "cellHeight": 1,
         "type": "medical",
         "name": "战术手术包",
         "value": 7999,
         "color": "367e68"
-    },
-    {
-        "cellWidth": 1,
-        "cellHeight": 1,
-        "type": "medical",
-        "name": "额温枪",
-        "value": 10071,
-        "color": "4b6b87"
-    },
-    {
-        "cellWidth": 1,
-        "cellHeight": 1,
-        "type": "medical",
-        "name": "医用酒精",
-        "value": 9002,
-        "color": "4b6b87"
     },
     {
         "cellWidth": 1,
@@ -397,30 +309,6 @@
         "name": "HIFI声卡",
         "value": 27163,
         "color": "695687"
-    },
-    {
-        "cellWidth": 2,
-        "cellHeight": 2,
-        "type": "medical",
-        "name": "血压仪",
-        "value": 39252,
-        "color": "695687"
-    },
-    {
-        "cellWidth": 1,
-        "cellHeight": 1,
-        "type": "food",
-        "name": "柠檬茶",
-        "value": 16178,
-        "color": "695687"
-    },
-    {
-        "cellWidth": 1,
-        "cellHeight": 1,
-        "type": "misc",
-        "name": "海盗铜币",
-        "value": 2569,
-        "color": "367e68"
     },
     {
         "cellWidth": 1,
@@ -507,30 +395,6 @@
         "cellWidth": 2,
         "cellHeight": 2,
         "type": "helmet",
-        "name": "GT1 战术头盔",
-        "value": 137202,
-        "color": "695687"
-    },
-    {
-        "cellWidth": 2,
-        "cellHeight": 2,
-        "type": "helmet",
-        "name": "MHS 战术头盔",
-        "value": 97548,
-        "color": "695687"
-    },
-    {
-        "cellWidth": 2,
-        "cellHeight": 2,
-        "type": "helmet",
-        "name": "MC201 防弹头盔",
-        "value": 40876,
-        "color": "695687"
-    },
-    {
-        "cellWidth": 2,
-        "cellHeight": 2,
-        "type": "helmet",
         "name": "户外棒球帽",
         "value": 9206,
         "color": "808080"
@@ -540,6 +404,7 @@
         "cellHeight": 2,
         "type": "helmet",
         "name": "MC201 防弹头盔",
+        "rarity": 3,
         "value": 40876,
         "color": "695687"
     },
@@ -745,7 +610,9 @@
             {"title": "瞄准镜", "type": "Scope"},
             {"title": "上导轨", "type": "Rail"},
             {"title": "侧瞄具", "type": "SideSight"}
-        ]
+        ],
+        "ammo": "Ammo300",
+        "capacity": 30
     },
     {
         "cellWidth": 4,
@@ -768,7 +635,9 @@
             {"title": "瞄准镜", "type": "Scope"},
             {"title": "侧瞄具", "type": "SideSight"},
             {"title": "拉机柄", "type": "PullHandle"}
-        ]
+        ],
+        "ammo": "Ammo919",
+        "capacity": 30
     },
     {
         "cellWidth": 4,
@@ -789,7 +658,9 @@
             {"title": "瞄准镜", "type": "Scope"},
             {"title": "侧瞄具", "type": "SideSight"},
             {"title": "枪托套件", "type": "ButtKit"}
-        ]
+        ],
+        "ammo": "Ammo45",
+        "capacity": 30
     },
     {
         "cellWidth": 4,
@@ -809,7 +680,9 @@
             {"title": "瞄准镜", "type": "Scope"},
             {"title": "上导轨", "type": "Rail"},
             {"title": "侧瞄具", "type": "SideSight"}
-        ]
+        ],
+        "ammo": "Ammo55645",
+        "capacity": 30
     },
     {
         "cellWidth": 4,
@@ -833,7 +706,9 @@
             {"title": "瞄准镜", "type": "Scope"},
             {"title": "侧瞄具", "type": "SideSight"},
             {"title": "拉机柄", "type": "PullHandle"}
-        ]
+        ],
+        "ammo": "Ammo54539",
+        "capacity": 30
     },
 
     {
@@ -968,7 +843,7 @@
     {
         "cellWidth": 1,
         "cellHeight": 1,
-        "type": "ammo",
+        "type": "ammo300",
         "name": ".300 BLK",
         "value": 3819,
         "color": "a16e50",
@@ -977,7 +852,7 @@
     {
         "cellWidth": 1,
         "cellHeight": 1,
-        "type": "ammo",
+        "type": "ammo919",
         "name": "9x19mm PBP",
         "value": 1508,
         "color": "695687",
@@ -986,7 +861,7 @@
     {
         "cellWidth": 1,
         "cellHeight": 1,
-        "type": "ammo",
+        "type": "ammo45",
         "name": ".45 ACP RIP",
         "value": 579,
         "color": "4b6b87",
@@ -1032,38 +907,6 @@
         "name": "M14洞察超长枪管",
         "value": 128092,
         "color": "4b6b87"
-    },
-    {
-        "cellWidth": 1,
-        "cellHeight": 1,
-        "type": "Rail",
-        "name": "PEQ-2红色激光镭指",
-        "value": 322654,
-        "color": "695687"
-    },
-    {
-        "cellWidth": 1,
-        "cellHeight": 1,
-        "type": "Rail",
-        "name": "耀斑战术手电",
-        "value": 35412,
-        "color": "695687"
-    },
-    {
-        "cellWidth": 1,
-        "cellHeight": 1,
-        "type": "Patch",
-        "name": "游侠护木片",
-        "value": 5631,
-        "color": "367e68"
-    },
-    {
-        "cellWidth": 1,
-        "cellHeight": 1,
-        "type": "Patch",
-        "name": "KC猎犬护木片",
-        "value": 5131,
-        "color": "367e68"
     },
     {
         "cellWidth": 1,
@@ -1290,6 +1133,14 @@
     {
         "cellWidth": 1,
         "cellHeight": 1,
+        "type": "Patch",
+        "name": "游侠护木片",
+        "value": 5631,
+        "color": "367e68"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
         "name": "蜜獾小口径快拔套（沙）",
         "value": 5142,
         "color": "367e68",
@@ -1337,6 +1188,14 @@
         "value": 31621,
         "color": "a16e50",
         "type": "Rail"
+    },
+    {
+        "cellWidth": 1,
+        "cellHeight": 1,
+        "type": "Rail",
+        "name": "耀斑战术手电",
+        "value": 35412,
+        "color": "695687"
     },
     {
         "cellWidth": 1,

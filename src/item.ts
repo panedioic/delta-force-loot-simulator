@@ -237,8 +237,8 @@ export class Item {
             });
             stackText.anchor.set(1, 1); // 右下角对齐
             stackText.position.set(
-                this.pixelWidth / 2 - 5,  // 右边缘留5像素边距
-                this.pixelHeight / 2 - 5   // 下边缘留5像素边距
+                pixelWidth - 5,  // 右边缘留5像素边距
+                pixelHeight - 5   // 下边缘留5像素边距
             );
             this.graphicsText.addChild(stackText);
         }
@@ -257,8 +257,8 @@ export class Item {
             });
             stackText.anchor.set(1, 1); // 右下角对齐
             stackText.position.set(
-                this.pixelWidth / 2 - 5,  // 右边缘留5像素边距
-                this.pixelHeight / 2 - 5   // 下边缘留5像素边距
+                pixelWidth - 5,  // 右边缘留5像素边距
+                pixelHeight - 5   // 下边缘留5像素边距
             );
             this.graphicsText.addChild(stackText);
         }
@@ -328,12 +328,12 @@ export class Item {
         }
 
         // refresh active item panel if exists
-        if (this.game.activeItemInfoPanel) {
-            const pos = this.game.activeItemInfoPanel.getPosition();
-            this.game.activeItemInfoPanel.close();
-            this.game.createItemInfoPanel(this);
-            if (this.game.activeItemInfoPanel) {
-                this.game.activeItemInfoPanel.setPosition(pos);
+        if (window.game.activeItemInfoPanel && window.game.activeItemInfoPanel.item === this) {
+            const pos = window.game.activeItemInfoPanel.getPosition();
+            window.game.activeItemInfoPanel.close();
+            window.game.createItemInfoPanel(this);
+            if (window.game.activeItemInfoPanel) {
+                window.game.activeItemInfoPanel.setPosition(pos);
             }
         }
     }
@@ -426,6 +426,7 @@ export class Item {
 
     onClick(clickCount=1) {
         if (clickCount === 1) {
+            console.log(3333)
             this.game.createItemInfoPanel(this);
         } else if (clickCount === 2) {
             if (!this.parentRegion) {
@@ -902,9 +903,11 @@ export class Item {
                 ammoItem.currentStactCount = ammoCount;
                 
                 // 将弹药添加到父网格
-                if (this.parentGrid) {
+                if (this.parentGrid && !this.parentGrid.fullfill) {
                     this.parentGrid.addItem(ammoItem);
                     ammoItem.refreshUI();
+                } else if (this.parentRegion && this.parentRegion instanceof Region) {
+                    this.parentRegion.addItem(ammoItem);
                 }
                 
                 // 清空当前弹药
