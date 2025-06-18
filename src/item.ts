@@ -426,7 +426,6 @@ export class Item {
 
     onClick(clickCount=1) {
         if (clickCount === 1) {
-            console.log(3333)
             this.game.createItemInfoPanel(this);
         } else if (clickCount === 2) {
             if (!this.parentRegion) {
@@ -630,6 +629,15 @@ export class Item {
                 // this.graphicsBg.width = this.graphicsBg.height;
                 // this.graphicsBg.height = t2;
                 // console.log('方块已旋转');
+            }
+        }
+        if (event.key.toLowerCase() === "f") {
+            const bounds = this.container.getBounds();
+            const mousePosition = this.game.app.renderer.events.pointer.global;
+            if (this.parentGrid && this.parentGrid.enabled &&
+                mousePosition.x >= bounds.x && mousePosition.x <= bounds.x + bounds.width &&
+                mousePosition.y >= bounds.y && mousePosition.y <= bounds.y + bounds.height) {
+                this.onClick(2);
             }
         }
     }

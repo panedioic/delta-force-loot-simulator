@@ -433,6 +433,7 @@ export class Subgrid {
     }
 
     setEnabled(enabled: boolean) {
+        this.enabled = enabled;
         this.container.visible = enabled;
     }
 

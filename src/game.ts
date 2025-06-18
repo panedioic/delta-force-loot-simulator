@@ -4,6 +4,7 @@ import { Subgrid } from "./subgrid";
 import { TotalValueDisplay } from "./totalValueDisplay";
 import { RegionSwitchUI } from "./components/regionSwitchUI";
 import { InfoDialog } from "./components/infoDialog";
+import { ChangelogDialog } from "./components/ChangelogDialog";
 import { Timer } from "./components/timer";
 import { ItemInfoPanel } from "./itemInfoPanel";
 import { Item } from "./item";
@@ -279,6 +280,7 @@ export class Game {
         this.playerRegion.addComponent('itemManager', ItemManager);
         this.playerRegion.addComponent('presetManager', PresetManager);
         this.playerRegion.addComponent('debugTools', DebugTools);
+        this.playerRegion.addComponent('changelogDialog', ChangelogDialog);
         this.playerRegion.addInventory(1, false);
         this.playerRegion.switchTo(0);
     }
