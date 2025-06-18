@@ -142,6 +142,12 @@ export class ChangelogDialog {
         `;
         content.innerHTML = `
             <div style="margin-bottom: 20px;">
+                <h2 style="font-size: 18px; color: #66ccff;">版本 0.9.1 <span style="color: #999; font-size: 14px;">2025-06-18</span></h2>
+                <ul style="list-style-type: none; padding-left: 20px;">
+                    <li>• 增加了 F 键快速拾取物品功能</li>
+                </ul>
+            </div>
+            <div style="margin-bottom: 20px;">
                 <h2 style="font-size: 18px; color: #66ccff;">版本 0.9.0 <span style="color: #999; font-size: 14px;">2025-06-18</span></h2>
                 <ul style="list-style-type: none; padding-left: 20px;">
                     <li>• 增加了 Changelog 页面</li>
