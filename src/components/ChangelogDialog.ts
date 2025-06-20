@@ -141,6 +141,12 @@ export class ChangelogDialog {
         `;
         content.innerHTML = `
             <div style="margin-bottom: 20px;">
+                <h2 style="font-size: 18px; color: #66ccff;">版本 0.10.1 <span style="color: #999; font-size: 14px;">2025-06-20</span></h2>
+                <ul style="list-style-type: none; padding-left: 20px;">
+                    <li>• 修复了部分道具交换位置失败的 bug。</li>
+                </ul>
+            </div>
+            <div style="margin-bottom: 20px;">
                 <h2 style="font-size: 18px; color: #66ccff;">版本 0.10.0 <span style="color: #999; font-size: 14px;">2025-06-20</span></h2>
                 <ul style="list-style-type: none; padding-left: 20px;">
                     <li>• 虽然没啥新功能，但是 item 的代码整体重构了一下，因此版本号直接跳到 0.10.0</li>

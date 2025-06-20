@@ -933,7 +933,7 @@ export class Item {
             // console.log(slotInfo, slotID)
             return slotInfo.accType;
         });
-        if (this.info.gunDetail.caliber === draggingItem.info.secondClass) {
+        if (this.info.gunDetail && this.info.gunDetail.caliber === draggingItem.info.secondClass) {
             // 添加子弹
             const draggingItemOriginalParentGrid = draggingItem.parentGrid;
             // 获取当前子弹总数
