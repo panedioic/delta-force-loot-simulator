@@ -217,7 +217,7 @@ export class Subgrid {
      * @returns {Item[]} - 返回所有重叠的物品数组
      */
     getOverlappingItems(
-        item: Item | ItemType,
+        item: Item | ItemType | ItemPlace,
         col: number,
         row: number,
         rotated: boolean=false
@@ -250,7 +250,7 @@ export class Subgrid {
      * 检查是否有重叠（保留此方法以保持向后兼容）
      */
     checkForOverlap(
-        item: Item | ItemType,
+        item: Item | ItemType | ItemPlace,
         col: number,
         row: number
     ): boolean {
@@ -326,6 +326,9 @@ export class Subgrid {
      * */
     addItem(obj: Item, col: number = -1, row: number = -1, removeFromOriginalGrid: boolean=true): boolean {
         // Check accept first
+        // if(obj.type === 'primaryWeapon') {
+        //     console.log('bbb')
+        // }
         const bIsAccepted = this.checkAccept(obj);
         if (!bIsAccepted) {
             return false;
@@ -443,18 +446,6 @@ export class Subgrid {
      * */
     getBounds(): PIXI.Bounds {
         return this.container.getBounds();
-    }
-
-    // 获取指定区域内的所有物品
-    getItemsInArea(x: number, y: number, width: number, height: number): Item[] {
-        const items: Item[] = [];
-        for (const item of this.blocks) {
-            if (Math.max(x, item.x) <= Math.min(x + width, item.x + item.cellWidth) &&
-                Math.max(y, item.y) <= Math.min(y + height, item.y + item.cellHeight)) {
-                items.push(item);
-            }
-        }
-        return items;
     }
 
     // 获取所有物品

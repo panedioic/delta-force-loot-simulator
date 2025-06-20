@@ -2,7 +2,7 @@ import * as PIXI from "pixi.js";
 import { Game } from "./game";
 import { Item } from "./item";
 import { Subgrid } from "./subgrid";
-import { GAME_WIDTH, GAME_HEIGHT } from "./config";
+import { GAME_WIDTH, GAME_HEIGHT, RARITY_COLORS } from "./config";
 
 interface ButtonConfig {
     text: string;
@@ -57,7 +57,7 @@ export class ItemInfoPanel {
         }
 
         // 如果是枪械，应该有卸载子弹功能
-        if (this.item.ammoType) {
+        if (this.item.info.gunDetail) {
             const unloadButton: ButtonConfig = {
                 text: "卸载子弹",
                 callback: () => this.item.unloadAmmo()
@@ -88,7 +88,7 @@ export class ItemInfoPanel {
         this.createButtons(buttonConfigs);
         
         // 如果是枪械，创建弹药和配件区域
-        if (this.item.accessories.length > 0) {
+        if (this.item.accessories && this.item.accessories.length > 0) {
             this.createAmmoArea();
             this.createAttachmentsArea();
         }
@@ -172,7 +172,8 @@ export class ItemInfoPanel {
         // 背景色块
         const colorBlock = new PIXI.Graphics();
         colorBlock.rect(0, 0, this.WIDTH, this.IMAGE_HEIGHT);
-        colorBlock.fill({ color: parseInt(this.item.color, 16), alpha: 1.0 });
+        const color = RARITY_COLORS[this.item.grade];
+        colorBlock.fill({ color: color, alpha: 1.0 });
         imageArea.addChild(colorBlock);
         
         // 物品名称
@@ -269,6 +270,7 @@ export class ItemInfoPanel {
     }
 
     private createAmmoArea() {
+        return;
         const lastButton = this.buttons[this.buttons.length - 1];
         let currentY = lastButton.y + lastButton.height + 24;
         
@@ -324,25 +326,25 @@ export class ItemInfoPanel {
         // this.contentContainer.addChild(ammoGrid.container);
         let count = 0;
         for (const accessory of this.item.accessories) {
-            const accessoryType = accessory.title;
-            if (accessoryType === this.ammoType) {
-                continue;
+            const slotId = accessory.slotID;
+            const slotInfo = window.game.itemManager.getGunSlotInfoByID(slotId);
+            if (slotInfo) {
+                const slotTitle = slotInfo.nameCN;
+                const subgrid = this.item.subgrids[slotTitle];
+                subgrid.setEnabled(true);
+                
+                if (count > 0 && count % 5 === 0) {
+                    currentY += this.SUBGRID_SIZE + this.BUTTON_GAP;
+                    currentX = (this.WIDTH - 5 * (this.SUBGRID_SIZE + this.BUTTON_GAP) + this.BUTTON_GAP) / 2;
+                }
+                
+                subgrid.container.position.set(currentX, currentY);
+                currentX += this.SUBGRID_SIZE + this.BUTTON_GAP;
+                
+                this.subgrids.push(subgrid);
+                this.contentContainer.addChild(subgrid.container);
+                count += 1;
             }
-            // console.log(accessoryType, this.item.subgrids)
-            const subgrid = this.item.subgrids[accessoryType];
-            subgrid.setEnabled(true);
-            
-            if (count > 0 && count % 5 === 0) {
-                currentY += this.SUBGRID_SIZE + this.BUTTON_GAP;
-                currentX = (this.WIDTH - 5 * (this.SUBGRID_SIZE + this.BUTTON_GAP) + this.BUTTON_GAP) / 2;
-            }
-            
-            subgrid.container.position.set(currentX, currentY);
-            currentX += this.SUBGRID_SIZE + this.BUTTON_GAP;
-            
-            this.subgrids.push(subgrid);
-            this.contentContainer.addChild(subgrid.container);
-            count += 1;
         }
     }
 
@@ -608,8 +610,8 @@ export class ItemInfoPanel {
         if (this.item.currentStactCount === 1) return;
 
         // 创建新的物品
-        const newItemInfo = this.game.BLOCK_TYPES.find((item: any) => item.name === this.item.name);
-        const newItem = new Item(this.game, null, newItemInfo.type, newItemInfo);
+        const newItemInfo = this.item.info;
+        const newItem = new Item(newItemInfo);
         newItem.currentStactCount = this.selectedSplitAmount;
 
         // 更新原物品的堆叠数量

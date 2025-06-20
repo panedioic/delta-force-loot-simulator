@@ -1,0 +1,1364 @@
+{
+	"ret": 0,
+	"iRet": 0,
+	"sMsg": "succ",
+	"jData": {
+		"data": {
+			"code": 0,
+			"data": {
+				"list": [
+                    {
+						"id": 10293,
+						"objectID": 37100100001,
+						"objectName": "5.56x45mm RRLP",
+						"length": 1,
+						"width": 1,
+						"grade": 1,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo5.56x45",
+						"secondClassCN": "5.56x45mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/5.56x45mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_5.56x45mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 1,
+							"harmRatio": 100,
+							"armorHarmLevel": "低"
+						}
+					},
+					{
+						"id": 10294,
+						"objectID": 37100200001,
+						"objectName": "5.56x45mm FMJ",
+						"length": 1,
+						"width": 1,
+						"grade": 2,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo5.56x45",
+						"secondClassCN": "5.56x45mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/5.56x45mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_5.56x45mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 2,
+							"harmRatio": 100,
+							"armorHarmLevel": "低"
+						}
+					},
+					{
+						"id": 10292,
+						"objectID": 37100300001,
+						"objectName": "5.56x45mm M855",
+						"length": 1,
+						"width": 1,
+						"grade": 3,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo5.56x45",
+						"secondClassCN": "5.56x45mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/5.56x45mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_5.56x45mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 3,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10291,
+						"objectID": 37100400001,
+						"objectName": "5.56x45mm M855A1",
+						"length": 1,
+						"width": 1,
+						"grade": 4,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo5.56x45",
+						"secondClassCN": "5.56x45mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/5.56x45mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_5.56x45mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 4,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10295,
+						"objectID": 37100500001,
+						"objectName": "5.56x45mm M995",
+						"length": 1,
+						"width": 1,
+						"grade": 5,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo5.56x45",
+						"secondClassCN": "5.56x45mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/5.56x45mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_5.56x45mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 5,
+							"harmRatio": 100,
+							"armorHarmLevel": "高"
+						}
+					},
+					{
+						"id": 20004,
+						"objectID": 37990300001,
+						"objectName": ".300 BLK",
+						"length": 1,
+						"width": 1,
+						"grade": 3,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo.300",
+						"secondClassCN": ".300",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/5.56x45mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_5.56x45mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 3,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 20003,
+						"objectID": 37990400001,
+						"objectName": ".300 BLK",
+						"length": 1,
+						"width": 1,
+						"grade": 4,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo.300",
+						"secondClassCN": ".300",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/5.56x45mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_5.56x45mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 4,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 20002,
+						"objectID": 37990500001,
+						"objectName": ".300 BLK",
+						"length": 1,
+						"width": 1,
+						"grade": 5,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo.300",
+						"secondClassCN": ".300",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/5.56x45mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_5.56x45mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 5,
+							"harmRatio": 100,
+							"armorHarmLevel": "高"
+						}
+					},
+					{
+						"id": 10309,
+						"objectID": 37110100001,
+						"objectName": "7.62x39mm LP",
+						"length": 1,
+						"width": 1,
+						"grade": 1,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo7.62x39",
+						"secondClassCN": "7.62x39mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/7.62x39mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_7.62x39mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 1,
+							"harmRatio": 100,
+							"armorHarmLevel": "低"
+						}
+					},
+					{
+						"id": 10312,
+						"objectID": 37110200001,
+						"objectName": "7.62x39mm T45M",
+						"length": 1,
+						"width": 1,
+						"grade": 2,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo7.62x39",
+						"secondClassCN": "7.62x39mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/7.62x39mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_7.62x39mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 2,
+							"harmRatio": 100,
+							"armorHarmLevel": "低"
+						}
+					},
+					{
+						"id": 10311,
+						"objectID": 37110300001,
+						"objectName": "7.62x39mm PS",
+						"length": 1,
+						"width": 1,
+						"grade": 3,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo7.62x39",
+						"secondClassCN": "7.62x39mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/7.62x39mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_7.62x39mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 3,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10313,
+						"objectID": 37110400001,
+						"objectName": "7.62x39mm BP",
+						"length": 1,
+						"width": 1,
+						"grade": 4,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo7.62x39",
+						"secondClassCN": "7.62x39mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/7.62x39mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_7.62x39mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 4,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10310,
+						"objectID": 37110500001,
+						"objectName": "7.62x39mm AP",
+						"length": 1,
+						"width": 1,
+						"grade": 5,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo7.62x39",
+						"secondClassCN": "7.62x39mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/7.62x39mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_7.62x39mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 5,
+							"harmRatio": 100,
+							"armorHarmLevel": "高"
+						}
+					},
+					{
+						"id": 10286,
+						"objectID": 37120100001,
+						"objectName": "5.45x39mm PRS",
+						"length": 1,
+						"width": 1,
+						"grade": 1,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo5.45x39",
+						"secondClassCN": "5.45x39mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/5.45x39mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_5.45x39mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 1,
+							"harmRatio": 100,
+							"armorHarmLevel": "低"
+						}
+					},
+					{
+						"id": 10288,
+						"objectID": 37120200001,
+						"objectName": "5.45x39mm T",
+						"length": 1,
+						"width": 1,
+						"grade": 2,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo5.45x39",
+						"secondClassCN": "5.45x39mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/5.45x39mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_5.45x39mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 2,
+							"harmRatio": 100,
+							"armorHarmLevel": "低"
+						}
+					},
+					{
+						"id": 10289,
+						"objectID": 37120300001,
+						"objectName": "5.45x39mm PS",
+						"length": 1,
+						"width": 1,
+						"grade": 3,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo5.45x39",
+						"secondClassCN": "5.45x39mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/5.45x39mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_5.45x39mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 3,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10290,
+						"objectID": 37120400001,
+						"objectName": "5.45x39mm BT",
+						"length": 1,
+						"width": 1,
+						"grade": 4,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo5.45x39",
+						"secondClassCN": "5.45x39mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/5.45x39mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_5.45x39mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 4,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10287,
+						"objectID": 37120500001,
+						"objectName": "5.45x39mm BS",
+						"length": 1,
+						"width": 1,
+						"grade": 5,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo5.45x39",
+						"secondClassCN": "5.45x39mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/5.45x39mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_5.45x39mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 5,
+							"harmRatio": 100,
+							"armorHarmLevel": "高"
+						}
+					},
+					{
+						"id": 10302,
+						"objectID": 37130200001,
+						"objectName": "5.8x42mm DBP87",
+						"length": 1,
+						"width": 1,
+						"grade": 2,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo5.8x42",
+						"secondClassCN": "5.8x42mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/5.8x42mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_5.8x42mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 2,
+							"harmRatio": 100,
+							"armorHarmLevel": "低"
+						}
+					},
+					{
+						"id": 10305,
+						"objectID": 37130300001,
+						"objectName": "5.8x42mm DVP88",
+						"length": 1,
+						"width": 1,
+						"grade": 3,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo5.8x42",
+						"secondClassCN": "5.8x42mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/5.8x42mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_5.8x42mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 3,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10303,
+						"objectID": 37130400001,
+						"objectName": "5.8x42mm DBP10",
+						"length": 1,
+						"width": 1,
+						"grade": 4,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo5.8x42",
+						"secondClassCN": "5.8x42mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/5.8x42mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_5.8x42mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 4,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10304,
+						"objectID": 37130500001,
+						"objectName": "5.8x42mm DVC12",
+						"length": 1,
+						"width": 1,
+						"grade": 5,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo5.8x42",
+						"secondClassCN": "5.8x42mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/5.8x42mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_5.8x42mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 5,
+							"harmRatio": 100,
+							"armorHarmLevel": "高"
+						}
+					},
+					{
+						"id": 10327,
+						"objectID": 37140300001,
+						"objectName": "9x39mm SP5",
+						"length": 1,
+						"width": 1,
+						"grade": 3,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo9x39",
+						"secondClassCN": "9x39mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/9x39mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_9x39mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 3,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10329,
+						"objectID": 37140400001,
+						"objectName": "9x39mm SP6",
+						"length": 1,
+						"width": 1,
+						"grade": 4,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo9x39",
+						"secondClassCN": "9x39mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/9x39mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_9x39mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 4,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10328,
+						"objectID": 37140500001,
+						"objectName": "9x39mm BP",
+						"length": 1,
+						"width": 1,
+						"grade": 5,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo9x39",
+						"secondClassCN": "9x39mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/9x39mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_9x39mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 5,
+							"harmRatio": 100,
+							"armorHarmLevel": "高"
+						}
+					},
+					{
+						"id": 10306,
+						"objectID": 37150400001,
+						"objectName": "6.8x51mm FMJ",
+						"length": 1,
+						"width": 1,
+						"grade": 4,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo6.8x51",
+						"secondClassCN": "6.8x51mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/6.8x51mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_6.8x51mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 4,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10307,
+						"objectID": 37150500001,
+						"objectName": "6.8x51mm Hybrid",
+						"length": 1,
+						"width": 1,
+						"grade": 5,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo6.8x51",
+						"secondClassCN": "6.8x51mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/6.8x51mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_6.8x51mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 5,
+							"harmRatio": 100,
+							"armorHarmLevel": "高"
+						}
+					},
+					{
+						"id": 10308,
+						"objectID": 37150600001,
+						"objectName": "6.8x51mm AP",
+						"length": 1,
+						"width": 1,
+						"grade": 6,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo6.8x51",
+						"secondClassCN": "6.8x51mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/6.8x51mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_6.8x51mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 6,
+							"harmRatio": 100,
+							"armorHarmLevel": "高"
+						}
+					},
+					{
+						"id": 10285,
+						"objectID": 37160300001,
+						"objectName": "12.7x55mm PS12A",
+						"length": 1,
+						"width": 1,
+						"grade": 3,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo12.7x55",
+						"secondClassCN": "12.7x55mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/12.7x55mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_12.7x55mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 3,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10283,
+						"objectID": 37160400001,
+						"objectName": "12.7x55mm PS12",
+						"length": 1,
+						"width": 1,
+						"grade": 4,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo12.7x55",
+						"secondClassCN": "12.7x55mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/12.7x55mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_12.7x55mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 4,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10284,
+						"objectID": 37160500001,
+						"objectName": "12.7x55mm PS12B",
+						"length": 1,
+						"width": 1,
+						"grade": 5,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo12.7x55",
+						"secondClassCN": "12.7x55mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/12.7x55mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_12.7x55mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 5,
+							"harmRatio": 100,
+							"armorHarmLevel": "高"
+						}
+					},
+					{
+						"id": 10317,
+						"objectID": 37170300001,
+						"objectName": "7.62x51mm BPZ",
+						"length": 1,
+						"width": 1,
+						"grade": 3,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo7.62x51",
+						"secondClassCN": "7.62x51mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/7.62x51mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_7.62x51mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 3,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10315,
+						"objectID": 37170400001,
+						"objectName": "7.62x51mm M80",
+						"length": 1,
+						"width": 1,
+						"grade": 4,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo7.62x51",
+						"secondClassCN": "7.62x51mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/7.62x51mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_7.62x51mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 4,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10314,
+						"objectID": 37170500001,
+						"objectName": "7.62x51mm M62",
+						"length": 1,
+						"width": 1,
+						"grade": 5,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo7.62x51",
+						"secondClassCN": "7.62x51mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/7.62x51mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_7.62x51mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 5,
+							"harmRatio": 100,
+							"armorHarmLevel": "高"
+						}
+					},
+					{
+						"id": 10316,
+						"objectID": 37170600001,
+						"objectName": "7.62x51mm M61",
+						"length": 1,
+						"width": 1,
+						"grade": 6,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo7.62x51",
+						"secondClassCN": "7.62x51mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/7.62x51mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_7.62x51mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 6,
+							"harmRatio": 100,
+							"armorHarmLevel": "高"
+						}
+					},
+					{
+						"id": 10321,
+						"objectID": 37180300001,
+						"objectName": "7.62x54R T46M",
+						"length": 1,
+						"width": 1,
+						"grade": 3,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo7.62x54",
+						"secondClassCN": "7.62x54mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/7.62x54mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_7.62x54mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 3,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10318,
+						"objectID": 37180400001,
+						"objectName": "7.62x54R LPS",
+						"length": 1,
+						"width": 1,
+						"grade": 4,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo7.62x54",
+						"secondClassCN": "7.62x54mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/7.62x54mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_7.62x54mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 4,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10320,
+						"objectID": 37180500001,
+						"objectName": "7.62x54R BT",
+						"length": 1,
+						"width": 1,
+						"grade": 5,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo7.62x54",
+						"secondClassCN": "7.62x54mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/7.62x54mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_7.62x54mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 5,
+							"harmRatio": 100,
+							"armorHarmLevel": "高"
+						}
+					},
+					{
+						"id": 10319,
+						"objectID": 37180600001,
+						"objectName": "7.62x54R SNB",
+						"length": 1,
+						"width": 1,
+						"grade": 6,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo7.62x54",
+						"secondClassCN": "7.62x54mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/7.62x54mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_7.62x54mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 6,
+							"harmRatio": 100,
+							"armorHarmLevel": "高"
+						}
+					},
+					{
+						"id": 10272,
+						"objectID": 37190000001,
+						"objectName": ".45 ACP RIP",
+						"length": 1,
+						"width": 1,
+						"grade": 3,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo.45",
+						"secondClassCN": ".45 ACP",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/45-ACP.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_45-ACP.png",
+						"ammoDetail": { "harmRatio": 130, "armorHarmLevel": "低" }
+					},
+					{
+						"id": 10269,
+						"objectID": 37190100001,
+						"objectName": ".45 ACP HS",
+						"length": 1,
+						"width": 1,
+						"grade": 1,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo.45",
+						"secondClassCN": ".45 ACP",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/45-ACP.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_45-ACP.png",
+						"ammoDetail": {
+							"penetrationLevel": 1,
+							"harmRatio": 100,
+							"armorHarmLevel": "低"
+						}
+					},
+					{
+						"id": 10268,
+						"objectID": 37190200001,
+						"objectName": ".45 ACP JHP",
+						"length": 1,
+						"width": 1,
+						"grade": 2,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo.45",
+						"secondClassCN": ".45 ACP",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/45-ACP.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_45-ACP.png",
+						"ammoDetail": {
+							"penetrationLevel": 2,
+							"harmRatio": 100,
+							"armorHarmLevel": "低"
+						}
+					},
+					{
+						"id": 10271,
+						"objectID": 37190300001,
+						"objectName": ".45 ACP FMJ",
+						"length": 1,
+						"width": 1,
+						"grade": 3,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo.45",
+						"secondClassCN": ".45 ACP",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/45-ACP.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_45-ACP.png",
+						"ammoDetail": {
+							"penetrationLevel": 3,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10270,
+						"objectID": 37190400001,
+						"objectName": ".45 ACP AP",
+						"length": 1,
+						"width": 1,
+						"grade": 4,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo.45",
+						"secondClassCN": ".45 ACP",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/45-ACP.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_45-ACP.png",
+						"ammoDetail": {
+							"penetrationLevel": 4,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10323,
+						"objectID": 37200000001,
+						"objectName": "9x19mm RIP",
+						"length": 1,
+						"width": 1,
+						"grade": 3,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo9x19",
+						"secondClassCN": "9x19mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/9x19mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_9x19mm.png",
+						"ammoDetail": { "harmRatio": 130, "armorHarmLevel": "低" }
+					},
+					{
+						"id": 10324,
+						"objectID": 37200100001,
+						"objectName": "9x19mm PSO",
+						"length": 1,
+						"width": 1,
+						"grade": 1,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo9x19",
+						"secondClassCN": "9x19mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/9x19mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_9x19mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 1,
+							"harmRatio": 100,
+							"armorHarmLevel": "低"
+						}
+					},
+					{
+						"id": 10326,
+						"objectID": 37200200001,
+						"objectName": "9x19mm Pst",
+						"length": 1,
+						"width": 1,
+						"grade": 2,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo9x19",
+						"secondClassCN": "9x19mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/9x19mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_9x19mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 2,
+							"harmRatio": 100,
+							"armorHarmLevel": "低"
+						}
+					},
+					{
+						"id": 10325,
+						"objectID": 37200300001,
+						"objectName": "9x19mm AP6.3",
+						"length": 1,
+						"width": 1,
+						"grade": 3,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo9x19",
+						"secondClassCN": "9x19mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/9x19mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_9x19mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 3,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10322,
+						"objectID": 37200400001,
+						"objectName": "9x19mm PBP",
+						"length": 1,
+						"width": 1,
+						"grade": 4,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo9x19",
+						"secondClassCN": "9x19mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/9x19mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_9x19mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 4,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10300,
+						"objectID": 37210000001,
+						"objectName": "5.7x28mm R37.F",
+						"length": 1,
+						"width": 1,
+						"grade": 3,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo5.7x28",
+						"secondClassCN": "5.7x28mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/5.7x28mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_5.7x28mm.png",
+						"ammoDetail": { "harmRatio": 130, "armorHarmLevel": "低" }
+					},
+					{
+						"id": 10297,
+						"objectID": 37210100001,
+						"objectName": "5.7x28mm SS198LF",
+						"length": 1,
+						"width": 1,
+						"grade": 1,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo5.7x28",
+						"secondClassCN": "5.7x28mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/5.7x28mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_5.7x28mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 1,
+							"harmRatio": 100,
+							"armorHarmLevel": "低"
+						}
+					},
+					{
+						"id": 10299,
+						"objectID": 37210200001,
+						"objectName": "5.7x28mm SS197SR",
+						"length": 1,
+						"width": 1,
+						"grade": 2,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo5.7x28",
+						"secondClassCN": "5.7x28mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/5.7x28mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_5.7x28mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 2,
+							"harmRatio": 100,
+							"armorHarmLevel": "低"
+						}
+					},
+					{
+						"id": 10301,
+						"objectID": 37210300001,
+						"objectName": "5.7x28mm L191",
+						"length": 1,
+						"width": 1,
+						"grade": 3,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo5.7x28",
+						"secondClassCN": "5.7x28mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/5.7x28mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_5.7x28mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 3,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10298,
+						"objectID": 37210400001,
+						"objectName": "5.7x28mm SS193",
+						"length": 1,
+						"width": 1,
+						"grade": 4,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo5.7x28",
+						"secondClassCN": "5.7x28mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/5.7x28mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_5.7x28mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 4,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10296,
+						"objectID": 37210500001,
+						"objectName": "5.7x28mm SS190",
+						"length": 1,
+						"width": 1,
+						"grade": 5,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo5.7x28",
+						"secondClassCN": "5.7x28mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/5.7x28mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_5.7x28mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 5,
+							"harmRatio": 100,
+							"armorHarmLevel": "高"
+						}
+					},
+					{
+						"id": 10016,
+						"objectID": 37220200001,
+						"objectName": ".357 Magnum HP",
+						"length": 1,
+						"width": 1,
+						"grade": 2,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo.357",
+						"secondClassCN": ".357 Magnum",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/357-Magnum.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_357-Magnum.png",
+						"ammoDetail": {
+							"penetrationLevel": 2,
+							"harmRatio": 100,
+							"armorHarmLevel": "低"
+						}
+					},
+					{
+						"id": 10017,
+						"objectID": 37220300001,
+						"objectName": ".357 Magnum JHP",
+						"length": 1,
+						"width": 1,
+						"grade": 3,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo.357",
+						"secondClassCN": ".357 Magnum",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/357-Magnum.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_357-Magnum.png",
+						"ammoDetail": {
+							"penetrationLevel": 3,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10018,
+						"objectID": 37220400001,
+						"objectName": ".357 Magnum FMJ",
+						"length": 1,
+						"width": 1,
+						"grade": 4,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo.357",
+						"secondClassCN": ".357 Magnum",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/357-Magnum.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_357-Magnum.png",
+						"ammoDetail": {
+							"penetrationLevel": 4,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10274,
+						"objectID": 37230200001,
+						"objectName": ".50 AE HP",
+						"length": 1,
+						"width": 1,
+						"grade": 2,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo.50",
+						"secondClassCN": ".50 AE",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/50-AE.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_50-AE.png",
+						"ammoDetail": {
+							"penetrationLevel": 2,
+							"harmRatio": 100,
+							"armorHarmLevel": "低"
+						}
+					},
+					{
+						"id": 10275,
+						"objectID": 37230300001,
+						"objectName": ".50 AE JHP",
+						"length": 1,
+						"width": 1,
+						"grade": 3,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo.50",
+						"secondClassCN": ".50 AE",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/50-AE.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_50-AE.png",
+						"ammoDetail": {
+							"penetrationLevel": 3,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10273,
+						"objectID": 37230400001,
+						"objectName": ".50 AE FMJ",
+						"length": 1,
+						"width": 1,
+						"grade": 4,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo.50",
+						"secondClassCN": ".50 AE",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/50-AE.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_50-AE.png",
+						"ammoDetail": {
+							"penetrationLevel": 4,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10015,
+						"objectID": 37240700001,
+						"objectName": ".338 Lap Mag AP",
+						"length": 1,
+						"width": 1,
+						"grade": 6,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo.338",
+						"secondClassCN": ".338 Lap Mag",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/338.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_338.png",
+						"ammoDetail": {
+							"penetrationLevel": 7,
+							"harmRatio": 100,
+							"armorHarmLevel": "高"
+						}
+					},
+					{
+						"id": 10277,
+						"objectID": 37250000001,
+						"objectName": "12 Gauge 8.5毫米鹿弹",
+						"length": 1,
+						"width": 1,
+						"grade": 3,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo12",
+						"secondClassCN": "12 Gauge",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/12-Gauge.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_12-Gauge.png",
+						"ammoDetail": { "harmRatio": 100, "armorHarmLevel": "低" }
+					},
+					{
+						"id": 10276,
+						"objectID": 37250000002,
+						"objectName": "12 Gauge独头 RIP",
+						"length": 1,
+						"width": 1,
+						"grade": 2,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo12",
+						"secondClassCN": "12 Gauge",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/12-Gauge.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_12-Gauge.png",
+						"ammoDetail": { "harmRatio": 250, "armorHarmLevel": "低" }
+					},
+					{
+						"id": 10282,
+						"objectID": 37250100001,
+						"objectName": "12 Gauge 7毫米鹿弹",
+						"length": 1,
+						"width": 1,
+						"grade": 1,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo12",
+						"secondClassCN": "12 Gauge",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/12-Gauge.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_12-Gauge.png",
+						"ammoDetail": {
+							"penetrationLevel": 1,
+							"harmRatio": 75,
+							"armorHarmLevel": "低"
+						}
+					},
+					{
+						"id": 10279,
+						"objectID": 37250200002,
+						"objectName": "12 Gauge独头 GT",
+						"length": 1,
+						"width": 1,
+						"grade": 2,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo12",
+						"secondClassCN": "12 Gauge",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/12-Gauge.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_12-Gauge.png",
+						"ammoDetail": {
+							"penetrationLevel": 2,
+							"harmRatio": 250,
+							"armorHarmLevel": "低"
+						}
+					},
+					{
+						"id": 10280,
+						"objectID": 37250300001,
+						"objectName": "12 Gauge 箭形弹",
+						"length": 1,
+						"width": 1,
+						"grade": 3,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo12",
+						"secondClassCN": "12 Gauge",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/12-Gauge.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_12-Gauge.png",
+						"ammoDetail": {
+							"penetrationLevel": 3,
+							"harmRatio": 70,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10281,
+						"objectID": 37250300002,
+						"objectName": "12 Gauge独头 FTX",
+						"length": 1,
+						"width": 1,
+						"grade": 3,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo12",
+						"secondClassCN": "12 Gauge",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/12-Gauge.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_12-Gauge.png",
+						"ammoDetail": {
+							"penetrationLevel": 3,
+							"harmRatio": 250,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10278,
+						"objectID": 37250400002,
+						"objectName": "12 Gauge独头 AP-20",
+						"length": 1,
+						"width": 1,
+						"grade": 4,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo12",
+						"secondClassCN": "12 Gauge",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/12-Gauge.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_12-Gauge.png",
+						"ammoDetail": {
+							"penetrationLevel": 4,
+							"harmRatio": 250,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10855,
+						"objectID": 37260300001,
+						"objectName": "4.6x30mm Subsonic SX",
+						"length": 1,
+						"width": 1,
+						"grade": 3,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo4.6x30",
+						"secondClassCN": "4.6x30mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/4.6x30mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_4.6x30mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 3,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10856,
+						"objectID": 37260400001,
+						"objectName": "4.6x30mm FMJ SX",
+						"length": 1,
+						"width": 1,
+						"grade": 4,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo4.6x30",
+						"secondClassCN": "4.6x30mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/4.6x30mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_4.6x30mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 4,
+							"harmRatio": 100,
+							"armorHarmLevel": "中"
+						}
+					},
+					{
+						"id": 10857,
+						"objectID": 37260500001,
+						"objectName": "4.6x30mm AP SX",
+						"length": 1,
+						"width": 1,
+						"grade": 5,
+						"weight": "0.01",
+						"primaryClass": "ammo",
+						"secondClass": "ammo4.6x30",
+						"secondClassCN": "4.6x30mm",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/4.6x30mm.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/gun/ammo/p_4.6x30mm.png",
+						"ammoDetail": {
+							"penetrationLevel": 5,
+							"harmRatio": 100,
+							"armorHarmLevel": "高"
+						}
+					}
+				]
+			},
+			"msg": "ok"
+		}
+	},
+	"sAmsSerial": "AMS-DFM-1114120412-SRAgje-661959-316968"
+}

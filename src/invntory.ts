@@ -262,10 +262,12 @@ export class Inventory {
                 currentY += item.container.height + 8; // 标题后添加间距
             } else if (item instanceof Subgrid) {
                 // 特殊物品的位置处理
-                if (item.acceptedTypes.includes("primaryWeapon")) {
+                if (item.title === 'PrimaryWeapon1') {
                     // console.log(item)
                     item.container.position.set(8, currentY);
-                } else if (item.acceptedTypes.includes("SecondaryWeapon")) {
+                } else if (item.title === 'PrimaryWeapon2') {
+                    item.container.position.set(8, currentY);
+                } else if (item.title === 'Secondary') {
                     item.container.position.set(348, currentY);
                     currentY += 136;
                 } else if (item.acceptedTypes.includes("knife")) {

@@ -26,22 +26,16 @@ export const getRandomInt = (min: number, max: number): number => {
  * @returns 
  */
 export const initInventory = (inventory: Inventory, type: number=0, preset_infos: any | null = null) => {
-    const item_infos = window.game.BLOCK_TYPES;
     if (preset_infos) {
         for (const preset of preset_infos.content) {
             const grid = inventory.contents[preset.title];
             // console.log(grid)
             for (const item_info of preset.content) {
                 const item_name = item_info.name;
-                const item_type = item_infos.find(item => item.name === item_name);
+                const item_type = window.game.itemManager.getItemInfoByName(item_name);
                 if (item_type) {
                     if (grid instanceof Subgrid) {
-                        const item = new Item(
-                            window.game,
-                            grid,
-                            item_type.type,
-                            item_type,
-                        );
+                        const item = new Item(item_type);
                         if(item_type.subgridLayout) {
                             item.subgridLayout = item_type.subgridLayout;
                         }
@@ -53,7 +47,8 @@ export const initInventory = (inventory: Inventory, type: number=0, preset_infos
                         }
                         if (item_info.accessories) {
                             for (const accessory of item_info.accessories) {
-                                const accessory_type = item_infos.find(i => i.name === accessory.name);
+                                // const accessory_type = item_infos.find(i => i.name === accessory.name);
+                                const accessory_type = window.game.itemManager.getItemInfoByName(accessory.name);
                                 // console.log('bbb\n', accessory, accessory_type)
                                 const gun_subgrid_name = Object.keys(item.subgrids).find(
                                     key => item.subgrids[key].acceptedTypes.includes(accessory_type.type) &&
@@ -65,12 +60,7 @@ export const initInventory = (inventory: Inventory, type: number=0, preset_infos
                                 const gun_subgrid = item.subgrids[gun_subgrid_name];
                                 // console.log('aaa\n', gun_subgrid, accessory_type)
                                 if (gun_subgrid) {
-                                    const accessory_item = new Item(
-                                        window.game,
-                                        gun_subgrid,
-                                        accessory_type.type,
-                                        accessory_type
-                                    );
+                                    const accessory_item = new Item(accessory_type);
                                     gun_subgrid.addItem(accessory_item, 0, 0);
                                 }
                             }
@@ -83,12 +73,7 @@ export const initInventory = (inventory: Inventory, type: number=0, preset_infos
                     } else if (grid instanceof GridContainer) {
                         const item_position = item_info.position;
                         const subgrid = grid.subgrids[item_position[0]];
-                        const item = new Item(
-                            window.game,
-                            subgrid,
-                            item_type.type,
-                            item_type
-                        );
+                        const item = new Item(item_type);
                         if(item_type.subgridLayout) {
                             item.subgridLayout = item_type.subgridLayout;
                         }
@@ -107,15 +92,11 @@ export const initInventory = (inventory: Inventory, type: number=0, preset_infos
                         }
                         if (item_info.accessories) {
                             for (const accessory of item_info.accessories) {
-                                const accessory_type = item_infos.find(i => i.name === accessory.name);
+                                // const accessory_type = item_infos.find(i => i.name === accessory.name);
+                                const accessory_type = window.game.itemManager.getItemInfoByName(accessory.name);
                                 const gun_subgrid = item.subgrids['accessory_type.type'];
                                 if (gun_subgrid) {
-                                    const accessory_item = new Item(
-                                        window.game,
-                                        gun_subgrid,
-                                        accessory_type.type,
-                                        accessory_type
-                                    );
+                                    const accessory_item = new Item(accessory_type);
                                     gun_subgrid.addItem(accessory_item, 0, 0);
                                 }
                             }
@@ -138,7 +119,7 @@ export const initInventory = (inventory: Inventory, type: number=0, preset_infos
         const blocksNum = Math.floor(Math.random() * 10) + 1; // 随机生成0到9个方块
         let items = [];
         for (let i = 0; i < blocksNum; i++) {
-            const info = item_infos[Math.floor(Math.random() * item_infos.length)];
+            const info = window.game.itemManager.getRandomItemWithPreset('default');
             items.push(info);
         }
 
@@ -149,18 +130,19 @@ export const initInventory = (inventory: Inventory, type: number=0, preset_infos
                     return;
                 }
                 const info = items[0];
-                const bOverlap = subgrid.checkForOverlap(info, col, row);
-                const bBoundary = subgrid.checkBoundary(info, col, row);
+                const checkSize = {
+                    cellWidth: info.length,
+                    cellHeight: info.width,
+                    col: col,
+                    row: row,
+                }
+                const bOverlap = subgrid.checkForOverlap(checkSize, col, row);
+                const bBoundary = subgrid.checkBoundary(checkSize, col, row);
                 // console.log('eee', bOverlap, bBoundary)
                 if (!bOverlap && bBoundary) {
                     // console.log("aaa", blockType, item);
                     // 使用 Block 类创建方块
-                    const block = new Item(
-                        window.game,
-                        subgrid,
-                        info.type,
-                        info,
-                    );
+                    const block = new Item(info);
                     if(info.subgridLayout) {
                         block.subgridLayout = info.subgridLayout;
                     }
@@ -179,36 +161,43 @@ export const initInventory = (inventory: Inventory, type: number=0, preset_infos
         const tasks1 = [
             {
                 type: 'primaryWeapon',
+                grades: [1, 0, 0, 0, 0, 0, 0, 0],
                 subgrid: 'PrimaryWeapon1',
                 probability: 0.9,
             },
             {
                 type: 'secondaryWeapon',
+                grades: [1, 0, 0, 0, 0, 0, 0, 0],
                 subgrid: 'Secondary',
                 probability: 0.3,
             },
             {
                 type: 'primaryWeapon',
+                grades: [1, 0, 0, 0, 0, 0, 0, 0],
                 subgrid: 'PrimaryWeapon2',
                 probability: 0.6,
             },
             {
                 type: 'helmet',
+                grades: [0, 0.1, 0.1, 0.3, 0.3, 0.15, 0.05, 0],
                 subgrid: 'Helmet',
                 probability: 0.7,
             },
             {
                 type: 'armor',
+                grades: [0, 0.1, 0.1, 0.3, 0.3, 0.15, 0.05, 0],
                 subgrid: 'Armor',
                 probability: 0.9,
             },
             {
                 type: 'chestRigs',
+                grades: [0, 0.1, 0.2, 0.2, 0.4, 0.1, 0, 0],
                 subgrid: 'ChestRig',
                 probability: 1,
             },
             {
                 type: 'backpack',
+                grades: [0, 0.1, 0.2, 0.2, 0.3, 0.1, 0.1, 0],
                 subgrid: 'Backpack',
                 probability: 1,
             },
@@ -216,17 +205,23 @@ export const initInventory = (inventory: Inventory, type: number=0, preset_infos
         for (const task of tasks1) {
             if (Math.random() < task.probability) {
                 const subgrid = inventory.contents[task.subgrid] as Subgrid;
-                const acceptable_infos = window.game.BLOCK_TYPES.filter(item => item.type === task.type);
-                const info = acceptable_infos[Math.floor(Math.random() * acceptable_infos.length)];
-                const item = new Item(
-                    window.game,
-                    subgrid,
-                    info.type,
-                    info,
-                );
+                const probObject: { [key: string]: { prob: number, grades: number[] } } = {};
+                probObject[task.type] = {
+                    prob: 1,
+                    grades: task.grades
+                }
+                const info = window.game.itemManager.getRandomItem(probObject);
+                // console.log(probObject)
+                const item = new Item(info);
                 // console.log(subgrid)
                 // console.log(task)
+                // if (info.primaryClass === 'gun') {
+                //     console.log(info, inventory.title, item)
+                // }
                 subgrid.addItem(item);
+                // if (info.primaryClass === 'gun') {
+                //     console.log(info, 'added')
+                // }
             }
         }
         // 口袋、背包、胸挂特殊处理
@@ -241,13 +236,13 @@ export const initInventory = (inventory: Inventory, type: number=0, preset_infos
                 type: 'chestRigs',
                 container: 'ContainerChestRigs',
                 stop_probability: 0.08,
-                prerequisite: 'Backpack',
+                prerequisite: 'ChestRig',
             },
             {
                 type: 'backpack',
                 container: 'ContainerBackpack',
                 stop_probability: 0.1,
-                prerequisite: 'Chest rig',
+                prerequisite: 'Backpack',
             },
         ];
         for (const task of tasks2) {
@@ -259,15 +254,9 @@ export const initInventory = (inventory: Inventory, type: number=0, preset_infos
                     break;
                 }
                 const gridContainer = inventory.contents[task.container] as GridContainer;
-                const infos = window.game.BLOCK_TYPES;
-                const info = infos[Math.floor(Math.random() * infos.length)];
+                const info = window.game.itemManager.getRandomItemWithPreset('default');
                 // console.log('info', task.type, info, gridContainer);
-                const item = new Item(
-                    window.game,
-                    null,
-                    info.type,
-                    info,
-                );
+                const item = new Item(info);
                 gridContainer.addItem(item);
             }
         }

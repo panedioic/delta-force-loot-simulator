@@ -2,7 +2,7 @@
     {
         "type": "Grid",
         "name": "PrimaryWeapon1",
-        "accept": ["primaryWeapon"],
+        "accept": ["gunRifle", "gunSMG", "gunShotgun", "gunLMG", "gunMP", "gunSniper"],
         "cellsize": 128,
         "aspect": 2.6,
         "scrollable": true,
@@ -11,7 +11,7 @@
     },
     {
         "type": "Grid",
-        "accept": ["SecondaryWeapon"],
+        "accept": ["gunPistol"],
         "name": "Secondary",
         "cellsize": 128,
         "aspect": 1.2,
@@ -21,7 +21,7 @@
     },
     {
         "type": "Grid",
-        "accept": ["primaryWeapon"],
+        "accept": ["gunRifle", "gunSMG", "gunShotgun", "gunLMG", "gunMP", "gunSniper"],
         "name": "PrimaryWeapon2",
         "cellsize": 128,
         "aspect": 2.6,
@@ -68,7 +68,7 @@
     {
         "type": "Grid",
         "name": "ChestRig",
-        "accept": ["chestRigs"],
+        "accept": ["chest"],
         "width": 1,
         "height": 1,
         "cellsize": 108,
@@ -104,7 +104,7 @@
     {
         "type": "Grid",
         "name": "Backpack",
-        "accept": ["backpack"],
+        "accept": ["bag"],
         "cellsize": 100,
         "aspect": 1.0,
         "scrollable": true,

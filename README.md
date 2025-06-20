@@ -141,4 +141,4 @@ Created by [Y1yan（依言）](https://github.com/panedioic)
 
 本项目采用 Apache-2.0 许可证开源。
 
-项目内部分道具文本版权归腾讯公司所有。
+部分道具数据来源于： ![DeltaForceData](https://github.com/jiansenc/DeltaForceData)

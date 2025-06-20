@@ -1,51 +1,38 @@
 import * as PIXI from "pixi.js";
 // import * as text from '@pixi/text';
 
-import { Game } from "./game";
 import { Subgrid } from "./subgrid";
 import { GAME_WIDTH, GAME_HEIGHT } from "./config";
-import { DEFAULT_CELL_SIZE } from "./config";
 import { updateTotalValueDisplay } from "./utils";
 import { Region } from "./region";
 import { RARITY_COLORS } from "./config";
 // import type { Grid, Inventory } from "./types";
 
 export class Item {
-    game: Game;
-    parentGrid: Subgrid | null;
-    col: number;
-    row: number;
-    x: number;
-    y: number;
+    parentGrid: Subgrid | null = null;
+    col: number = 0;
+    row: number = 0;
     // itemType: any;
     cellWidth: number;
     cellHeight: number;
-    originCellWidth: number;
-    originCellHeight: number;
-    pixelWidth: number;
-    pixelHeight: number;
-    color: string;
-    baseValue: number;
+    baseValue: number = 1;
     name: string;
     type: string;
-    search: number;
-    cellSize: number;
-    aspect: number;
-    fullfill: boolean;
     container: PIXI.Container;
     graphicsBg: PIXI.Graphics;
     graphicsText: PIXI.Container | null;
     subgridLayout: Array<[number, number, number, number]> = [];
     subgrids: { [key: string]: Subgrid } = {};
-    accessories: Array<{type: string, title: string}> = [];
-    maxStackCount: number;
-    currentStactCount: number;
-    ammoType: string | null;
-    ammo: { [key: string]: number } = {};
-    capacity: number | null;
+    accessories: any[] = [];
+    maxStackCount: number = 1;
+    currentStactCount: number = 1;
+    ammoType: string = '';
+    caliber: string = '';
+    ammo: { [key: number]: number } = {};
+    capacity: number | null = 30;
     conflicts: { [key: string]: string[] } = {};
     parentRegion: Region | Item | null = null;
-    rarity: number | null;
+    grade: number=0;
 
     /** 拖动相关 */
     dragStartParentContainer: PIXI.Container;
@@ -62,53 +49,41 @@ export class Item {
     clickCount: number;
 
     /** 搜索 */
+    search: number;
     searched: boolean;
     searchTime: number;
     searchMask: PIXI.Graphics;
 
-    constructor(game: Game, parentGrid: Subgrid | null, type: string, itemType: any) {
-        this.game = game;
-        this.parentGrid = parentGrid;
-        this.col = 0;
-        this.row = 0;
-        this.x = 0;
-        this.y = 0;
-        // this.itemType = itemType;
-        this.cellWidth = itemType.cellWidth;
-        this.cellHeight = itemType.cellHeight;
-        this.originCellWidth = this.cellWidth;
-        this.originCellHeight = this.cellHeight;
-        this.pixelWidth =
-            this.parentGrid ? this.cellWidth * this.parentGrid.cellSize * this.parentGrid.aspect : this.cellWidth * DEFAULT_CELL_SIZE;
-        this.pixelHeight = this.parentGrid ? this.cellHeight * this.parentGrid.cellSize : this.cellHeight * DEFAULT_CELL_SIZE;
-        this.color = itemType.color;
-        this.baseValue = itemType.value;
-        this.name = itemType.name;
-        this.type = type || "collection";
-        this.search = itemType.search || 1.2;
-        this.subgridLayout = itemType.subgridLayout;
-        this.accessories = itemType.accessories ? JSON.parse(JSON.stringify(itemType.accessories)) : [];
-        this.maxStackCount = itemType.maxStack || 1;
-        this.currentStactCount = itemType.stack || 1;
-        this.ammoType = itemType.ammo;
-        this.capacity = itemType.capacity;
-        this.conflicts = itemType.conflict || {};
-        this.rarity = itemType.rarity || null;
+    /** 保存用于生成 Item 的 Info */
+    info: any;
 
-        // 只用作检查
-        this.cellSize = this.parentGrid ? this.parentGrid.cellSize : DEFAULT_CELL_SIZE;
-        this.aspect = this.parentGrid ? this.parentGrid.aspect : 1;
-        this.fullfill = false;
+    constructor(itemInfo: any) {
+        // this.itemType = itemType;
+        // console.log(itemInfo)
+        this.cellWidth = itemInfo.length;
+        this.cellHeight = itemInfo.width;
+        this.baseValue = itemInfo.baseValue;
+        this.name = itemInfo.objectName;
+        this.type = itemInfo.secondClass || "collection";
+        this.search = 1.2;
+        this.subgridLayout = itemInfo.subgridLayout;
+        // this.accessories = itemType.accessories ? JSON.parse(JSON.stringify(itemType.accessories)) : [];
+        this.maxStackCount = itemInfo.maxStack || 1;
+        this.currentStactCount = itemInfo.stack || 1;
+        // this.ammoType = itemType.ammo;
+        this.caliber = itemInfo.gunDetail?.caliber;
+        this.capacity = itemInfo.gunDetail?.capacity;
+        this.accessories = itemInfo.gunDetail ? itemInfo.gunDetail.allAccessory : [];
+        this.grade = itemInfo.grade;
 
         this.container = new PIXI.Container();
-        // this.container.position.set(this.x, this.y);
         this.graphicsBg = new PIXI.Graphics();
         this.graphicsText = null;
 
         this.dragStartParentContainer = this.container.parent;
-        this.dragStartItemLocalPosition = new PIXI.Point(this.x, this.y);
-        this.dragStartItemGlobalPosition = new PIXI.Point(this.x, this.y);
-        this.dragStartMouseGlobalPoint = new PIXI.Point(this.x, this.y);
+        this.dragStartItemLocalPosition = new PIXI.Point(0, 0);
+        this.dragStartItemGlobalPosition = new PIXI.Point(0, 0);
+        this.dragStartMouseGlobalPoint = new PIXI.Point(0, 0);
         this.isDragging = false;
         this.hasMoved = false;
         this.dragOverlay = null;
@@ -132,24 +107,31 @@ export class Item {
             this.searchMask.visible = false;
         }
 
+        // if (itemInfo.primaryClass === 'gun') {
+        //     console.log(itemInfo)
+        // }
+
+        this.info = itemInfo;
+
         this.initUI();
 
-        // 处理冲突列表
-        if (itemType.conflict) {
-            // 将冲突列表转换为字典形式
-            for (const [type1, type2] of itemType.conflict) {
-                // 添加双向冲突
-                if (!this.conflicts[type1]) {
-                    this.conflicts[type1] = [];
-                }
-                if (!this.conflicts[type2]) {
-                    this.conflicts[type2] = [];
-                }
-                this.conflicts[type1].push(type2);
-                this.conflicts[type2].push(type1);
-            }
-        }
+        // 在理好新代码逻辑之前，忽略掉配件的冲突
+        // if (itemType.conflict) {
+        //     // 将冲突列表转换为字典形式
+        //     for (const [type1, type2] of itemType.conflict) {
+        //         // 添加双向冲突
+        //         if (!this.conflicts[type1]) {
+        //             this.conflicts[type1] = [];
+        //         }
+        //         if (!this.conflicts[type2]) {
+        //             this.conflicts[type2] = [];
+        //         }
+        //         this.conflicts[type1].push(type2);
+        //         this.conflicts[type2].push(type1);
+        //     }
+        // }
     }
+
 
     initUI() {
         // 清空之前的图形内容（避免重复绘制）
@@ -164,7 +146,7 @@ export class Item {
         this.graphicsBg = new PIXI.Graphics();
 
         // 确保颜色是有效的十六进制值
-        const color = this.rarity ? RARITY_COLORS[this.rarity] : parseInt(this.color, 16);
+        const color = RARITY_COLORS[this.grade];
 
         const pixelWidth = this.parentGrid ? 
             this.parentGrid.fullfill ? 
@@ -182,6 +164,7 @@ export class Item {
             pixelWidth - 4, // 减去边框宽度
             pixelHeight - 4,
         );
+        // console.log(color, this.grade, RARITY_COLORS[this.grade])
         this.graphicsBg.fill({ color: color });
         this.graphicsBg.stroke({ width: 3, color: 0x666666, alpha: 0.8 });
 
@@ -244,7 +227,7 @@ export class Item {
         }
 
         // 有子弹，需要显示子弹数量
-        if (this.ammoType) {
+        if (this.caliber) {
             const stackText = new PIXI.Text({
                 text: `${this.getTotalAmmo()}/${this.capacity}`,
                 style: {
@@ -256,6 +239,7 @@ export class Item {
                 },
             });
             stackText.anchor.set(1, 1); // 右下角对齐
+            // console.log(this, pixelWidth, pixelHeight)
             stackText.position.set(
                 pixelWidth - 5,  // 右边缘留5像素边距
                 pixelHeight - 5   // 下边缘留5像素边距
@@ -302,8 +286,12 @@ export class Item {
                 this.cellHeight * 72;
         const nameGraph = this.graphicsText.children[0] as PIXI.Graphics;
         const valueGraph = this.graphicsText.children[1] as PIXI.Graphics;
+        const stackText = this.graphicsText.children[2] as PIXI.Text;
         nameGraph.position.set(pixelWidth / 2, pixelHeight / 2 - 10);
         valueGraph.position.set(pixelWidth / 2, pixelHeight / 2 + 10);
+        if (stackText) {
+            stackText.position.set(pixelWidth - 5, pixelHeight - 5);
+        }
         
         // 更新价值显示
         const valueText = this.graphicsText.children[1] as PIXI.Text;
@@ -319,7 +307,7 @@ export class Item {
         }
 
         // 更新子弹数量显示
-        if (this.ammoType) {
+        if (this.caliber) {
             const ammoText = this.graphicsText.children[2] as PIXI.Text;
             if (ammoText) {
                 const totalAmmo = this.getTotalAmmo();
@@ -345,7 +333,7 @@ export class Item {
             if(!this.searched) {
                 return;
             }
-            if (this.game.isGameStarted) {
+            if (window.game.isGameStarted) {
                 // 增加点击数量
                 this.clickCount++;
 
@@ -426,7 +414,7 @@ export class Item {
 
     onClick(clickCount=1) {
         if (clickCount === 1) {
-            this.game.createItemInfoPanel(this);
+            window.game.createItemInfoPanel(this);
         } else if (clickCount === 2) {
             if (!this.parentRegion) {
                 return;
@@ -459,7 +447,7 @@ export class Item {
 
         // 移除预览指示器 & 移除拖动覆盖层
         if (this.previewIndicator) {
-            this.game.app.stage.removeChild(this.previewIndicator);
+            window.game.app.stage.removeChild(this.previewIndicator);
             this.previewIndicator = null;
         }
         if (this.dragOverlay) {
@@ -468,8 +456,8 @@ export class Item {
         }
 
         // 获取当前鼠标位置对应的网格
-        const mousePosition = this.game.app.renderer.events.pointer.global;
-        const targetGrid = this.game.findGrid(mousePosition.x, mousePosition.y);
+        const mousePosition = window.game.app.renderer.events.pointer.global;
+        const targetGrid = window.game.findGrid(mousePosition.x, mousePosition.y);
 
         // 位置不合法或不可交互，返回原位置
         let bReturnToOriginalPosition = false;
@@ -581,7 +569,7 @@ export class Item {
             // 创建预览指示器
             if (!this.previewIndicator) {
                 this.previewIndicator = new PIXI.Graphics();
-                this.game.app.stage.addChild(this.previewIndicator);
+                window.game.app.stage.addChild(this.previewIndicator);
             }
 
             // 创建拖动覆盖层
@@ -600,7 +588,7 @@ export class Item {
 
             // 移动到舞台顶层
             const globalPosition = this.container.getGlobalPosition();
-            this.game.app.stage.addChild(this.container);
+            window.game.app.stage.addChild(this.container);
             this.container.position.set(globalPosition.x, globalPosition.y);
         }
 
@@ -633,7 +621,7 @@ export class Item {
         }
         if (event.key.toLowerCase() === "f") {
             const bounds = this.container.getBounds();
-            const mousePosition = this.game.app.renderer.events.pointer.global;
+            const mousePosition = window.game.app.renderer.events.pointer.global;
             if (this.parentGrid && this.parentGrid.enabled &&
                 mousePosition.x >= bounds.x && mousePosition.x <= bounds.x + bounds.width &&
                 mousePosition.y >= bounds.y && mousePosition.y <= bounds.y + bounds.height) {
@@ -644,12 +632,13 @@ export class Item {
 
     updatePreviewIndicator(x: number, y: number) {
         if (!this.previewIndicator) return;
+        if (!this.parentGrid) return;
 
         this.previewIndicator.clear();
 
         // 确定在哪个区域
         let globalPos, baseX, baseY, grid;
-        grid = this.game.findGrid(x, y);
+        grid = window.game.findGrid(x, y);
         if (!grid) {
             // console.log('没有找到对应的网格');
             return;
@@ -714,11 +703,11 @@ export class Item {
 
         const globalSnappedPosition = grid.getGridGlobalPosition({col: clampedCol, row: clampedRow});
         const drawX = grid.fullfill ? baseX :
-            (bCanInteract || bCanInteractRotated) ? baseX + snapX - (this.cellWidth * this.cellSize) / 2 : // TODO
+            (bCanInteract || bCanInteractRotated) ? baseX + snapX - (this.cellWidth * this.parentGrid.cellSize) / 2 : // TODO
             // baseX + snapX + (this.cellWidth * this.cellSize) / 2;
             globalSnappedPosition.x;
         const drawY = grid.fullfill ? baseY :
-            (bCanInteract || bCanInteractRotated) ? baseY + snapY - (this.cellHeight * this.cellSize) / 2 : // TODO
+            (bCanInteract || bCanInteractRotated) ? baseY + snapY - (this.cellHeight * this.parentGrid.cellSize) / 2 : // TODO
             globalSnappedPosition.y;
         // console.log(x, baseX, snapX, clampedCol)
         const drawWidth = grid.fullfill ? grid.width * grid.cellSize * grid.aspect :
@@ -774,8 +763,6 @@ export class Item {
         //     this.parentGrid.cellSize *
         //     this.parentGrid.aspect;
         // this.y = (row + 0.5 * this.cellHeight) * this.parentGrid.cellSize;
-        this.x = col * this.cellWidth * this.parentGrid.cellSize * this.parentGrid.aspect;
-        this.y = row * this.cellHeight * this.parentGrid.cellSize;
         this.container.position.set(
             col * this.parentGrid.cellSize * this.parentGrid.aspect, 
             row * this.parentGrid.cellSize
@@ -791,9 +778,10 @@ export class Item {
                 ret += item.getValue();
             }
         }
-        for (const [ammoType, ammoCount] of Object.entries(this.ammo)) {
+        for (const [ammoId, ammoCount] of Object.entries(this.ammo)) {
             // console.log(this.ammo, ammoType, ammoCount)
-            ret += ammoCount * this.game.BLOCK_TYPES.find(info => info.name ===ammoType).value;
+            const ammoInfo = window.game.itemManager.getItemInfoById(ammoId);
+            ret += ammoCount * ammoInfo.baseValue;
         }
         return ret;
     }
@@ -823,7 +811,7 @@ export class Item {
             for (const newInfo of item.accessories) {
                 this.accessories.push(newInfo);
                 const newSubgrid = new Subgrid(
-                    this.game,
+                    window.game,
                     1,
                     1,
                     72,
@@ -866,23 +854,32 @@ export class Item {
      * 初始化配件
      */
     initAccessories() {
+        if (!this.accessories) {
+            return;
+        }
         for(const info of this.accessories) {
-            const subgrid = new Subgrid(
-                this.game,
-                1,
-                1,
-                72,
-                1,
-                true,
-                false,
-                [info.type],
-                info.title
-            );
-            subgrid.parentRegion = this;
-            this.subgrids[info.title] = subgrid;
-            subgrid.onItemDraggedIn = this.onAccessoryAdded.bind(this);
-            subgrid.onItemDraggedOut = this.onAccessoryRemoved.bind(this);
-            subgrid.setEnabled(false);
+            const slotId = info.slotID;
+            const slotInfo = window.game.itemManager.getGunSlotInfoByID(slotId);
+            if(slotInfo) {
+                const slotTitle = slotInfo.nameCN;
+                const accType = slotInfo.accType;
+                const subgrid = new Subgrid(
+                    window.game,
+                    1,
+                    1,
+                    72,
+                    1,
+                    true,
+                    false,
+                    [accType],
+                    slotTitle
+                )
+                subgrid.parentRegion = this;
+                this.subgrids[slotTitle] = subgrid;
+                subgrid.onItemDraggedIn = this.onAccessoryAdded.bind(this);
+                subgrid.onItemDraggedOut = this.onAccessoryRemoved.bind(this);
+                subgrid.setEnabled(false);
+            }
         }
     }
 
@@ -903,11 +900,11 @@ export class Item {
      */
     unloadAmmo() {
         // console.log(this.ammo)
-        for (const [ammoType, ammoCount] of Object.entries(this.ammo)) {
+        for (const [ammoId, ammoCount] of Object.entries(this.ammo)) {
             if (ammoCount > 0) {
                 // 创建新的弹药物品
-                const ammoInfo = this.game.BLOCK_TYPES.find(info => info.name ===ammoType);
-                const ammoItem = new Item(this.game, null, ammoInfo.type, ammoInfo);
+                const ammoInfo = window.game.itemManager.getItemInfoById(ammoId);
+                const ammoItem = new Item(ammoInfo);
                 ammoItem.currentStactCount = ammoCount;
                 
                 // 将弹药添加到父网格
@@ -919,7 +916,7 @@ export class Item {
                 }
                 
                 // 清空当前弹药
-                this.ammo[ammoType] = 0;
+                this.ammo[Number(ammoId)] = 0;
             }
         }
         this.refreshUI();
@@ -931,8 +928,12 @@ export class Item {
      * @returns {boolean} 返回 true 表示已处理交互，false 表示未处理
      */
     onItemInteract(draggingItem: Item, pos: {col: number, row: number}, interacting: Item[]) {
-        const accessoryTypes = this.accessories.map(accessory => accessory.type);
-        if (this.ammoType === draggingItem.type) {
+        const accessoryTypes = this.accessories.map((accessory) => {
+            const slotInfo = window.game.itemManager.getGunSlotInfoByID(accessory.slotID);
+            // console.log(slotInfo, slotID)
+            return slotInfo.accType;
+        });
+        if (this.info.gunDetail.caliber === draggingItem.info.secondClass) {
             // 添加子弹
             const draggingItemOriginalParentGrid = draggingItem.parentGrid;
             // 获取当前子弹总数
@@ -944,19 +945,20 @@ export class Item {
                 }
             } else {
                 if (draggingItem.currentStactCount <= this.capacity - totalAmmoCount) {
-                    if (!this.ammo[draggingItem.name]) {
-                        this.ammo[draggingItem.name] = draggingItem.currentStactCount;
+                    const ammoId = draggingItem.info.objectID;
+                    if (!this.ammo[ammoId]) {
+                        this.ammo[ammoId] = draggingItem.currentStactCount;
                     } else {
-                        this.ammo[draggingItem.name] += draggingItem.currentStactCount;
+                        this.ammo[ammoId] += draggingItem.currentStactCount;
                     }
                     draggingItem.currentStactCount = 0;
                     draggingItem.destroy();
                     // console.log('test', draggingItem, this)
                 } else {
-                    if (!this.ammo[draggingItem.name]) {
-                        this.ammo[draggingItem.name] = this.capacity - totalAmmoCount;
+                    if (!this.ammo[draggingItem.info.objectID]) {
+                        this.ammo[draggingItem.info.objectID] = this.capacity - totalAmmoCount;
                     } else {
-                        this.ammo[draggingItem.name] += this.capacity - totalAmmoCount;
+                        this.ammo[draggingItem.info.objectID] += this.capacity - totalAmmoCount;
                     }
                     draggingItem.currentStactCount -= this.capacity - totalAmmoCount;
                     if(draggingItemOriginalParentGrid) {
@@ -969,19 +971,19 @@ export class Item {
             // console.log('ui refreshed!', this)
         } else if (accessoryTypes.includes(draggingItem.type)) {
             // 添加配件
-            // 先检测是否有冲突
+            // 先检测是否有冲突（TODO）
             let bHasConflict = false;
-            if (this.conflicts[draggingItem.type]) {
-            for (const conflictedTypes of this.conflicts[draggingItem.type]) {
-                for (const subgrid of Object.values(this.subgrids)) {
-                    if (subgrid.acceptedTypes.includes(conflictedTypes) && subgrid.blocks.length > 0) {
-                        bHasConflict = true;
-                        break;
-                    }
-                    }
-                }
-                console.log(this.conflicts[draggingItem.type], draggingItem.type, bHasConflict)
-            }
+            // if (this.conflicts[draggingItem.type]) {
+            //     for (const conflictedTypes of this.conflicts[draggingItem.type]) {
+            //         for (const subgrid of Object.values(this.subgrids)) {
+            //             if (subgrid.acceptedTypes.includes(conflictedTypes) && subgrid.blocks.length > 0) {
+            //                 bHasConflict = true;
+            //                 break;
+            //             }
+            //             }
+            //         }
+            //         console.log(this.conflicts[draggingItem.type], draggingItem.type, bHasConflict)
+            // }
             if (bHasConflict) {
                 if (draggingItem.parentGrid) {
                     // back to original position
@@ -990,26 +992,25 @@ export class Item {
                 return false;
             }
             // 找到对应的subgrid
-            const accessoryInfo = this.accessories.find(acc => acc.type === draggingItem.type);
-            if (accessoryInfo) {
-                const subgrid = this.subgrids[accessoryInfo.title];
-                if (subgrid) {
-                    // 尝试将物品添加到subgrid中
-                    const draggingItemOriginalParentGrid = draggingItem.parentGrid;
-                    const added = subgrid.addItem(draggingItem);
-                    if (added) {
-                        return true;
-                    } else {
-                        const originalItem = subgrid.blocks[0];
-                        subgrid.addItem(draggingItem)
-                        draggingItemOriginalParentGrid?.addItem(originalItem);
-                    }
-                    // 如果添加失败，将物品返回到原始位置（暂时忽略返回原位置的情况）
-                    // if (draggingItem.parentGrid) {
-                    //     draggingItem.parentGrid.addItem(draggingItem, draggingItem.col, draggingItem.row);
-                    // }
+            let acceptableSubgrid = null;
+            for (const subgrid of Object.values(this.subgrids)) {
+                if (subgrid.acceptedTypes.includes(draggingItem.type)) {
+                    acceptableSubgrid = subgrid;
+                    break;
                 }
             }
+            if (acceptableSubgrid) {
+                //  (TODO) 如果格子内已经有配件，应该交换位置，但这里先简单的当作不可以放入处理
+                const added = acceptableSubgrid.addItem(draggingItem);
+                if (added) {
+                    return true;
+                }
+            }
+            // 如果添加失败，将物品返回到原始位置（暂时忽略返回原位置的情况）
+            if (draggingItem.parentGrid) {
+                draggingItem.parentGrid.addItem(draggingItem, draggingItem.col, draggingItem.row);
+            }
+            return false;
         } else if (this.maxStackCount > 1 && this.name == draggingItem.name) {
             // 堆叠子弹
             if (this.currentStactCount < this.maxStackCount) {
@@ -1113,8 +1114,12 @@ export class Item {
      * @returns {boolean} 返回 true 表示可以交互，false 表示不能交互
      */
     onItemInteractPreview(draggingItem: Item, pos: {col: number, row: number}, _interacting: Item[]): boolean {
-        const accessoryTypes = this.accessories.map(accessory => accessory.type);
-        if (this.ammoType === draggingItem.type) {
+        const accessoryTypes = this.accessories.map((accessory) => {
+            const slotInfo = window.game.itemManager.getGunSlotInfoByID(accessory.slotID);
+            // console.log(slotInfo, slotID)
+            return slotInfo.accType;
+        });
+        if (this.info.gunDetail && this.info.gunDetail.caliber === draggingItem.info.secondClass) {
             return true;
         } else if (accessoryTypes.includes(draggingItem.type)) {
             // 可放入subgrid

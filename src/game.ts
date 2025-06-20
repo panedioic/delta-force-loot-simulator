@@ -11,10 +11,11 @@ import { Item } from "./item";
 import { TitleBar } from "./titleBar";
 import { Region } from "./region";
 import { SettingsDialog } from "./components/SettingsDialog";
-import { ItemManager } from "./components/ItemManager";
-import { DebugTools } from "./components/DebugTools";
+// import { ItemManager } from "./components/ItemManager";
+// import { DebugTools } from "./components/DebugTools";
 import { PresetManager } from "./components/PresetManager";
 import { initInventory, updateTotalValueDisplay } from "./utils";
+import { ItemManager } from "./itemManager";
 // import { Magnify } from "./magnify";
 
 declare global {
@@ -59,9 +60,12 @@ export class Game {
     presets: any[] = [];
 
     // debug
-    debugTools: DebugTools | null;
+    // debugTools: DebugTools | null;
 
     presetManager: PresetManager | null = null;
+
+    // item manager
+    itemManager: ItemManager;
 
     constructor() {
         this.app = new PIXI.Application();
@@ -79,11 +83,13 @@ export class Game {
         this.infoDialog = null;
         this.instances = [];
         this.activeItemInfoPanel = null;
-        this.debugTools = null;
+        // this.debugTools = null;
         this.needSearch = true;
 
         // debuging
         this.needSearch = false;
+
+        this.itemManager = new ItemManager();
 
         // default spoils region
         const storedRegions = localStorage.getItem('defaultSpoilsRegionConfig');
@@ -116,6 +122,7 @@ export class Game {
      * */
     async init(): Promise<void> {
         await this.loadResources();
+        await this.itemManager.loadResources();
         // Create PIXI application
         await this.createPixiApp();
         this.initGameUI();
@@ -128,6 +135,19 @@ export class Game {
         if (import.meta.env.MODE === "development") this.isGameStarted = true;
 
         this.startGameWithPreset(0);
+
+        // debug
+
+        // debug
+        const debugItemArray = [
+            'M4A1突击步枪',
+            '5.56x45mm M995'
+        ];
+        for (const itemName of debugItemArray) {
+            const itemInfo = this.itemManager.getItemInfoByName(itemName);
+            const item = new Item(itemInfo);
+            this.spoilsRegion?.addItem(item);
+        }
     }
 
     /**
@@ -277,9 +297,9 @@ export class Game {
         this.playerRegion.addComponent('timer', Timer);
         this.playerRegion.addComponent('infoDialog', InfoDialog);
         this.playerRegion.addComponent('settingsDialog', SettingsDialog);
-        this.playerRegion.addComponent('itemManager', ItemManager);
+        // this.playerRegion.addComponent('itemManager', ItemManager);
         this.playerRegion.addComponent('presetManager', PresetManager);
-        this.playerRegion.addComponent('debugTools', DebugTools);
+        // this.playerRegion.addComponent('debugTools', DebugTools);
         this.playerRegion.addComponent('changelogDialog', ChangelogDialog);
         this.playerRegion.addInventory(1, false);
         this.playerRegion.switchTo(0);
