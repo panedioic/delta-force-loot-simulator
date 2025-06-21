@@ -103,17 +103,15 @@ export class Inventory {
             for (const info of window.game.GRID_INFO) {
                 // this.createObject(info);
                 if (info.type === 'Grid') {
-                        const subgrid = new Subgrid(
-                            window.game,
-                            1,
-                            1,
-                            info.cellsize,
-                            info.aspect,
-                            info.fullfill,
-                            this.countable,
-                            info.accept,
-                            info.name
-                        );
+                        const subgrid = new Subgrid({
+                            size: {width: 1, height: 1},
+                            cellSize: info.cellsize,
+                            aspect: info.aspect,
+                            fullfill: info.fullfill,
+                            countable: this.countable,
+                            accept: info.accept,
+                            title: info.name
+                        });
                         subgrid.parentRegion = this.parentRegion;
                         this.contents[info.name] = subgrid;
                         this.container.addChild(subgrid.container);
@@ -218,17 +216,15 @@ export class Inventory {
                 console.error(error)
             }
         } else {
-            const spoilsBox = new Subgrid(
-                window.game,
-                7,
-                8,
-                72,
-                1,
-                false,
-                false,
-                [],
-                "spoilsBox"
-            );
+            const spoilsBox = new Subgrid({
+                size: {width: 7, height: 8},
+                cellSize: 72,
+                aspect: 1,
+                fullfill: false,
+                countable: false,
+                accept: [],
+                title: "spoilsBox"
+            });
             spoilsBox.parentRegion = this.parentRegion;
             // console.log(this, spoilsBox)
             // console.log(this.parentRegion, spoilsBox.parentRegion)
@@ -247,12 +243,6 @@ export class Inventory {
 
         for (const info of window.game.GRID_INFO) {
             const item = this.contents[info.name];
-        //     console.log(item);
-        //     if(item instanceof GridContainer && item.subgrids.length > 0) {
-        //     console.log(item.subgrids[0].container.position)
-        //     console.log(item.container.position)
-        // }
-        // console.log('now pos:', currentX, currentY, info.name)
             if (!item || !item.container || !item.container.position) {
                 return;
             }
@@ -303,6 +293,13 @@ export class Inventory {
         this.maxHeight = (currentY) - this.baseY - 580;
     }
 
+    public refreshUIRecursive() {
+        this.refreshUI();
+        for (const content of Object.values(this.contents)) {
+            content.refreshUIRecursive();
+        }
+    }
+
     /**
      * Handle the scroll event
      * @param {PIXI.FederatedMouseEvent} event - The scroll event
@@ -334,6 +331,7 @@ export class Inventory {
         }
         // console.log(this)
         this.container.visible = enabled;
+        this.refreshUI();
     }
 
     /**
@@ -372,7 +370,7 @@ export class Inventory {
      * Tick 函数，一般每帧执行一次
      */
     update() {
-        if (!this.enabled) {
+        if (!this.enabled || !window.game.config.needSearch) {
             this.currentSearchItem = null;
             if(this.magnify) {
                 this.magnify.hide();
@@ -382,7 +380,7 @@ export class Inventory {
             return;
         }
         // 检查是否有需要搜索的物品
-        if (window.game.needSearch && !this.currentSearchItem) {
+        if (window.game.config.needSearch && !this.currentSearchItem) {
             const itemToSearch = this.findNextSearchableItem();
             if (itemToSearch) {
                 this.startSearchItem(itemToSearch);
@@ -392,7 +390,8 @@ export class Inventory {
         // 更新搜索计时
         if (this.currentSearchItem) {
             this.searchTimer += window.game.app.ticker.deltaMS / 1000; // 转换为秒
-            if (this.searchTimer >= this.currentSearchItem.searchTime) { // 1秒后完成搜索
+            const searchTime = this.currentSearchItem.info.searchTime ? this.currentSearchItem.info.searchTime : 1.2;
+            if (this.searchTimer >= searchTime) { // 1秒后完成搜索
                 this.completeSearch();
             }
         }
@@ -435,12 +434,8 @@ export class Inventory {
         // 创建放大镜动画
         if(!this.currentSearchItem.parentGrid) return;
         const parentGrid = this.currentSearchItem.parentGrid;
-        const x = parentGrid.container.position.x + 
-            (this.currentSearchItem.col + (this.currentSearchItem.cellWidth-1) / 2) * 
-            parentGrid.cellSize * parentGrid.aspect;
-        const y = parentGrid.container.position.y + 
-            (this.currentSearchItem.row + (this.currentSearchItem.cellHeight-1) / 2) * 
-            parentGrid.cellSize;
+        const x = (this.currentSearchItem.col + (this.currentSearchItem.cellWidth-1) / 2) * parentGrid.cellSize * parentGrid.aspect;
+        const y = (this.currentSearchItem.row + (this.currentSearchItem.cellHeight-1) / 2) * parentGrid.cellSize;
         this.magnify = new Magnify(
             parentGrid.container,
             x,
@@ -458,6 +453,7 @@ export class Inventory {
         if (this.currentSearchItem) {
             this.currentSearchItem.searched = true;
             this.currentSearchItem.searchMask.visible = false;
+            this.currentSearchItem.refreshUI();
         }
 
         // 移除放大镜

@@ -145,7 +145,7 @@ export class SettingsDialog {
             <h2 style="margin-bottom: 15px;">基础设置</h2>
             <div style="margin-bottom: 15px;">
                 <label style="display: block; margin-bottom: 5px;">
-                    <input type="checkbox" checked> 启用搜索功能
+                    <input type="checkbox" id="needSearchCheckbox" ${window.game.config.needSearch ? 'checked' : ''}> 启用搜索功能
                 </label>
             </div>
             <div style="margin-bottom: 15px;">
@@ -316,13 +316,19 @@ export class SettingsDialog {
         const cancelRegionBtn = document.getElementById('cancelRegionBtn');
         const confirmRegionBtn = document.getElementById('confirmRegionBtn');
         const regionType = document.getElementById('regionType') as HTMLSelectElement;
+        const needSearchCheckbox = document.getElementById('needSearchCheckbox') as HTMLInputElement;
         this.regionDialog = document.getElementById('regionDialog') as HTMLDivElement;
         this.regionList = document.getElementById('regionList') as HTMLDivElement;
 
-        if (!addRegionBtn || !cancelRegionBtn || !confirmRegionBtn || !regionType || !this.regionDialog || !this.regionList) {
+        if (!addRegionBtn || !cancelRegionBtn || !confirmRegionBtn || !regionType || !this.regionDialog || !this.regionList || !needSearchCheckbox) {
             console.error('Some required elements are missing');
             return;
         }
+
+        needSearchCheckbox.addEventListener('change', (e) => {
+            window.game.config.needSearch = (e.target as HTMLInputElement).checked;
+            window.game.refreshUIRecursive();
+        });
 
         addRegionBtn.addEventListener('click', () => this.showRegionDialog());
         cancelRegionBtn.addEventListener('click', () => this.hideRegionDialog());

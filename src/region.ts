@@ -86,6 +86,18 @@ export class Region {
         this.container.addChild(contentBG);
     }
 
+    public refreshUI() {
+        // 目前没有需要做的
+    }
+
+    public refreshUIRecursive() {
+        this.refreshUI();
+        // 只刷新当前激活的 inventory 的 UI，其他的会在切换过去的时候刷新
+        if (this.inventories[this.currentInventoryId]) {
+            this.inventories[this.currentInventoryId].refreshUIRecursive();
+        }
+    }
+
     /**
      * 添加一个组件到内容区
      * @param component 要添加的组件

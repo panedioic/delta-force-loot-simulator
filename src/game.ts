@@ -51,9 +51,6 @@ export class Game {
 
     activeItemInfoPanel: ItemInfoPanel | null;
 
-    /** 搜索模式 */
-    needSearch: boolean;
-
     /** 预设 */
     defaultSpoilsRegionNumber: number = 3;
     defaultPlayerRegionNumber: number = 1;
@@ -66,6 +63,12 @@ export class Game {
 
     // item manager
     itemManager: ItemManager;
+
+    // 基础配置信息
+    config: any = {
+        displayGridTitle: true,
+        needSearch: true,
+    };
 
     constructor() {
         this.app = new PIXI.Application();
@@ -83,11 +86,6 @@ export class Game {
         this.infoDialog = null;
         this.instances = [];
         this.activeItemInfoPanel = null;
-        // this.debugTools = null;
-        this.needSearch = true;
-
-        // debuging
-        this.needSearch = false;
 
         this.itemManager = new ItemManager();
 
@@ -102,6 +100,12 @@ export class Game {
             }
         } else {
             this.initDefaultSpoilsRegionConfig();
+        }
+
+        /** Debuging */
+        if (import.meta.env.MODE === "development") {
+            this.isGameStarted = true;
+            this.config.needSearch = false;
         }
     }
 
@@ -131,12 +135,7 @@ export class Game {
         // 初始化标题栏
         this.titleBar = new TitleBar();
 
-        /** Debuging */
-        if (import.meta.env.MODE === "development") this.isGameStarted = true;
-
         this.startGameWithPreset(0);
-
-        // debug
 
         // debug
         const debugItemArray = [
@@ -147,6 +146,23 @@ export class Game {
             const itemInfo = this.itemManager.getItemInfoByName(itemName);
             const item = new Item(itemInfo);
             this.spoilsRegion?.addItem(item);
+        }
+    }
+
+    /**
+     * 刷新游戏 UI （一般用于更新配置后）
+     */
+    public refreshUI() {
+
+    }
+
+    public refreshUIRecursive() {
+        this.refreshUI();
+        if (this.playerRegion) {
+            this.playerRegion.refreshUIRecursive();
+        }
+        if (this.spoilsRegion) {
+            this.spoilsRegion.refreshUIRecursive();
         }
     }
 

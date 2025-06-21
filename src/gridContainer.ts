@@ -25,7 +25,6 @@ export class GridContainer {
     subgrids: Subgrid[];
     dragable: boolean;
     maxWidth: number;
-    backgroundGrid: Subgrid;
     parentRegion: Region | Item | null = null;
     enabled: boolean = true;
 
@@ -60,9 +59,6 @@ export class GridContainer {
 
         this.margin = [4, 4, 4, 4]; // 上下左右边距
         this.container = new PIXI.Container();
-        this.backgroundGrid = new Subgrid(
-            this.game, 1, 1, 128, 1, true, this.countable, ["Null"], 'Null'
-        );
         // this.container.addChild(this.backgroundGrid.container);
         this.additiveSize = { x: 0, y: 0}
 
@@ -82,17 +78,15 @@ export class GridContainer {
         try {
             for (const element of this.layout) {
                 const [width, height, _x, _y] = element;
-                const subgrid = new Subgrid(
-                    this.game,
-                    width,
-                    height,
-                    this.cellSize,
-                    this.aspect,
-                    this.fullfill,
-                    this.countable,
-                    this.acceptedTypes,
-                    's-' + this.subgrids.length
-                );
+                const subgrid = new Subgrid({
+                    size: {width: width, height: height},
+                    cellSize: this.cellSize,
+                    aspect: this.aspect,
+                    fullfill: this.fullfill,
+                    countable: this.countable,
+                    accept: this.acceptedTypes,
+                    title: 's-' + this.subgrids.length
+                });
                 this.subgrids.push(subgrid);
             }
         } catch ( error ) {
@@ -117,6 +111,13 @@ export class GridContainer {
             this.subgrids[i].onItemDraggedIn = (item: Item, _col: number, _row: number) => {
                 this.onContainerItemDraggedIn(item);
             }
+        }
+    }
+
+    public refreshUIRecursive() {
+        this.refreshUI();
+        for (const subgrid of this.subgrids) {
+            subgrid.refreshUIRecursive();
         }
     }
 
@@ -159,6 +160,7 @@ export class GridContainer {
         for (const subgrid of this.subgrids) {
             subgrid.setEnabled(enabled);
         }
+        this.refreshUI();
     }
 
     clearItem() {

@@ -95,7 +95,7 @@ export class ItemInfoPanel {
         
         // 计算内容高度并设置滚动
         this.setupScrolling();
-        this.maxHeight = this.contentContainer.height - this.HEIGHT + 128;
+        this.maxHeight = this.contentContainer.getBounds().height - this.HEIGHT + 128;
         if(this.maxHeight < 0) {
             this.maxHeight = 0;
         }
@@ -106,11 +106,14 @@ export class ItemInfoPanel {
 
     private drawBackground() {
         this.background.clear();
-        // 绘制背景
-        this.background.beginFill(0x1f2121, 0.95);
-        this.background.lineStyle(1, 0x686F75);
-        this.background.drawRect(0, 0, this.WIDTH, this.HEIGHT);
-        this.background.endFill();
+        this.background.rect(
+            0,
+            0,
+            this.WIDTH,
+            this.HEIGHT,
+        );
+        this.background.fill({ color: 0x1f2121, alpha: 0.95 });
+        this.background.stroke({ width: 1, color: 0x686F75 });
         this.container.addChild(this.background);
     }
 
@@ -120,9 +123,13 @@ export class ItemInfoPanel {
         
         // 标题背景
         const titleBg = new PIXI.Graphics();
-        titleBg.beginFill(0x2a2f2f);
-        titleBg.drawRect(0, 0, this.WIDTH, this.TITLE_HEIGHT);
-        titleBg.endFill();
+        titleBg.rect(
+            0,
+            0,
+            this.WIDTH,
+            this.TITLE_HEIGHT,
+        );
+        titleBg.fill({ color: 0x2a2f2f });
         titleBar.addChild(titleBg);
         
         // 标题文本
@@ -230,9 +237,13 @@ export class ItemInfoPanel {
             
             // 按钮背景
             const buttonBg = new PIXI.Graphics();
-            buttonBg.beginFill(0x313131);
-            buttonBg.drawRect(0, 0, this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
-            buttonBg.endFill();
+            buttonBg.rect(
+                0,
+                0,
+                this.BUTTON_WIDTH,
+                this.BUTTON_HEIGHT,
+            );
+            buttonBg.fill({ color: 0x313131 });
             button.addChild(buttonBg);
             
             // 按钮文本
@@ -351,9 +362,8 @@ export class ItemInfoPanel {
     private setupScrolling() {
         // 添加遮罩
         this.maskGraphics = new PIXI.Graphics();
-        this.maskGraphics.beginFill(0xffffff);
-        this.maskGraphics.drawRect(0, 0, this.WIDTH, this.HEIGHT);
-        this.maskGraphics.endFill();
+        this.maskGraphics.rect(0, 0, this.WIDTH, this.HEIGHT);
+        this.maskGraphics.fill({ color: 0xffffff });
 
         // 添加内容容器到主容器
         this.container.addChild(this.contentContainer);
@@ -363,7 +373,7 @@ export class ItemInfoPanel {
         this.contentContainer.mask = this.maskGraphics;
         
         // 计算最大滚动距离
-        this.maxScrollY = Math.max(0, this.contentContainer.height - this.HEIGHT);
+        this.maxScrollY = Math.max(0, this.contentContainer.getBounds().height - this.HEIGHT);
         
         // 添加滚动事件监听
         this.container.eventMode = 'static';
@@ -384,9 +394,13 @@ export class ItemInfoPanel {
 
         // 创建拖动覆盖层
         this.dragOverlay = new PIXI.Graphics();
-        this.dragOverlay.beginFill(0xFFFFFF, 0.001);
-        this.dragOverlay.drawRect(-GAME_WIDTH, -GAME_HEIGHT, GAME_WIDTH * 2, GAME_HEIGHT * 2);
-        this.dragOverlay.endFill();
+        this.dragOverlay.rect(
+            -GAME_WIDTH,
+            -GAME_HEIGHT,
+            GAME_WIDTH * 2,
+            GAME_HEIGHT * 2,
+        );
+        this.dragOverlay.fill({ color: 0xFFFFFF, alpha: 0.001 });
         this.container.addChild(this.dragOverlay);
     }
 
@@ -465,17 +479,25 @@ export class ItemInfoPanel {
 
         // 半透明背景遮罩
         const overlay = new PIXI.Graphics();
-        overlay.beginFill(0x000000, 0.5);
-        overlay.drawRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-        overlay.endFill();
+        overlay.rect(
+            0,
+            0,
+            GAME_WIDTH,
+            GAME_HEIGHT,
+        );
+        overlay.fill({ color: 0x000000, alpha: 0.5 });
         this.game.app.stage.addChild(overlay);
 
         // 面板背景
         const background = new PIXI.Graphics();
-        background.beginFill(0x1f2121, 0.95);
-        background.lineStyle(1, 0x686F75);
-        background.drawRect(0, 0, this.SPLIT_PANEL_WIDTH, this.SPLIT_PANEL_HEIGHT);
-        background.endFill();
+        background.rect(
+            0,
+            0,
+            this.SPLIT_PANEL_WIDTH,
+            this.SPLIT_PANEL_HEIGHT,
+        );
+        background.fill({ color: 0x1f2121, alpha: 0.95 });
+        background.stroke({ width: 1, color: 0x686F75 });
         this.splitPanel.addChild(background);
 
         // 数量显示文本
@@ -499,16 +521,23 @@ export class ItemInfoPanel {
 
         // 滑动条背景
         const sliderBg = new PIXI.Graphics();
-        sliderBg.beginFill(0x333333);
-        sliderBg.drawRect(70, 65, 160, 10);
-        sliderBg.endFill();
+        sliderBg.rect(
+            70,
+            65,
+            160,
+            10,
+        );
+        sliderBg.fill({ color: 0x333333 });
         this.splitPanel.addChild(sliderBg);
 
         // 滑动条把手
         const slider = new PIXI.Graphics();
-        slider.beginFill(0xffffff);
-        slider.drawCircle(0, 0, 10);
-        slider.endFill();
+        slider.circle(
+            0,
+            0,
+            10,
+        );
+        slider.fill({ color: 0xffffff });
         slider.position.set(70, 70);
         slider.eventMode = 'static';
         slider.cursor = 'pointer';
@@ -565,9 +594,9 @@ export class ItemInfoPanel {
         button.position.set(x, y);
 
         const bg = new PIXI.Graphics();
-        bg.beginFill(0x313131);
-        bg.drawRect(0, 0, width, height);
-        bg.endFill();
+        bg.rect(0, 0, width, height);
+        bg.fill({ color: 0x313131 });
+        bg.stroke({ width: 1, color: 0x686F75 });
         button.addChild(bg);
 
         const buttonText = new PIXI.Text({

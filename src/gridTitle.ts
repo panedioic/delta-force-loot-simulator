@@ -1,8 +1,6 @@
 import * as PIXI from "pixi.js";
-import { Game } from "./game";
 
 export class GridTitle {
-    game: Game;
     title: string;
     width: number;
     height: number;
@@ -10,14 +8,14 @@ export class GridTitle {
     aspect: number;
     margin: number[];
     container: PIXI.Container;
-
+    info: any;
+    
     constructor(
-        game: Game,
+        info: any,
         title: string,
         cellSize: number,
         aspect: number,
     ) {
-        this.game = game;
         this.title = title;
         this.width = 1;
         this.height = 1;
@@ -27,6 +25,8 @@ export class GridTitle {
         this.margin = [4, 4, 4, 4]; // 上下左右边距
 
         this.container = new PIXI.Container();
+
+        this.info = info;
 
         this.initUI();
     }
@@ -47,18 +47,16 @@ export class GridTitle {
         );
         graphics.fill({ color: 0x1f2121, alpha: 0.3 });
 
-        // 网格线
-        // graphics.lineStyle(2, 0x666666);
-
         // 外围边框
         graphics.rect(
             0,
             0,
             this.width * this.cellSize * this.aspect,
             this.height * this.cellSize,
-        ); // 使用 this.cellSize
-
+        );
         graphics.stroke({ width: 2, color: 0x666666 });
+        this.container.addChild(graphics);
+
         const titleText = new PIXI.Text({
             text: this.title,
             style: {
@@ -70,19 +68,15 @@ export class GridTitle {
         });
         titleText.anchor.set(0);
         titleText.position.set(4, 4);
-        graphics.addChild(titleText);
-        
-
-        this.container.addChild(graphics);
+        this.container.addChild(titleText);
     }
 
-    /**
-     * Set the position of the grid.
-     * @param {number} x - The x coordinate
-     * @param {number} y - The y coordinate
-     * */
-    setPosition(x: number, y: number) {
-        this.container.position.set(x, y);
+    public refreshUI() {
+        // 目前没有需要做的
+    }
+
+    public refreshUIRecursive() {
+        this.refreshUI();
     }
 
     setEnabled(enabled: boolean) {

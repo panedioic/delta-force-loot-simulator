@@ -58,7 +58,7 @@ export class Magnify {
     }
 
     private animate() {
-        if (!window.game.needSearch) return;
+        if (!window.game.config.needSearch) return;
         
         // 更新角度
         this.angle += this.rotationSpeed;

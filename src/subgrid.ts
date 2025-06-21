@@ -1,6 +1,5 @@
 import * as PIXI from "pixi.js";
 import { Item } from "./item";
-import { Game } from "./game";
 import { DEFAULT_CELL_SIZE } from "./config";
 import { ItemType } from "./types";
 import { Region } from "./region";
@@ -20,76 +19,57 @@ interface ItemPlace {
  * @param {PIXI.Container} stage - The stage to add the grid to
  */
 export class Subgrid {
-    game: Game;
     width: number;
     height: number;
     cellSize: number;
     aspect: number;
-    info: any;
     fullfill: boolean;
     countable: boolean;
     acceptedTypes: string[];
-    margin: number[];
     container: PIXI.Container;
-    blocks: Item[];
     title: string;
+
+    blocks: Item[] = [];
     parentRegion: Region | Item | null = null;
     enabled: boolean = true;
+    
     onItemDraggedIn?: (item: Item, col: number, row: number, grid: Subgrid | null) => void;
     onItemDraggedOut?: (item: Item, grid: Subgrid | null) => void;
 
     // 用于防止出现大小的bug
     additiveSize: { x: number; y: number };
 
-    constructor(
-        game: Game,
-        width: number,
-        height: number,
-        cellSize: number,
-        aspect: number,
-        fullfill: boolean,
-        countable: boolean,
-        accept: string[],
-        title: string,
-    ) {
-        this.game = game;
-        this.width = width;
-        this.height = height;
-        this.cellSize = cellSize || DEFAULT_CELL_SIZE;
-        this.aspect = aspect || 1.0;
-        this.fullfill = fullfill || false;
-        this.countable = countable || false;
-        this.acceptedTypes = accept || []; // 默认接受所有类型
-        this.title = title || '';
+    // 保存初始化 grid 的信息
+    info: any = null;
 
-        this.margin = [4, 4, 4, 4]; // 上下左右边距
+    constructor(info: any) {
+        this.width = info.size.width || 1;
+        this.height = info.size.height || 1;
+        this.cellSize = info.cellSize || DEFAULT_CELL_SIZE;
+        this.aspect = info.aspect || 1.0;
+        this.fullfill = info.fullfill || false;
+        this.countable = info.countable || false;
+        this.acceptedTypes = info.accept || []; // 默认接受所有类型
+        this.title = info.title || '';
 
         this.container = new PIXI.Container();
 
-        this.blocks = [];
-
         this.initUI();
-        this.game.grids.push(this);
+        this.refreshUI();
+        window.game.grids.push(this);
         this.additiveSize = { x: this.container.width, y: this.container.height };
+
+        this.info = info;
         // console.log(this)
     }
 
     /**
-     * Initialize the grid by creating the grid background and lines.
+     * 初始化 UI。此函数仅在构造时调用。
      */
-    initUI() {
+    private initUI() {
         // 创建网格背景
         const graphics = new PIXI.Graphics();
 
-        // 半透明背景 (deprecated)
-        // graphics.beginFill(0x1f2121, 0.3);
-        // graphics.drawRect(
-        //     0,
-        //     0,
-        //     this.width * this.cellSize * this.aspect,
-        //     this.height * this.cellSize,
-        // );
-        // graphics.endFill();
         graphics.rect(
             0,
             0,
@@ -98,12 +78,9 @@ export class Subgrid {
         );
         graphics.fill({ color: 0x1f2121, alpha: 0.3 });
 
-        // 网格线
-        // graphics.lineStyle(2, 0x666666);
-
         // 水平线
         for (let row = 0; row <= this.height; row++) {
-            graphics.moveTo(0, row * this.cellSize); // 使用 this.cellSize
+            graphics.moveTo(0, row * this.cellSize);
             graphics.lineTo(
                 this.width * this.cellSize * this.aspect,
                 row * this.cellSize,
@@ -113,7 +90,7 @@ export class Subgrid {
 
         // 垂直线
         for (let col = 0; col <= this.width; col++) {
-            graphics.moveTo(col * this.cellSize * this.aspect, 0); // 使用 this.cellSize
+            graphics.moveTo(col * this.cellSize * this.aspect, 0);
             graphics.lineTo(
                 col * this.cellSize * this.aspect,
                 this.height * this.cellSize,
@@ -127,8 +104,10 @@ export class Subgrid {
             0,
             this.width * this.cellSize * this.aspect,
             this.height * this.cellSize,
-        ); // 使用 this.cellSize
+        );
         graphics.stroke({ width: 3, color: 0x666666 });
+
+        this.container.addChild(graphics);
 
         const titleText = new PIXI.Text({
             text: this.title,
@@ -140,13 +119,30 @@ export class Subgrid {
         });
         titleText.anchor.set(0);
         titleText.position.set(4, 4);
-        graphics.addChild(titleText);
-
-        this.container.addChild(graphics);
+        this.container.addChild(titleText);
     }
 
     /**
-     * Get the global position of the grid.
+     * 刷新 UI
+     */
+    public refreshUI() {
+        const titleText = this.container.children[1] as PIXI.Text;
+        if (window.game.config.displayGridTitle) {
+            titleText.visible = true;
+        } else {
+            titleText.visible = false;
+        }
+    }
+
+    public refreshUIRecursive() {
+        this.refreshUI();
+        for(const item of this.blocks) {
+            item.refreshUI();
+        }
+    }
+
+    /**
+     * 获取 Container 左上角的全局坐标
      * @returns {PIXI.Point} - The global position of the grid
      **/
     getGlobalPosition(): PIXI.Point {
@@ -306,14 +302,6 @@ export class Subgrid {
         return ret;
     }
 
-    /**
-     * Add the grid to the stage.
-     * @param {PIXI.Container} stage - The stage to add the grid to
-     * */
-    addToStage(stage: PIXI.Container) {
-        stage.addChild(this.container);
-    }
-
     rearrange() {
         // TODO
     }
@@ -401,15 +389,6 @@ export class Subgrid {
 
     /**
      * Remove a block from the grid.
-     * @deprecated 使用 removeItem 代替
-     * @param {Item} obj - The block to remove
-     * */
-    removeBlock(obj: Item, destroy: boolean=false) {
-        this.removeItem(obj, destroy);
-    }
-
-    /**
-     * Remove a block from the grid.
      * @param {Item} obj - The block to remove
      * */
     removeItem(obj: Item, destroy: boolean=false) {
@@ -427,60 +406,13 @@ export class Subgrid {
         }
     }
 
-    /**
-     * Set the visibility of the grid.
-     * @param {boolean} visible - The visibility of the grid
-     * */
-    setVisible(visible: boolean) {
-        this.container.visible = visible;
-    }
-
     setEnabled(enabled: boolean) {
         this.enabled = enabled;
         this.container.visible = enabled;
-    }
-
-    /**
-     * Get the bounds of the grid.
-     * @returns {PIXI.Rectangle} - The bounds of the grid
-     * */
-    getBounds(): PIXI.Bounds {
-        return this.container.getBounds();
-    }
-
-    // 获取所有物品
-    getAllItems(): Item[] {
-        return this.blocks;
-    }
-
-    /**
-     * 获取与指定位置重叠的物品
-     * @param {Item} item - 要检查的物品
-     * @param {number} col - 列位置
-     * @param {number} row - 行位置
-     * @returns {Item|null} - 返回重叠的物品，如果没有重叠则返回 null
-     */
-    getOverlappingItem(item: Item, col: number, row: number): Item | null {
-        for (const block of this.blocks) {
-            // 跳过自己
-            if (block === item) continue;
-
-            // 检查是否有重叠
-            const itemRight = col + item.cellWidth;
-            const itemBottom = row + item.cellHeight;
-            const blockRight = block.col + block.cellWidth;
-            const blockBottom = block.row + block.cellHeight;
-
-            if (
-                col < blockRight &&
-                itemRight > block.col &&
-                row < blockBottom &&
-                itemBottom > block.row
-            ) {
-                return block;
-            }
+        for(const item of this.blocks) {
+            item.setEnabled(enabled);
         }
-        return null;
+        this.refreshUI();
     }
 
     clearItem() {
@@ -565,13 +497,6 @@ export class Subgrid {
         }
         // TODO: rearrange
         return null;
-    }
-
-    public gridToPixel(col: number, row: number): { x: number, y: number } {
-        return {
-            x: col * this.cellSize * this.aspect,
-            y: row * this.cellSize
-        };
     }
 
     destroy() {

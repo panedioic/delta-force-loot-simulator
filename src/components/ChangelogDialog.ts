@@ -141,6 +141,13 @@ export class ChangelogDialog {
         `;
         content.innerHTML = `
             <div style="margin-bottom: 20px;">
+                <h2 style="font-size: 18px; color: #66ccff;">版本 0.10.2 <span style="color: #999; font-size: 14px;">2025-06-21</span></h2>
+                <ul style="list-style-type: none; padding-left: 20px;">
+                    <li>• 重构了一些代码，去掉了一些 warnings。</li>
+                    <li>• 增加了搜索功能。</li>
+                </ul>
+            </div>
+            <div style="margin-bottom: 20px;">
                 <h2 style="font-size: 18px; color: #66ccff;">版本 0.10.1 <span style="color: #999; font-size: 14px;">2025-06-20</span></h2>
                 <ul style="list-style-type: none; padding-left: 20px;">
                     <li>• 修复了部分道具交换位置失败的 bug。</li>

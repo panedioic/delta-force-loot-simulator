@@ -342,6 +342,9 @@ export class ItemManager {
             info.maxStack = 60;
             info.stack = Math.floor(Math.random() * 60) + 1;
         }
+
+        // 添加搜索时间信息（TODO：当前默认为 1.2s，之后再写具体算法）
+        info.searchTime = 1.2;
         return info;
     }
 

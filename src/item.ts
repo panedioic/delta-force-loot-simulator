@@ -57,6 +57,8 @@ export class Item {
     /** 保存用于生成 Item 的 Info */
     info: any;
 
+    enabled: boolean = true;
+
     constructor(itemInfo: any) {
         // this.itemType = itemType;
         // console.log(itemInfo)
@@ -98,14 +100,8 @@ export class Item {
         this.clickCount = 0;
 
         this.searchTime = 1;
-        if (window.game.needSearch) {
-            this.searched = false;
-            this.searchMask = new PIXI.Graphics();
-        } else {
-            this.searched = true;
-            this.searchMask = new PIXI.Graphics();
-            this.searchMask.visible = false;
-        }
+        this.searched = false;
+        this.searchMask = new PIXI.Graphics();
 
         // if (itemInfo.primaryClass === 'gun') {
         //     console.log(itemInfo)
@@ -114,6 +110,7 @@ export class Item {
         this.info = itemInfo;
 
         this.initUI();
+        this.refreshUI();
 
         // 在理好新代码逻辑之前，忽略掉配件的冲突
         // if (itemType.conflict) {
@@ -315,6 +312,29 @@ export class Item {
             }
         }
 
+        // 添加 searchMask
+        // 先写在这吧，在 fullfill 的情况下一般是不需要搜索的
+        if (this.parentGrid && this.parentGrid.fullfill) {
+            this.searched = true;
+        }
+        this.searchMask.clear();
+        this.searchMask.rect(
+            2,
+            2,
+            pixelWidth - 4, // 减去边框宽度
+            pixelHeight - 4,
+        );
+        this.searchMask.fill({ color: 0x040404 });
+        this.searchMask.stroke({ width: 3, color: 0x666666, alpha: 0.8 });
+        this.container.addChild(this.searchMask);
+        if (window.game.config.needSearch && !this.searched) {
+            this.graphicsText.visible = false;
+            this.searchMask.visible = true;
+        } else {
+            this.graphicsText.visible = true;
+            this.searchMask.visible = false;
+        }
+
         // refresh active item panel if exists
         if (window.game.activeItemInfoPanel && window.game.activeItemInfoPanel.item === this) {
             const pos = window.game.activeItemInfoPanel.getPosition();
@@ -324,6 +344,11 @@ export class Item {
                 window.game.activeItemInfoPanel.setPosition(pos);
             }
         }
+    }
+
+    setEnabled(enabled: boolean) {
+        this.enabled = enabled;
+        this.refreshUI();
     }
 
     addEventListeners() {
@@ -575,14 +600,13 @@ export class Item {
             // 创建拖动覆盖层
             if (!this.dragOverlay) {
                 this.dragOverlay = new PIXI.Graphics();
-                this.dragOverlay.beginFill(0x000000, 0.1);
-                this.dragOverlay.drawRect(
+                this.dragOverlay.rect(
                     -GAME_WIDTH,
                     -GAME_HEIGHT,
                     GAME_WIDTH * 3,
                     GAME_HEIGHT * 3,
                 );
-                this.dragOverlay.endFill();
+                this.dragOverlay.fill({ color: 0x000000, alpha: 0.1 });
                 this.container.addChild(this.dragOverlay);
             }
 
@@ -810,17 +834,15 @@ export class Item {
         if (item.accessories) {
             for (const newInfo of item.accessories) {
                 this.accessories.push(newInfo);
-                const newSubgrid = new Subgrid(
-                    window.game,
-                    1,
-                    1,
-                    72,
-                    1,
-                    true,
-                    false,
-                    [newInfo.type],
-                    newInfo.title
-                )
+                const newSubgrid = new Subgrid({
+                    size: {width: 1, height: 1},
+                    cellSize: 72,
+                    aspect: 1,
+                    fullfill: true,
+                    countable: false,
+                    accept: [newInfo.type],
+                    title: newInfo.title
+                });
                 this.subgrids[newInfo.title] = newSubgrid;
                 newSubgrid.onItemDraggedIn = this.onAccessoryAdded.bind(this);
                 newSubgrid.onItemDraggedOut = this.onAccessoryRemoved.bind(this);
@@ -863,17 +885,15 @@ export class Item {
             if(slotInfo) {
                 const slotTitle = slotInfo.nameCN;
                 const accType = slotInfo.accType;
-                const subgrid = new Subgrid(
-                    window.game,
-                    1,
-                    1,
-                    72,
-                    1,
-                    true,
-                    false,
-                    [accType],
-                    slotTitle
-                )
+                const subgrid = new Subgrid({
+                    size: {width: 1, height: 1},
+                    cellSize: 72,
+                    aspect: 1,
+                    fullfill: true,
+                    countable: false,
+                    accept: [accType],
+                    title: slotTitle
+                });
                 subgrid.parentRegion = this;
                 this.subgrids[slotTitle] = subgrid;
                 subgrid.onItemDraggedIn = this.onAccessoryAdded.bind(this);
