@@ -5060,7 +5060,7 @@
 					},
 					{
 						"id": 20006,
-						"objectID": 13020001001,
+						"objectID": 13020000541,
 						"objectName": "K437断刃短枪管组合",
 						"length": 2,
 						"width": 1,
@@ -5069,8 +5069,8 @@
 						"primaryClass": "acc",
 						"secondClass": "accBarrel",
 						"secondClassCN": "枪管",
-						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/13020000508.png",
-						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/p_13020000508.png",
+						"pic": "https://playerhub.df.qq.com/playerhub/60004/object/13020000541.png",
+						"prePic": "https://playerhub.df.qq.com/playerhub/60004/object/p_13020000541.png",
 						"accDetail": {
 							"recoil": 4,
 							"hipShot": 8,

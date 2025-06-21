@@ -1,3 +1,18 @@
+import { GAME_RESOURCE_CDN, REALTIME_VALUE } from './config';
+
+interface ResourceInfo {
+    name: string;
+    url: string;
+}
+
+interface ResourceResult {
+    name: string;
+    data: any[];
+}
+
+type CDNType = 'local' | 'jsdelivr';
+type ValueSourceType = 'local' | 'df.sanyueqi.com';
+
 // import { Item } from "./item";
 // import { Subgrid } from "./subgrid";
 
@@ -94,136 +109,88 @@ export class ItemManager {
         }
     }
     
-    async loadResources(): Promise<void> {
+    async loadResources() {
         try {
-            const [collection, armor, backpack, chestRigs, helmet, primaryWeapon, secondaryWeapon, ammo, 
-                accBackGrip, accBarrel, accForeGrip, accFunctional, accHandGuard, accMagazine, accMuzzle, accScope, accStock,
-                consume, key,
-                layouts, values, gunSlotMap
-            ] = await Promise.all([
-                // 加载方块数据
-                (async () => {
-                    const response = await fetch("/json/props/collection.json");
-                    return await response.json();
-                })(),
-                (async () => {
-                    const response = await fetch("/json/protect/armor.json");
-                    return await response.json();
-                })(),
-                (async () => {
-                    const response = await fetch("/json/protect/backpack.json");
-                    return await response.json();
-                })(),
-                (async () => {
-                    const response = await fetch("/json/protect/chestRigs.json");
-                    return await response.json();
-                })(),
-                (async () => {
-                    const response = await fetch("/json/protect/helmet.json");
-                    return await response.json();
-                })(),
-                (async () => {
-                    const response = await fetch("/json/gun/gunRifle.json");
-                    return await response.json();
-                })(),
-                (async () => {
-                    const response = await fetch("/json/gun/gunPistol.json");
-                    return await response.json();
-                })(),
-                (async () => {
-                    const response = await fetch("/json/gun/ammo.json");
-                    return await response.json();
-                })(),
-                (async () => {
-                    const response = await fetch("/json/acc/accBackGrip.json");
-                    return await response.json();
-                })(),
-                (async () => {
-                    const response = await fetch("/json/acc/accBarrel.json");
-                    return await response.json();
-                })(),
-                (async () => {
-                    const response = await fetch("/json/acc/accForeGrip.json");
-                    return await response.json();
-                })(),
-                (async () => {
-                    const response = await fetch("/json/acc/accFunctional.json");
-                    return await response.json();
-                })(),
-                (async () => {
-                    const response = await fetch("/json/acc/accHandGuard.json");
-                    return await response.json();
-                })(),
-                (async () => {
-                    const response = await fetch("/json/acc/accMagazine.json");
-                    return await response.json();
-                })(),
-                (async () => {
-                    const response = await fetch("/json/acc/accMuzzle.json");
-                    return await response.json();
-                })(),
-                (async () => {
-                    const response = await fetch("/json/acc/accScope.json");
-                    return await response.json();
-                })(),
-                (async () => {
-                    const response = await fetch("/json/acc/accStock.json");
-                    return await response.json();
-                })(),
-                (async () => {
-                    const response = await fetch("/json/props/consume.json");
-                    return await response.json();
-                })(),
-                (async () => {
-                    const response = await fetch("/json/props/key.json");
-                    return await response.json();
-                })(),
-                (async () => {
-                    const response = await fetch("/json/layouts.json");
-                    return await response.json();
-                })(),
-                (async () => {
-                    const response = await fetch("/json/values.json");
-                    return await response.json();
-                })(),
-                (async () => {
-                    const response = await fetch("/json/gunSlotMap.json");
-                    return await response.json();
-                })(),
-                
+            const cdn = window.game.config.resource_cdn as CDNType;
+            
+            // 加载物品信息
+            const itemLoadPromises = GAME_RESOURCE_CDN[cdn].item_info.map(async (info: ResourceInfo) => {
+                const response = await fetch(info.url);
+                const data = await response.json();
+                return {
+                    name: info.name,
+                    data: data.jData.data.data.list
+                };
+            });
+
+            // 加载其他必要信息
+            const otherLoadPromises = {
+                layouts: fetch(GAME_RESOURCE_CDN[cdn].layouts).then(res => res.json()),
+                gunSlotMap: fetch(GAME_RESOURCE_CDN[cdn].gunSlotMap).then(res => res.json())
+            };
+
+            // 等待所有资源加载完成
+            const [itemResults, otherResults] = await Promise.all([
+                Promise.all(itemLoadPromises),
+                Promise.all(Object.values(otherLoadPromises))
             ]);
 
-            this.itemInfos['collection'] = collection.jData.data.data.list;
-            this.itemInfos['armor'] = armor.jData.data.data.list;
-            this.itemInfos['backpack'] = backpack.jData.data.data.list;
-            this.itemInfos['chestRigs'] = chestRigs.jData.data.data.list;
-            this.itemInfos['helmet'] = helmet.jData.data.data.list;
-            this.itemInfos['primaryWeapon'] = primaryWeapon.jData.data.data.list;
-            this.itemInfos['secondaryWeapon'] = secondaryWeapon.jData.data.data.list;
-            this.itemInfos['ammo'] = ammo.jData.data.data.list;
-            this.itemInfos['accBackGrip'] = accBackGrip.jData.data.data.list;
-            this.itemInfos['accBarrel'] = accBarrel.jData.data.data.list;
-            this.itemInfos['accForeGrip'] = accForeGrip.jData.data.data.list;
-            this.itemInfos['accFunctional'] = accFunctional.jData.data.data.list;
-            this.itemInfos['accHandGuard'] = accHandGuard.jData.data.data.list;
-            this.itemInfos['accMagazine'] = accMagazine.jData.data.data.list;
-            this.itemInfos['accMuzzle'] = accMuzzle.jData.data.data.list;
-            this.itemInfos['accScope'] = accScope.jData.data.data.list;
-            this.itemInfos['accStock'] = accStock.jData.data.data.list;
-            this.itemInfos['consume'] = consume.jData.data.data.list;
-            this.itemInfos['key'] = key.jData.data.data.list;
+            // 处理物品信息
+            itemResults.forEach((result: ResourceResult) => {
+                this.itemInfos[result.name] = result.data;
+            });
 
+            // 处理其他信息
+            const [layouts, gunSlotMap] = otherResults;
             this.layouts = layouts.list;
-            this.values = values.list;
             this.gunSlotMap = gunSlotMap;
 
+            // 加载实时价格
+            await this.getValues();
+
+            console.log('资源加载完成');
+            return true;
         } catch (error) {
-            console.error("Failed to load game resources:", error);
-            throw error;
+            console.error('加载资源时出错：', error);
+            return false;
         }
     }
 
-    
+    async getValues() {
+        try {
+            const valueSource = window.game.config.realtime_value as ValueSourceType;
+            const response = await fetch(REALTIME_VALUE[valueSource]);
+            const data = await response.json();
+
+            if (valueSource === 'local') {
+                const ret: Array<{objectID: number, baseValue: number}> = [];
+                for (const item of data.list) {
+                    ret.push({
+                        objectID: Number(item.objectID),
+                        baseValue: Number(item.baseValue)
+                    });
+                }
+                this.values = ret;
+            } else if (valueSource === 'df.sanyueqi.com') {
+                const ret: Array<{objectID: number, baseValue: number}> = [];
+                for (const item of data.data.rows) {
+                    ret.push({
+                        objectID: Number(item.object_id),
+                        baseValue: Number(item.c_price)
+                    });
+                }
+                this.values = ret;
+            }
+        } catch (error) {
+            console.error('加载实时价格时出错：', error);
+            // 如果加载失败，使用本地价格作为后备
+            if (this.values.length === 0) {
+                const response = await fetch(REALTIME_VALUE.local);
+                const data = await response.json();
+                this.values = data.list;
+            }
+        }
+    }
 
     getItemInfoByName(name: string) {
         for (const key of Object.keys(this.itemInfos)) {
@@ -323,10 +290,6 @@ export class ItemManager {
             // console.log('233', layoutInfo)
             info.subgridLayout = layoutInfo.subgridLayout;
         }
-        // if(info.secondClass === 'bag'){
-        //     console.log('466', info)
-        //     console.log(this.layouts)
-        // }
 
         // 添加 value 信息
         const valueInfo = this.values.find((val: any) => val.objectID === info.objectID);

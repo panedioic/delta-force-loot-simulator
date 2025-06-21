@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import { GAME_WIDTH, GAME_HEIGHT } from "./config";
+import { GAME_WIDTH, GAME_HEIGHT, GAME_DEFAULT_CONFIG } from "./config";
 import { Subgrid } from "./subgrid";
 import { TotalValueDisplay } from "./totalValueDisplay";
 import { RegionSwitchUI } from "./components/regionSwitchUI";
@@ -65,10 +65,7 @@ export class Game {
     itemManager: ItemManager;
 
     // 基础配置信息
-    config: any = {
-        displayGridTitle: true,
-        needSearch: true,
-    };
+    config: any = GAME_DEFAULT_CONFIG;
 
     constructor() {
         this.app = new PIXI.Application();
@@ -106,7 +103,11 @@ export class Game {
         if (import.meta.env.MODE === "development") {
             this.isGameStarted = true;
             this.config.needSearch = false;
+            this.config.resource_cdn = 'local';
+            this.config.realtime_value = 'local';
         }
+
+        window.game = this;
     }
 
     private initDefaultSpoilsRegionConfig() {
@@ -269,7 +270,6 @@ export class Game {
             resizeCanvas();
             window.addEventListener('resize', resizeCanvas);
         }
-        window.game = this;
 
         // 添加更新循环
         this.app.ticker.add(() => {

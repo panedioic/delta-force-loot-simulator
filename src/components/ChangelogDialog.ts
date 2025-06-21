@@ -141,6 +141,13 @@ export class ChangelogDialog {
         `;
         content.innerHTML = `
             <div style="margin-bottom: 20px;">
+                <h2 style="font-size: 18px; color: #66ccff;">版本 0.10.3 <span style="color: #999; font-size: 14px;">2025-06-21</span></h2>
+                <ul style="list-style-type: none; padding-left: 20px;">
+                    <li>• 加入了实时价格功能（感谢 @松叶 提供的 API）。</li>
+                    <li>• 加入了 CDN 功能，加速资源加载。</li>
+                </ul>
+            </div>
+            <div style="margin-bottom: 20px;">
                 <h2 style="font-size: 18px; color: #66ccff;">版本 0.10.2 <span style="color: #999; font-size: 14px;">2025-06-21</span></h2>
                 <ul style="list-style-type: none; padding-left: 20px;">
                     <li>• 重构了一些代码，去掉了一些 warnings。</li>
